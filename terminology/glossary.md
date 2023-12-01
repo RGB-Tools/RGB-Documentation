@@ -84,7 +84,7 @@ A directed graph which do not contains any directed cycle thus allowing topologi
 
 #### Interface
 
-The set of human and wallet-readable information of an RGB \[contract]\(### Contract)
+The set of human and wallet-readable information of an RGB [contract](#contract)
 
 #### Container&#x20;
 

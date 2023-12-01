@@ -55,6 +55,8 @@
 * [Governance](annex/governance.md)
 * [History & acknowledgements](annex/history-and-acknowledgements.md)
 
-***
+## Terminology
 
-* [GLOSSARY OF TERMS](glossary-of-terms.md)
+* [Glossary](terminology/glossary.md)
+
+***

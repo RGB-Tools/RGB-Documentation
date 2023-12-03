@@ -10,7 +10,7 @@ description: Terminology used in RGB sorted in alphabetical order
 
 The operation which allows the verification of some [stash](glossary-of-terms.md#stash) in respect to a defined set of protocol rules. The above stashes are exchanged between the participants privately as they are not stored on a public medium.
 
-#### Single -Use Seal&#x20;
+#### Single -Use Seal
 
 A promise to [commit](glossary-of-terms.md#commitment) to a yet unknown message in the future, once and only once, such that commitment fact will be provably known to all members of a certain audience.
 
@@ -52,9 +52,13 @@ Formal timestamped fingerprint expressed as the registration of an hash referrin
 
 #### Bundle ID
 
-#### Assignment&#x20;
+#### Assignment
+The RGB equivalent of 
 
-#### Consignment&#x20;
+#### Consignment
+The data trasnfered between parties that are subject to client-side validation. There are 2 main types of consignemen:
+* Contract Consignment: provided by the contract issues including the main information about the contract
+* Transfer Consignment: provided by the payer user party and containing all the state transition hystory up to the [terminal consignment]()
 
 #### Global State
 
@@ -62,7 +66,28 @@ Formal timestamped fingerprint expressed as the registration of an hash referrin
 
 #### Operation ID
 
-#### Contract Genesis&#x20;
+
+
+#### Contract participant
+
+An actor which participate in contract operations. Contract parties are classified into the following categories:
+
+* Contract issuer: an actor creating contract genesis
+* Contract party: all actors which has ownership rights over RGB contract state
+* Public party: an actor constructing state extensions. Can exist only in contracts providing valencies and state extensions.
+
+
+#### Contract Genesis
+
+
+#### Terminal Consignement - Consignement endpoint
+
+The final state of a contract which include the last state transition constructed from a payee counterparty invoice.
+
+### Invoice
+
+A Base58 encoded string, which supporta URL scheme capabilities, embedding the necessary data in order to allow a payer counterparty to construct a state transition.
+
 
 #### State Transition
 
@@ -70,11 +95,11 @@ Formal timestamped fingerprint expressed as the registration of an hash referrin
 
 #### Taproot
 
-#### Contract
+#### RGB Contract
 
-A set of rights established and executed digitally between certain parties
+A set of rights established and executed digitally between certain parties. A contract has state and business logic, expressed in terms of ownership rights and executive rights. The contract state, rights and conditions of valid operations are defined using RGB schema; only state and operations which allowed by the schema declarations and valdiation scripts are allowed to happen withint the contract scope.
 
-#### Valency&#x20;
+#### Valency;
 
 A public rights having no state but which can be referenced and  applied through a state extension
 

@@ -8,7 +8,7 @@ description: Terminology used in RGB sorted in alphabetical order
 
 #### Client-side Validation
 
-The operation which allows the verification of some [stash](glossary-of-terms.md#stash) in respect to a defined set of protocol rules. The above stashes are exchanged between the participants privately as they are not stored on a public medium.
+The operation which allows the verification of some data exchanged between parties according to some defined protocolo rule. In RGB protocol these data are in form of [consignement](#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they dont't need to be registered on a public medium (e.g. the blockchain).
 
 #### Single -Use Seal
 

@@ -6,6 +6,8 @@ description: Terminology used in RGB sorted in alphabetical order
 
 #### Anchor
 
+Most upper-level commitment of a [client-side-validation](#client-side-validation) scheme inside a transaction. In RGB protocol is constituted by the root hash of a [Multi Protocol Commitment](#) and by a tapret proof (if used in the commitment scheme).   
+
 #### Client-side Validation
 
 The operation which allows the verification of some data exchanged between parties according to some defined protocolo rule. In RGB protocol these data are in form of [consignement](#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they dont't need to be registered on a public medium (e.g. the blockchain).
@@ -22,11 +24,11 @@ The set of rules according to which an RGB contract works
 
 #### Stash
 
-The set of client-side data over which a [validation](glossary-of-terms.md#client-side-validation) operation can be performed.
+The set of client-side data over which have undergone a [validation](glossary-of-terms.md#client-side-validation) operation and are stored by the user.
 
 #### Shard
 
-A branch of the DAG&#x20;
+A branch of the DAG
 
 #### Multi Protocol Commitment - MPC
 

@@ -15,7 +15,7 @@ Before going entering into the technical details of the RGB, an introduction ove
 We will discuss various kind of **Distributed Consensus Systems** which have some degree of hierarchy and interrelated properties between them. They are differentiated on how to dermenine and enforce the most updated state of the system:
 * **Blockchain /Timechain + PoW Mechanism (layer 1)**. The sequence of **state transitions** is public and auditable and is organized in **transaction** included in ordered blocks which are added one upon the other. The security of the system lies on the amount of work required to produce an alternative chain which revert the actual greater-work chain which is considered as the valid chain. For instance **Bitcoin** is based on this technological stack.
 * **State channels (Layer 2)**. Is a system constructed between 2 (or more) parties and which depend hierarchically on layer 1. The final state is represented by the last transaction out of sequence of ordered invalidating transactions, signed and agreed by the parties *off-chain*. The final state can be enforced by each parties by publishing that last valid transaction on the layer 1. The most developed application of state channels is the **Lightning Network**.
-* **Client Side Validated Data (Layer 3)** Is a system that can be implemented on both blockchain and to state channels and it is based on a certain *limited* amount data whose validity, computation tasks and update is entrusted to each node. Differently form layer 1, the data to be validated by each client node represent **a defined subset of the entirery of all the state transition of the network**. This subset of data is often defined a **shard** of the data. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last transition and which relate the exchange of certain (digital) properties among the counterpary involved, and not any other data. This operation is called **Client-side Validation** and underpin all **RGB** operations.
+* **Client Side Validated Data -Stash (Layer 3)** Is a system that can be implemented on both blockchain and to state channels and it is based on a certain *limited* amount data whose validity, computation tasks and update is entrusted to each node. Differently form layer 1, the data to be validated by each client node represent a **defined subset of the entirery of all state transitions of the network, and NOT every transition happened within the network**. This validated subset of data in possession of a client node is defined a **Stash** of the data. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last the transition (a so called **Shard**) and which relate the exchange and the validation of certain digital properties among the counterpary involved. Seen as a whole, the validation mechanism of the shard which produce the stash is called **Client-side Validation** and underpin all **RGB** operations.
  
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/ac60cc0d-0d3f-4dbd-a7c5-2cef5ac1b765)  
 *The 3 set of Distributed System - Blockchain (layer1) is self-sustaining while the other 2 rely on layer 1 for operating - layer 3 can operate on top of both blockchain and state channels*
@@ -46,11 +46,16 @@ In syntesis:
 
 An important feature to take into account is the different way through which State Channel and Client-Side validation architectures update the state of the data:
 
-* State Channel state must be syncronous with the counterpary
-* Client side validated state update can be asyncronous
+* State Channel state must be **syncronous** with the counterpary
+* Client side validated state update can be **asyncronous**
+
+Naturally, if the clien-side validated data are embedded in state channels, the update of the state will follow an asyncronous process.   
 
 
-# Client side Validated data
+# Client Side Validation
+
+Let's delve...
+
 
 
 # Single Use Seals

@@ -1,6 +1,6 @@
 # Technical Introduction
 
-Before going entering into the technical details of the RGB, an introduction over the fundamental elements of the protocol, the environment undepinning the technological substrate, as well as the base terminology represent an essentia step towards a thorough understanding of the subject.
+Before going entering into the technical details of the RGB, an introduction over the fundamental elements of the protocol, the environment undepinning the technological substrate, as well as the base terminology represent an essential step towards a thorough understanding of the subject.
 
 ## Paradigm of Distributed Computing
 
@@ -42,23 +42,64 @@ In syntesis:
 
 * Blockchain (layer 1) preserve Integrity and Decentralization but lacks Scalability and Confidentiality as each node need to replicate *publicly and in-full* every state transition
 * State Channels (layer 2) preserve Decentralization and Scalability but doesn't preserve the Integrity as the state can be changed or updated asyncrnously by the counterparties.
-* Client Side validated data (layer 3) are Scalable and maintin Integrity, however some data are not decentralized and hence lack Availability. Thus as single point of centralization of the data (e.g. the issuer) is required.  
+* Client Side validated data (layer 3) are Scalable and maintin Integrity, however some data are not decentralized and hence lack Availability. Thus a single point of centralization of the data (e.g. the issuer) is required.  
 
 An important feature to take into account is the different way through which State Channel and Client-Side validation architectures update the state of the data:
 
 * State Channel state must be **syncronous** with the counterpary
 * Client side validated state update can be **asyncronous**
 
-Naturally, if the clien-side validated data are embedded in state channels, the update of the state will follow an asyncronous process.   
+Naturally, if the client-side validated data are embedded in state channels, the update of the state will follow an asyncronous process. 
+In the next section we will delve into Client-side Validation and its features.  
 
 
-# Client Side Validation
+# Client-side Validation
 
-Let's delve...
+ The goal of every validation process od a distributed system machine is the ability to assess the validity and the chronological ordering of the states, hence to map the state transitions that took place.
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/463eea67-d5e9-401c-916e-bce7357a538e)
+
+ In Bitcoin Blockchain, for instance, such process maps the change in the [UTXO](https://en.wikipedia.org/wiki/Unspent_transaction_output) determined by the transactions collected into the sequence of ordered blocks. Every block represent a state update.
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/1d209128-de76-40ab-b291-373b1c74440a)
+
+The main drawback of Layer 1 validation process is that **every node needs to validate each transaction from everybody** and store the related data and this architecture lead to two main issues:
+* Scalability: the size limit of the blocks vs. the demand of blockspace per unit time shared by all the participants willing to transact (i.e. 1 MB on ~10 minutes on average on bitcoin)   
+* Privacy: the detail of each transactions are broadcasted and stored in public form ( in particular: the amounts transacted and the receiving adressess, albeit pseudonimous)
+  
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/403da928-31a8-4e08-8707-9c1f853df067)
+
+However, from the point of a transaction recipient the only aspectes that matters are:
+* the last state of a specific property that will change through a transaction addrressed to him and,
+* the chronological sequence of transactions (and thus state transitions) that lead to the that last state.s
+
+Basically what is important to him is the [Directed Acyclic Graph](#) which connect the history of state transitions to the last state addressed to him (a **Shard** of the whole data)
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/6f81258f-1326-46e8-a951-16bc61163784)
 
 
+For this reason, the **logic of validation can be resersed** in the following terms:
+* Each party validates **its own part of the history** and thus the digital properties that matters to him
+* A compact reference to the **validated state transition is committed to the first layer**  which constitue a **Proof-of-Pubblication** and an anti-double-spend measure. 
 
-# Single Use Seals
+These are the principles behind **Client-side Validation**
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3c241331-abfa-42d9-af48-2d9bcb1aad33)
+
+This ensures the respect of:
+* Scalability: as the commitment of the verified state, which need to be stored by everyone, has a small size footprint (order on tens of byte)
+* Privacy: by using a hash one-way function (such as SHA-256), the original data (the pre-image) reference by the commitment cannot be inferred, and, in addition, are kept private by the parties.
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f429b7b9-2ddc-4701-94f0-296ce8144be0)
+
+The commitment structure used in client side validations (such as in RGB protoco which we will cover in depth later) allows important additional scalability. Indeed each possessor with a single commitment can: 
+
+* aggregate the state transitions of different properties (for example two different contracts pertaining to 2 different digital assets)
+* bundle more than one state transition of the same asset   
+
+In order to guarentee the efficacy of the commitment scheme and a precise chronologica ordering stemmed from the layer 1, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal** 
+
+# Single-use Seals
 
 
 

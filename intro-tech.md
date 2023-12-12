@@ -53,7 +53,7 @@ Naturally, if the client-side validated data are embedded in state channels, the
 In the next section we will delve into Client-side Validation and its features.  
 
 
-# Client-side Validation
+## Client-side Validation
 
  The goal of every validation process od a distributed system machine is the ability to assess the validity and the chronological ordering of the states, hence to map the state transitions that took place.
 
@@ -99,7 +99,7 @@ The commitment structure used in client side validations (such as in RGB protoco
 
 In order to guarentee the efficacy of the commitment scheme and a precise chronologica ordering stemmed from the layer 1, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.
 
-# Single-use Seals
+## Single-use Seals
 
 A Single-use seal is a form of **cryptographical commitment** which resemble the application of a physical seal to a box containing some objects, which allows to prove a sequence of events limiting the risk that this sequence of events can be altered after being set. This implies that such commitment scheme, [proposed](https://petertodd.org/2016/commitments-and-single-use-seals) by Peter Todd in ~2016, is more advanced than `simple commitments` and `timestamping`.
 
@@ -164,7 +164,11 @@ So making a recap:
  * Single-use-seal definition made on the client side, not necessary in the global consensus medium
 * However, **you can’t prove the definition of the seal itself** even if you a member of audience observing the pubblication medium
 
- `Thus we need a “chain” of single-use-seals, where **the commitment to the message of previous seal defines the next seal(s): this is what RGB does together with Bitcoin**
+ `Thus we need a “chain” of single-use-seals, where **the commitment to the message of previous seal defines the next seal(s): this is what RGB does together with Bitcoin**:
+ * the messages are client-side validated data
+ * the seal definitions are bitcoin UTXO
+ * the commitment is an hash placed inside bitcoin transaction
+ * the seal closing can be either an UTXO being spent or an addressed to which a transaction credit some bitcoins 
  
  Now we will explore in details how RGB implements the single use seal concept, storing commitment to its operation in the bitcoin blockchain.
 

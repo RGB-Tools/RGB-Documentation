@@ -97,9 +97,66 @@ The commitment structure used in client side validations (such as in RGB protoco
 * aggregate the state transitions of different properties (for example two different contracts pertaining to 2 different digital assets)
 * bundle more than one state transition of the same asset   
 
-In order to guarentee the efficacy of the commitment scheme and a precise chronologica ordering stemmed from the layer 1, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal** 
+In order to guarentee the efficacy of the commitment scheme and a precise chronologica ordering stemmed from the layer 1, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.
 
 # Single-use Seals
+
+A Single-use seal is a form of **cryptographical commitment** which resemble the application of a physical seal to a box containing some objects, which allows to prove a sequence of events limiting the risk that this sequence of events can be altered after being set. This implies that such commitment scheme, [proposed](https://petertodd.org/2016/commitments-and-single-use-seals) by Peter Todd in ~2016, is more advanced than `simple commitments` and `timestamping`.
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/984ef35b-6410-4eac-8163-d08b0ccc049e)
+
+In order to work properly, Single-use seals require:
+
+* a **Proof of Pubblication Medium**  - This can be a medium with global consensus (like layer 1 blockchain) but not necessarily decentralized, for example a newspape, which has the ability to be difficult to alterated once issued and made public.
+* to prove that a certain message `m` has been received by *every* member of a certain audience
+* to prove, conversely, that a certain message `m` has not (yet) published
+* to prove that no other alternative medium has not been used to publish the message
+
+With this properties we can state a formal definition:
+
+> A single-use Seal is a commitment formal promise to commit to a (yet) unknown message in the future, once and only once, such that commitment fact will be provably known to all members of a certain audience.
+
+With such definition and the general properties reported above, a single use seal can achieve simultaneously the following 3 properties:
+
+ * the pubblication of the commitment doesn't reveal the original message (e.g. using a one-way hash function)  - this property is also shared by simple commitment and timestamps
+ * it proofs the commitment time and the fact that the original message existed before a certain date - this property is shared by timestamps only
+ * it proofs that no alternative valid commitment can exists - this property is unique of single use seals
+
+So, how we can contruct practically a Single-use Seal? And what can be used? In a general way, it's working principles comprises 3 steps:
+
+* Seal Definition
+* Seal Closing
+* Seal Verification
+
+For the sake of the examples we will be using the well known cryprographic characters Alice and Bob.
+
+**Seal Defintion** 
+ 
+In Seal definition, Alice promise to Bob (either in private or in public) to create a **commitment** to some **message**:
+
+* at a well definied point in time and space 
+* using a precise medium of information
+
+**Seal Closing**
+
+When Alice publish the **commitment** following all the features stated in the **definition**, in addition she produces a **witness** which is the proof that the seal has been actually closed.  
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3711069c-af89-494f-be31-dfeaa960d841)
+
+
+**Seal Verification**
+      
+Once closed, the seal, being "single-use", cannot be opened nor closed again. The only thing that can be done (by Alice) is to verify if the seal has been actually closed around the commitment of the message, by using the seal, the witness and the commitment (to the message).
+
+In Computer Science Language the whole procedure can be summed-up as follows:
+```
+Define() -> seal  (done by Alice, accepted by Bob)
+
+Close(seal, commitmet(message)) -> witness    (close a seal over a message, done by Alice
+
+Verify(seal, witness, commitment(message)) ->  true|false  (verify that the seal was closed, done by Bob)
+
+
 
 
 

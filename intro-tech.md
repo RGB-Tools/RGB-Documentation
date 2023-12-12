@@ -155,6 +155,18 @@ Define() -> seal  (done by Alice, accepted by Bob)
 Close(seal, commitmet(message)) -> witness    (close a seal over a message, done by Alice
 
 Verify(seal, witness, commitment(message)) ->  true|false  (verify that the seal was closed, done by Bob)
+```
+
+So making a recap:
+
+* With single-use-seal you can build client-side-validated systems which does not require global consensus (“blockchain”) storing all of the data.
+ * This gives scalability and  privacy
+ * Single-use-seal definition made on the client side, not necessary in the global consensus medium
+* However, **you can’t prove the definition of the seal itself** even if you a member of audience observing the pubblication medium
+
+ `Thus we need a “chain” of single-use-seals, where **the commitment to the message of previous seal defines the next seal(s): this is what RGB does together with Bitcoin**
+ 
+ Now we will explore in details how RGB implements the single use seal concept, storing commitment to its operation in the bitcoin blockchain.
 
 
 

@@ -1,26 +1,26 @@
-# Technical Introduction
+# Technical Introduction and Base Concepts
 
-Before going entering into the technical details of the RGB, an introduction over the fundamental elements of the protocol, the environment undepinning the technological substrate, as well as the base terminology represent an essential step towards a thorough understanding of the subject.
+Before divining into the technical details of the RGB, the introduction to the fundamental concepts of the technology, as well as the study of the base terminology represent the essential step towards a thorough understanding of the subject.
 
 ## Paradigm of Distributed Computing
 
 * RGB locate itself as a new additional piece of the vast word of *Distributed Computing*.
-* Distributed computing, is a branch of Computer Science which study the protocol systems able to exchange and compute data information between of a network of computer nodes: the set of computer nodes and the undelying protocol rules which allows the computation are the contituents of the **Distributed system**.  
-  * The nodes, composing the network are able to indipendently verify and validate such set of data and they can contruct, depending on the protocol, complete or partial snapshots of the properties of the network: these are **state** of the distributed system and essentially represent the expression of properties and the underlying agreement over that properties that are established during network operations.
-  * The most important properties of a Distributed Systems is represented by the **chronological ordering** of the operations and thus the **ordered sequence of state changes** that take place inside the system. In fact when we talk about **Consensus**, we are talking about:
-    1.  **recognized validity of the state transitions** by the nodes and most importantly,
-    2.  **consensus on the order of the state transitions** so that every node knows which operation precedes the other.
+* Distributed computing, is a branch of Computer Science which study the protocol systems able to exchange and compute data information between of a network of computer nodes: the set of computer nodes and the undelying protocol rules which allows the computation of these data are the contituents of the **Distributed system**.  
+  * The nodes, composing the network are able to indipendently verify and validate some set of data and they can contruct, depending on the protocol, complete or partial snapshots of the set of information of the network: these are called the **states** of the distributed system and essentially represent the expression of properties and the underlying agreement over those properties that are established during network operations.
+  * The most important properties of a Distributed Systems is represented by the **chronological ordering** of the operations and the data and thus the **ordered sequence of state changes** that take place inside the system. In fact when we talk about **Consensus**, we are talking about:
+    1.  **recognizing the validity of the state transitions** by the nodes according to the protocol rules.
+    2.  **establishing consensus on the order of the state transitions** so that every node knows which operation precedes the other and the state cannot be reversed once it has changed: the so called **anti double-spend property**.  
   * The achievement of a *resilient and reliable* chronological ordering for distributed system, which embed important properties such as permissionlessness and censorship resistance, was reached by Satoshi Nakamoto with the invention of Bitcoin, using the blockchain data structure and a **Proof-of-Work** consensus which is able to entrust differrent participants to the system according to their computational power. Indeed Bitcoin can be considered to be the first working example of **Distributed Consensus System**.     
 
-We will discuss various kind of **Distributed Consensus Systems** which have some degree of hierarchy and interrelated properties between them. They are differentiated on how to dermenine and enforce the most updated state of the system:
-* **Blockchain /Timechain + PoW Mechanism (layer 1)**. The sequence of **state transitions** is public and auditable and is organized in **transaction** included in ordered blocks which are added one upon the other. The security of the system lies on the amount of work required to produce an alternative chain which revert the actual greater-work chain which is considered as the valid chain. For instance **Bitcoin** is based on this technological stack.
-* **State channels (Layer 2)**. Is a system constructed between 2 (or more) parties and which depend hierarchically on layer 1. The final state is represented by the last transaction out of sequence of ordered invalidating transactions, signed and agreed by the parties *off-chain*. The final state can be enforced by each parties by publishing that last valid transaction on the layer 1. The most developed application of state channels is the **Lightning Network**.
-* **Client Side Validated Data -Stash (Layer 3)** Is a system that can be implemented on both blockchain and to state channels and it is based on a certain *limited* amount data whose validity, computation tasks and update is entrusted to each node. Differently form layer 1, the data to be validated by each client node represent a **defined subset of the entirery of all state transitions of the network, and NOT every transition happened within the network**. This validated subset of data in possession of a client node is defined a **Stash** of the data. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last the transition (a so called **Shard**) and which relate the exchange and the validation of certain digital properties among the counterpary involved. Seen as a whole, the validation mechanism of the shard which produce the stash is called **Client-side Validation** and underpin all **RGB** operations.
+We will discuss various kind of **Distributed Consensus Systems** which have some degree of hierarchy and interrelated properties between them. They are differentiated on how they determine and enforce the most updated state of the system:
+* **Blockchain + PoW Mechanism (layer 1)**. The sequence of **state transitions** is public and auditable and is organized in **transactions** included in ordered blocks which are added one upon the other. The security of the system lies on the amount of work required to produce an alternative chain which revert the actual greater-work chain which is considered as the valid chain. For instance **Bitcoin** is based on this technological stack.
+* **State channels (Layer 2)**. Is a system constructed between 2 (or more) parties and which depend hierarchically on layer 1. The final state is represented by the last transaction out of sequence of ordered invalidating transactions, signed and agreed by the parties *off-chain*. The final state can be enforced by each parties by publishing that last valid transaction on the layer 1. The most known application of state channels is the **Lightning Network**.
+* **Client Side Validated Data - Stash (Layer 3)** Is a system that can be implemented both on blockchain and to state channels and it is based on a certain *circumscribed* amount data whose validity, computation tasks and update is entrusted to some nodes. Differently form layer 1, the data to be validated by each client node represent a **defined subset of the entirery of all state transitions of the network, and NOT every transition happened within the network**. This validated subset of data in possession of a client node is defined a **Stash** of the data. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last transition and which relate to the exchange and to the validation of some digital properties among the counterpary involved. Seen as a whole, the validation mechanism of the shard which produce the stash is called **Client-side Validation** and underpin all **RGB** operations.
  
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/ac60cc0d-0d3f-4dbd-a7c5-2cef5ac1b765)  
 *The 3 set of Distributed System - Blockchain (layer1) is self-sustaining while the other 2 rely on layer 1 for operating - layer 3 can operate on top of both blockchain and state channels*
 
-In order to precisely frame the applications of each Distributed Consensus System and their undelying data structure it's important to understand the limitations that affect each one of these technology. This condition is expressed in form of a **Trilemma** which is connected to an important theoretical result of Distributed Computing, known as **[CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem)**. Indeed the therorem states that:
+In order to precisely frame the applications of each Distributed Consensus System and their undelying data structure it's important to understand the limitations that affect each one of these technology. This condition is expressed in form of a **Trilemma** which is connected to an important theoretical result of Distributed Computing, known as **[CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem)**. which states that:
 
 > Any distributed data store can provide only two of the following three guarantees:
 > * Consistency - Every read receives the most recent write or an error.
@@ -30,7 +30,7 @@ In order to precisely frame the applications of each Distributed Consensus Syste
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/022ad2c0-f07d-4754-a3e6-a150bd64abdf)  
 *Application of CAP Theorem to Distributed Consensus System - Each Distributed Consensus System can fit 2 and only 2 of the properties*
 
-Seen from a more consensus-focussed point of view, the properties of the theorem can be seen also see the 3 properties from this angle: 
+Seen from a more consensus-focussed point of view, the properties of the theorem can be reformulated in the following way: 
 
 * Consistency > Integrity
 * Availability > Decentralization
@@ -38,49 +38,49 @@ Seen from a more consensus-focussed point of view, the properties of the theorem
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/7692116c-f13b-4a06-bb39-d649a0dce10c)  
 *A more in-depth view of th inherent degree of application of the Trilemma to Distributed Consensus System*  
-In syntesis:
 
-* Blockchain (layer 1) preserve Integrity and Decentralization but lacks Scalability and Confidentiality as each node need to replicate *publicly and in-full* every state transition
+In syntesis:
+* Blockchain (layer 1) preserve Integrity and Decentralization but lacks Scalability and Confidentiality as each node need to replicate *publicly and in-full* every state transition.
 * State Channels (layer 2) preserve Decentralization and Scalability but doesn't preserve the Integrity as the state can be changed or updated asyncrnously by the counterparties.
-* Client Side validated data (layer 3) are Scalable and maintin Integrity, however some data are not decentralized and hence lack Availability. Thus a single point of centralization of the data (e.g. the issuer) is required.  
+* Client Side validated data (layer 3) are Scalable and maintin Integrity, however some data are not decentralized and hence lack Availability, as a single point of centralization which stores the data is required.  
 
 An important feature to take into account is the different way through which State Channel and Client-Side validation architectures update the state of the data:
 
 * State Channel state must be **syncronous** with the counterpary
 * Client side validated state update can be **asyncronous**
 
-Naturally, if the client-side validated data are embedded in state channels, the update of the state will follow an asyncronous process. 
-In the next section we will delve into Client-side Validation and its features.  
+Naturally, if the client-side validated data are embedded in state channels, the update of the state will be ultimately based on an asyncronous process. 
+
+In the next paragraph we will delve into Client-side Validation and its features.  
 
 
 ## Client-side Validation
 
- The goal of every validation process od a distributed system machine is the ability to assess the validity and the chronological ordering of the states, hence to map the state transitions that took place.
+ The goal of every validation process of a distributed system machine is the ability to assess the validity and the chronological ordering of the states, hence to map the state transitions that took place.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/463eea67-d5e9-401c-916e-bce7357a538e)
 
- In Bitcoin Blockchain, for instance, such process maps the change in the [UTXO](https://en.wikipedia.org/wiki/Unspent_transaction_output) determined by the transactions collected into the sequence of ordered blocks. Every block represent a state update.
+In Bitcoin Blockchain, for instance, such process maps the change in the [UTXO set](https://en.wikipedia.org/wiki/Unspent_transaction_output) determined by the transactions collected into the sequence of ordered blocks. Thus, every block represent a state update.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/1d209128-de76-40ab-b291-373b1c74440a)
 
-The main drawback of Layer 1 validation process is that **every node needs to validate each transaction from everybody** and store the related data and this architecture lead to two main issues:
-* Scalability: the size limit of the blocks vs. the demand of blockspace per unit time shared by all the participants willing to transact (i.e. 1 MB on ~10 minutes on average on bitcoin)   
-* Privacy: the detail of each transactions are broadcasted and stored in public form ( in particular: the amounts transacted and the receiving adressess, albeit pseudonimous)
+The main drawback of Layer 1 validation process is that **every node needs to validate each transaction from everybody** and store the related data. This architecture lead to two main issues:
+* Scalability: the size limit of the blocks vs. the demand of blockspace per unit time shared by all the participants willing to transact limit the transaction throughput (i.e. 1 MB on ~10 minutes on average on bitcoin)   
+* Privacy: the detail of each transactions are broadcasted and stored in public form (in particular: the amounts transacted and the receiving adressess, although pseudonimous)
   
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/403da928-31a8-4e08-8707-9c1f853df067)
 
-However, from the point of a transaction recipient the only aspectes that matters are:
-* the last state of a specific property that will change through a transaction addrressed to him and,
-* the chronological sequence of transactions (and thus state transitions) that lead to the that last state.s
+However, from the point of view of a transaction recipient the only aspects that matters are:
+* the last state of a specific property that will change through a transaction addrressed to him.
+* the chronological sequence of transactions (and thus state transitions) that lead to that last state.
 
 Basically what is important to him is the [Directed Acyclic Graph](#) which connect the history of state transitions to the last state addressed to him (a **Shard** of the whole data)
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/6f81258f-1326-46e8-a951-16bc61163784)
 
-
-For this reason, the **logic of validation can be resersed** in the following terms:
-* Each party validates **its own part of the history** and thus the digital properties that matters to him
-* A compact reference to the **validated state transition is committed to the first layer**  which constitue a **Proof-of-Pubblication** and an anti-double-spend measure. 
+For this reason, the **logic of validation can be reversed** in the following terms:
+* Each party validates **its own part of the history** and thus the digital properties that matters to it.
+* A compact reference to the **validated state transition is committed to the first layer**  which constitue a **Proof-of-Pubblication** and an **anti double-spend measure** 
 
 These are the principles behind **Client-side Validation**
 
@@ -169,8 +169,20 @@ So making a recap:
  * the seal definitions are bitcoin UTXO
  * the commitment is an hash placed inside bitcoin transaction
  * the seal closing can be either an UTXO being spent or an addressed to which a transaction credit some bitcoins 
+
+### Library for Client-side Validation
+Repository:
+* https://github.com/LNP-BP/client_side_validation
+
+Rust Crates:
+  * https://crates.io/crates/client_side_validation
+  * https://crates.io/crates/single_use_seals
  
- Now we will explore in details how RGB implements the single use seal concept, storing commitment to its operation in the bitcoin blockchain.
+ In the next session we will explore in details how RGB implements the single use seal concept, storing commitments of its operation in the bitcoin blockchain.
+
+
+
+ 
 
 
 

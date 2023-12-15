@@ -51,80 +51,69 @@ An important feature to take into account is the different way through which Sta
 
 Naturally, if the client-side validated data are embedded in state channels, the update of the state will be ultimately based on an asyncronous process. 
 
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/aa3eecd6-4906-4bdd-8c5c-417edafabc70)
 
-
-![Alt text][def]
-
-In addition the 3 layers just described, a fourth layer of Bitcoin Finance (#BiFi) laveraging both state channels and blockchain can complete the whole ecosystem. The general picture and the deep inteconnections of all the layers, with the blockcain layer at the base, allow to achieve all the properties of the CAP theorem.
-
-
+In addition to the 3 layers we have been just describing, a fourth layer of Bitcoin Finance (#BiFi) which laverages both state channels and blockchain can complete the whole ecosystem. The general picture and the deep inteconnections of all the layers, with the blockcain layer at the base, allow to achieve, in a composite way, all the properties of the CAP theorem.
 
 In the next paragraph we will delve into Client-side Validation and its features.  
 
-
-
-
 ## Client-side Validation
 
- The goal of every validation process of a distributed system machine is the **ability to assess the validity and the chronological ordering of the states**, hence to map the state transitions that took place.
+The goal of every validation process of a distributed system machine is the **ability to assess the validity and the chronological ordering of the states**, hence to map the state transitions that took place.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/463eea67-d5e9-401c-916e-bce7357a538e)
 
-In Bitcoin Blockchain, for instance, such process maps the change in the [UTXO set](https://en.wikipedia.org/wiki/Unspent_transaction_output) determined by the transactions collected into the sequence of ordered blocks. Thus, every block represent a state update.
+In Bitcoin Blockchain, for instance, such process maps the change in the [UTXO set](https://en.wikipedia.org/wiki/Unspent_transaction_output) determined by the transactions collected into the sequence of ordered blocks. Thus, every block represent a **state update**.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/1d209128-de76-40ab-b291-373b1c74440a)
 
-The main drawback of Layer 1 validation process is that **every node needs to validate each transaction from everybody** and store the related data. This architecture lead to two main issues:
+The main drawback of Layer 1 validation process is that **every node needs to validate store each transaction from everybody and store the related data** once block inclusion took place. This architecture lead to two main issues:
 * Scalability: the size limit of the blocks vs. the demand of blockspace per unit time shared by all the participants willing to transact limit the transaction throughput (i.e. 1 MB on ~10 minutes on average on bitcoin)   
 * Privacy: the detail of each transactions are broadcasted and stored in public form (in particular: the amounts transacted and the receiving adressess, although pseudonimous)
   
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/403da928-31a8-4e08-8707-9c1f853df067)
 
-However, from the point of view of a transaction recipient the only aspects that matters are:
-* the last state of a specific property that will change through a transaction addrressed to him.
-* the chronological sequence of transactions (and thus state transitions) that lead to that last state.
+However, from the point of view of a transaction recipient, the only aspects that matters are:
+* the last state transition motivated by a transaction addrressed to him.
+* the chronological sequence of transactions (and thus state transitions) that lead to that last state transition.
 
-Basically what is important to him is the [Directed Acyclic Graph](#) which connect the history of state transitions to the last state addressed to him (a **Shard** of the whole data)
+Basically what is important to him is the [Directed Acyclic Graph](#) which connect the history of the state transitions from the [genesis]() to the last state addressed to him (a **Shard** of the whole data)
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/6f81258f-1326-46e8-a951-16bc61163784)
 
 For this reason, the **logic of validation can be reversed** in the following terms:
 * Each party validates **its own part of the history** and thus the digital properties that matters to it.
-* A compact reference to the **validated state transition is committed to the first layer**  which constitue a **Proof-of-Pubblication** and an **anti double-spend measure** 
-
-These are the principles behind **Client-side Validation**
+* A compact reference of the **validated state transition is committed to the first layer** in order to be timestamped. This construction constitue a **Proof-of-Pubblication** and act as an **anti double-spend measure**. 
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3c241331-abfa-42d9-af48-2d9bcb1aad33)
 
-This ensures the respect of:
+**Cliwent-side Validation ensure the respect of the following properties:
 * Scalability: as the commitment of the verified state, which need to be stored by everyone, has a small size footprint (order on tens of byte)
-* Privacy: by using a hash one-way function (such as SHA-256), the original data (the pre-image) reference by the commitment cannot be inferred, and, in addition, are kept private by the parties.
+* Privacy: by using a hash one-way function (such as SHA-256), the original data (the pre-image) which has produced the commitment cannot be reconstructed, and, in addition, they are kept private by the parties.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f429b7b9-2ddc-4701-94f0-296ce8144be0)
 
-The commitment structure used in client side validations (such as in RGB protoco which we will cover in depth later) allows important additional scalability. Indeed each possessor with a single commitment can: 
+The commitment structure used in Client-side Validation (such as in RGB protocol which we will cover in depth later) allows important additional scalability features:
+* aggregate state transitions of different properties (for example two different contracts pertaining to 2 different digital assets).
+* bundle more than one state transition of the same asset in the same commitment.   
 
-* aggregate the state transitions of different properties (for example two different contracts pertaining to 2 different digital assets)
-* bundle more than one state transition of the same asset   
-
-In order to guarentee the efficacy of the commitment scheme and a precise chronologica ordering stemmed from the layer 1, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.
+In order to guarentee the efficacy of the commitment scheme and a precise chronologica ordering stemmed from the blockchain layer, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.
 
 ## Single-use Seals
 
-A Single-use seal is a form of **cryptographical commitment** which resemble the application of a physical seal to a box containing some objects, which allows to prove a sequence of events limiting the risk that this sequence of events can be altered after being set. This implies that such commitment scheme, [proposed](https://petertodd.org/2016/commitments-and-single-use-seals) by Peter Todd in ~2016, is more advanced than `simple commitments` and `timestamping`.
+A Single-use seal is a form of **cryptographical commitment** which resemble that of the application of a physical seal to a box containing some objects, which allows to prove a sequence of events limiting the risk that this sequence of events can be altered after being set. This implies that such commitment scheme, [proposed](https://petertodd.org/2016/commitments-and-single-use-seals) by Peter Todd in ~2016, is more advanced than `simple commitments` and `timestamping`.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/984ef35b-6410-4eac-8163-d08b0ccc049e)
 
 In order to work properly, Single-use seals require:
 
-* a **Proof of Pubblication Medium**  - This can be a medium with global consensus (like layer 1 blockchain) but not necessarily decentralized, for example a newspape, which has the ability to be difficult to alterated once issued and made public.
+* a **Proof of Pubblication Medium**  - This can be a medium with global consensus (like blockchain layer) but not necessarily decentralized, for example a newspaper, which has the ability to be difficult to forge or replicate once issued and made public.
 * to prove that a certain message `m` has been received by *every* member of a certain audience
-* to prove, conversely, that a certain message `m` has not (yet) published
 * to prove that no other alternative medium has not been used to publish the message
 
-With this properties we can state a formal definition:
+With these properties we can state a more formal definition:
 
-> A single-use Seal is a commitment formal promise to commit to a (yet) unknown message in the future, once and only once, such that commitment fact will be provably known to all members of a certain audience.
+> A single-use Seal is a formal promise to commit to a (yet) unknown message in the future, once and only once, such that commitment fact will be provably known to all members of a certain audience.
 
 With such definition and the general properties reported above, a single use seal can achieve simultaneously the following 3 properties:
 
@@ -142,40 +131,35 @@ For the sake of the examples we will be using the well known cryprographic chara
 
 **Seal Defintion** 
  
-In Seal definition, Alice promise to Bob (either in private or in public) to create a **commitment** to some **message**:
+In Seal definition, Alice promise to Bob (either in private or in public) to create some **message** (in practice an hash of some data):
 
 * at a well definied point in time and space 
-* using a precise medium of information
+* using a precise pubblication medium
 
 **Seal Closing**
 
-When Alice publish the **commitment** following all the features stated in the **definition**, in addition she produces a **witness** which is the proof that the seal has been actually closed.  
+When Alice publish the **message** following all the rules stated in the **seal definition**, in addition, she produces a **witness** which is the proof that the seal has been actually closed.  
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3711069c-af89-494f-be31-dfeaa960d841)
 
 
 **Seal Verification**
       
-Once closed, the seal, being "single-use", cannot be opened nor closed again. The only thing that can be done (by Alice) is to verify if the seal has been actually closed around the commitment of the message, by using the seal, the witness and the commitment (to the message).
+Once closed, the seal, being "single-use", cannot be opened nor closed again. The only thing that can be done by Bob, is to verify if the seal has been actually closed around the commitment of the message, using as inputs: the seal, the witness and the commitment (to the message).
 
 In Computer Science Language the whole procedure can be summed-up as follows:
 ```
 Define() -> seal  (done by Alice, accepted by Bob)
 
-Close(seal, commitmet(message)) -> witness    (close a seal over a message, done by Alice
+Close(seal, commitment(message)) -> witness    (close a seal over a message, done by Alice)
 
 Verify(seal, witness, commitment(message)) ->  true|false  (verify that the seal was closed, done by Bob)
 ```
 
-So making a recap:
+So the combination of single-use seals and client-side-validation allows for the creation of a distributed system that do not require global consensus (“blockchain”) in order to store all the data that matter to some counterparties, and this provide high level of scalability and privacy. However, this is not enough to make the system work. As the definition of a single-use seal is made on the client-side and it in not necessary to include it in the global consensus medium, **a party can’t prove that the definition of the seal has ever took place** even if you a member of audience observing the pubblication medium.
 
-* With single-use-seal you can build client-side-validated systems which does not require global consensus (“blockchain”) storing all of the data.
- * This gives scalability and  privacy
- * Single-use-seal definition made on the client side, not necessary in the global consensus medium
-* However, **you can’t prove the definition of the seal itself** even if you a member of audience observing the pubblication medium
-
- `Thus we need a “chain” of single-use-seals, where **the commitment to the message of previous seal defines the next seal(s): this is what RGB does together with Bitcoin**:
- * the messages are client-side validated data
+ `Thus we need a **“chain” of single-use-seals**, where **the seal closing of previous seal embedds the definition of the next seal(s): this is what RGB does together with Bitcoin**:
+ * the messages are commitment to client-side validated data
  * the seal definitions are bitcoin UTXO
  * the commitment is an hash placed inside bitcoin transaction
  * the seal closing can be either an UTXO being spent or an addressed to which a transaction credit some bitcoins 

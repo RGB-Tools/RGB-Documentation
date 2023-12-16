@@ -1,4 +1,4 @@
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/8c355911-9d96-4baf-8b1b-235f29edef2b)# Client-side Validation with Bitcoin
+# Client-side Validation with Bitcoin
 
 In this section we will explore the application of client-side validation and single-use seal to Bitcoin Blockchain, introducing the main architectural features behind **RGB** protocol.
 As mentioned in the [previous chapter](intro-tech.md) this cryptographic operations can be generally applied to different blockchain and even to different pubblication medium. However the outstanding properties of Bitcoin consensus algorithm in particular related to decentralization, censorship resistance and permissionlessness make it the ideal technologycal stak for developing advanced programmability features such as dose required by digital bearer rights and smart contracts.       
@@ -32,13 +32,20 @@ In particular RGB protocol uses the **TxO2** scheme in which both seal definitio
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f770fd32-e903-49b0-a3ea-d604fd189770)
 
-4. However, the UTXO spent by Alice contains the commitment of the client side validated data. By passing the original data to Bob, he is able, independently, to verify that they are duly referenced by the commitment placed by Alice in the witness transaction. 
+4. However, the UTXO spent by Alice contains the commitment of the client side validated data. By passing the original data to Bob, she is able to prove to Bob that those data are duly referenced by the commitment placed by Alice in the witness transaction. The verification operation is performed by Bob independenly, using the appropriate scheme they have agreed upon.  
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f6440aae-202a-4569-bea7-f46664c00e92)
 
+The key point of single-use seal usage in combination with client-side validation consist in the uniqueness of the spending event and the data committed (i.e. the message) to it:
 
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/b246c3af-4df0-4eb3-aea7-2aca5780eac2)
 
+The whole operation can be summed up in the following terms.
 
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/dd575319-8eb8-48c2-837a-b6b7bf4faa81)
 
- 
+The next important step, which we will focus in the next section, is represented by the different methods that allows to store the commitment ot the client-side-validated data inside the Bitcoin witness transaction.   
+
+## Deterministic Bitcoin Commitment 
+
  

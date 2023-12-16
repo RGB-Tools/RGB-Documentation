@@ -1,12 +1,12 @@
 # Client-side Validation with Bitcoin
 
 In this section we will explore the application of client-side validation and single-use seal to Bitcoin Blockchain, introducing the main architectural features behind **RGB** protocol.
-As mentioned in the [previous chapter](intro-tech.md) this cryptographic operations  
+As mentioned in the [previous chapter](intro-tech.md) this cryptographic operations can be generally applied to different blockchain and even to different pubblication medium. However the outstanding properties of Bitcoin consensus algorithm in particular related to decentralization, censorship resistance and permissionlessness make it the ideal technologycal stak for developing advanced programmability features such as dose required by digital bearer rights and smart contracts.       
 
-Basically, there are 2 ways in which a Single-use Seal can be defined and subsequently close on bitcoin:
+Basically, there are 2 ways in which a Single-use Seal can be defined and subsequently close on Bitcoin:
 
-* Public key or address – the seal is closed when the first use of it take place. The committment to client-side validated data is accomplished with the signature of the inputs.
-* Bitcoin transaction output – the seal is closed by spending an UTXO selected in the seal definition. The commitment to the client-side validated data can be done in several ways inside the spending transaction.
+* By using **Public keys or addresses**, the seal is closed when the first use of it take place. The committment to client-side validated data is accomplished with the signature of the inputs.
+* **Bitcoin transaction outputs** – the seal is closed by spending an UTXO previously selected in the seal definition. The commitment to the client-side validated data can be done in several ways inside the spending transaction.
 
 In the following table we summarize the scheme that can be employed:
 
@@ -15,6 +15,8 @@ In the following table we summarize the scheme that can be employed:
 |   |   |   |   |   |   |                                    |
 |   |   |   |   |   |   |                                    |
 |   |   |   |   |   |   |                                    |
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/8ba6ff47-5cd7-4ff2-bddb-c04bb12e9de9)
 
 
 

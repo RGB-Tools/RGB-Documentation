@@ -36,11 +36,7 @@ In particular RGB protocol uses the **TxO2** scheme in which both seal definitio
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f6440aae-202a-4569-bea7-f46664c00e92)
 
-The key point of single-use seal usage in combination with client-side validation consists in the uniqueness of the spending event and the data committed (i.e. the message) to it, which cannot be altered in the future:
-
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/b246c3af-4df0-4eb3-aea7-2aca5780eac2)
-
-The whole operation can be summed up in the following terms.
+The key point of single-use seal usage in combination with client-side validation consists in the uniqueness of the spending event and the data committed (i.e. the message) to it, which cannot be altered in the future. The whole operation can be summed up in the following terms.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/dd575319-8eb8-48c2-837a-b6b7bf4faa81)
 

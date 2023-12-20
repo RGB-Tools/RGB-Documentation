@@ -10,20 +10,21 @@ Most upper-level commitment of a [client-side-validation](#client-side-validatio
 
 #### Assignement
 
-The RGB-equivalent of a transaction output modifying the state of a contract
+The RGB-equivalent of a transaction output modifying the state of a contract.
 
 #### Bundle
+
+A set of RGB assignements[#assignemen] whose state transitions are grouped together at client-side level as they reference to the same contract schema (e.g. asset). 
 
 
 #### Client-side Validation
 
-The operation which allows the verification of some data exchanged between parties according to some defined protocolo rule. In RGB protocol these data are in form of [consignement](#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they dont't need to be registered on a public medium (e.g. the blockchain).
+The operation which allows the verification of some data exchanged between parties according to some defined protocolo rule. In RGB protocol these data are in form of [consignements](#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they dont't need to be registered on a public medium (e.g. the blockchain).
 
 #### Commitment
 
 Formal timestamped fingerprint expressed as the registration of an hash referring to some structured data over some defined medium (e.g. the blockchain)
 
-#### Commitment Scheme
 
 #### Consignment
 The data trasnfered between parties that are subject to client-side validation. There are 2 main types of consignemen:
@@ -40,6 +41,9 @@ A set of rights established and executed digitally between certain parties. A co
 
 #### Contract State
 
+The set of up to date, private and public information related to a contract. In RGB the contract state is constituted by:
+* Global State - public informations
+* Owned State
 
 
 #### Contract Participant
@@ -50,8 +54,11 @@ An actor which participate in contract operations. Contract parties are classifi
 * Contract party: all actors which has ownership rights over RGB contract state
 * Public party: an actor constructing state extensions. Can exist only in contracts providing valencies and state extensions.
 
+#### Deterministic Bitcoin Commitments - DBC
 
-#### Deterministic Bitcoin Commitment - DBC
+The set of rules which allows for the registration of a provably single [commitment](#commitment) in a Bitcoin transaction. Specifically, RGB protocol embedds 2 forms of DBC:
+* Opret
+* Tapret
 
 #### Directed Acyclic Graph - DAG
 
@@ -65,6 +72,8 @@ An optional fingerprint that past owners of a contract can register allowing ver
 
 #### Genesis
 
+The set of data, regulated by a contract [schema](), which represent the starting point of every contract of RGB. It's equivalent of Bitcoin Genesis Block in the Client-side Validation domain. 
+
 #### Global State
 
 #### Interface
@@ -75,17 +84,13 @@ The set of human and wallet-readable information of an RGB [contract](#contract)
 
 A Base58 encoded string, which supporta URL scheme capabilities, embedding the necessary data in order to allow a payer counterparty to construct a state transition.
 
-#### Merkle Tree
-
 #### Multi Protocol Commitment - MPC
 
-#### Private Key
-
-#### Public Key
+The Merkle Tree structure used in RGB to include in a single commitment into the Bitcoin Blockchain multiple contract state transitions of different contracts.
 
 #### Schema
 
-The set of rules according to which an RGB contract works.
+The set of rules and business logic according to which an RGB contract works.
 
 #### Seal Definition
 
@@ -99,7 +104,7 @@ A promise to [commit](#commitment) to a yet unknown message in the future, once 
 
 #### Stash
 
-The set of client-side data over which have undergone a [validation](glossary-of-terms.md#client-side-validation) operation and are stored by the user.
+The set of client-side data over which have undergone [validation](glossary-of-terms.md#client-side-validation) and are stored by the user.
 
 #### State Extension
 

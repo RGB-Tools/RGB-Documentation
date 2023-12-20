@@ -16,4 +16,5 @@ This guide targets the broader technical audience willing to undertand in depth 
    * Deterministic Bitcoin Commitments - DBC
    * Multi Protocol Commitments - MPC
 * [RGB Contracts and States]()
-* [RGB State Transitions and Business Logic]()  
+* [RGB State Transitions and Business Logic]()
+* [Glossary](terminology/glossary.md)

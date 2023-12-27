@@ -1,26 +1,34 @@
 # Client-side Validation with Bitcoin
 
 In this section we will explore the application of client-side validation and single-use seal to Bitcoin Blockchain, introducing the main architectural features behind **RGB** protocol.
-As mentioned in the [previous chapter](intro-tech.md) this cryptographic operations can be generally applied to different blockchain and even to different pubblication medium. However, the outstanding properties of Bitcoin consensus algorithm in particular related to decentralization, censorship resistance and permissionlessness make it the ideal technologycal stak for developing advanced programmability features such as those required by digital bearer rights and smart contracts.       
+As mentioned in the [previous chapter](intro-tech.md) this cryptographic operations can be generally applied to different blockchain and even to different pubblication medium. However, the outstanding properties of Bitcoin consensus algorithm in particular related to decentralization, censorship resistance and permissionlessness make it the ideal technologycal stak for developing advanced programmability features such as those required by digital bearer rights and smart contracts.
 
-Basically, there are 2 ways in which a Single-use Seal can be defined and closed using some parts of the Bitcoin transactions:
+## Single-use Seals in Bitcoin Transactions and RGB
 
-* **Public keys or addresses**, the seal is closed when the first use of previously selected address/public key takes place (i.e. some funds are locked by a script involving it). The committment to client-side validated data is accomplished with the signature of the inputs.
-* **Bitcoin transaction outputs** – the seal is closed by spending an UTXO previously selected in the seal definition. The commitment to the client-side validated data can be done in several ways inside the spending transaction.
+From previously, we recall that Single-use Seals creation undergo two fundamental operations: **Seal Definition** and **Seal Closing**. We will now explore how these two operations can be implemented **using Bitcoin as a pubblication medium**, and in particular making use of elements of **Bitcoin Transactions**. 
 
-It's worth noting that the seal definition method can be different from the seal closing method, such that there 4 combination of methods are available: 
+There are 2 main ways in which a Single-use Seal can be **defined** in Bitcoin transactions:
 
+* **Public keys or addresses**, the seal is defined selecting an address or a public key which has not been used yet (i.e. have not been used to lock some bitcoins)
+* **Bitcoin transaction outputs** – the seal is defined by selecting a specific UTXO available to some wallet.
 
+This definition methods can be employed in a combination of **closing methods** which differentiate themselves according to how a **spending transaction**:
+1. Uses the seal definition: use of the address in locking script / spend of the UTXO  
+2. Host the message over which the seal is closed according to a **commitment scheme** (i.e. in which part of the transaction the message is stored).
+     
+The following table illustrates the 4 possible combinations of seal definition and seal closing:
 
 | Scheme name  | Seal Definition         | Seal Closing            | Additional Requirements                             |  Main application              | Possible commitment schemes      |
 |--------------|-------------------------|-------------------------|-----------------------------------------------------|--------------------------------|----------------------------------|
 | PkO          | Public key value        | Transaction output      | P2(W)PKH                                            |  none yet                      | Keytweak, tapret, opret          |                  
 | **TxO2**     | **Transaction output**  | **Transaction output**  | **Requires Deterministic Bitcoin Commitments**      |  **RGBv1 (universal)**         | **Keytweak, tapret, opret**      |                  
 | PkI          | Public key value        | Transaction input       | Taproot-only - Not working with legacy wallets      |  Bitcoin-based identities      | Sigtweak, witweak                |                  
-| TxO1I        | Transaction output      | Transaction input       | Taproot-only - Not working with legacy wallets      |  none yet                      | Sigtweak, witweak                | 
+| TxOI         | Transaction output      | Transaction input       | Taproot-only - Not working with legacy wallets      |  none yet                      | Sigtweak, witweak                | 
 
 
 In particular RGB protocol uses the **TxO2** scheme in which both seal definition and the seal closing uses the Outputs of a chain of connected transactions. The "**O2**" in **TxO2** acronym stand for **2 Outputs** meaning that both the seal definition and the seal closing uses transaction Outputs. 
+
+
 We will focus on this important operation step by step below, using the 2 usual cryptographic characters: Alice, dealing with a seal operation, and Bob as an observer.
 
 1. First of all Alice, have some UTXO at her disposal **which reference some client validated data known only by her**.

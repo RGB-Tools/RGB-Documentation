@@ -25,24 +25,22 @@ The following table illustrates the 4 possible combinations of seal definition a
 | PkI          | Public key value        | Transaction input       | Taproot-only - Not working with legacy wallets      |  Bitcoin-based identities      | Sigtweak, witweak                |                  
 | TxOI         | Transaction output      | Transaction input       | Taproot-only - Not working with legacy wallets      |  none yet                      | Sigtweak, witweak                | 
 
+**RGB protocol uses the TxO2** scheme in which both seal definition and the seal closing uses the Outputs (the "**O2**" in **TxO2** acronym stand for **2 Outputs** meaning that both the seal definition and the seal closing uses transaction Outputs).
 
 As shown in the table, the possible **commitment schemes** are associated with the places of the transaction in which the messagge is committed which is further differentiate whether the message is committed in transaction input or output:
 * Transaction Input:
      * Sigtweak - the commitment is placed inside the random 32-byte **r** component constituting the **<r,s>** ECDSA signature pair of an input. It make uses of [Sign-to-contract (S2C)](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#sign-to-contract)
      * Witweak - the commitment is placed inside the segregated witness data of the transaction
-* Transaction Output:
-     * Keytweak - It uses the [Pay-to-contract](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#pay-to-contract) construction through which the public key of the output is "tweaked" (i.e. modified) in order to contain a deterministic reference to the message.   
-     * **Tapret (taptweak)** - This scheme represent a form of tweak in which the message is committed into a leaf in the `Script path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) 
-     * **Opret** - It is the most simple commitment scheme, in which the message committed is placed as an unspendable output after`OP_RETURN` opcode.
+* Transaction Output (ScriptPubKey):
+     * Keytweak - It uses the [Pay-to-contract](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#pay-to-contract) construction through which the outpu's public key of the output is "tweaked" (i.e. modified) in order to contain a deterministic reference to the message.   
+     * **Opret** - The message committed is placed as an unspendable output after`OP_RETURN` opcode.
+     * **Tapret (taptweak)** - This scheme represent a form of tweak in which the message is committed into an `OP_RETURN` tagged string placed into a leaf in the `Script path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) which thus change the value of the PubKey.
+    
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d0bc6d55-0918-48c1-b97d-73071f98874b)
 
-         
 
-**RGB protocol uses the TxO2** scheme in which both seal definition and the seal closing uses the Outputs (the "**O2**" in **TxO2** acronym stand for **2 Outputs** meaning that both the seal definition and the seal closing uses transaction Outputs). In particular, the protocol makes use of **tapret and opret** commitment schemes which we will be  in the next section. 
-
-
-We will focus on this important operation step by step below, using the 2 usual cryptographic characters: Alice, dealing with a seal operation, and Bob as an observer.
+In the next paragraphs we will focus on client side validation combined with single-use seal definition an closing operation of the **TxO2** scheme, showing them step by step below and using the 2 usual cryptographic characters: Alice, dealing with a seal operation, and Bob as an observer.
 
 1. First of all Alice, have some UTXO at her disposal **which reference some client validated data known only by her**.
 
@@ -64,8 +62,38 @@ The key point of single-use seal usage in combination with client-side validatio
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/dd575319-8eb8-48c2-837a-b6b7bf4faa81)
 
-The next important step, which we will focus in the next section, is represented by the different methods that allows to store the commitment to the client-side validated data inside Bitcoin trasnactions.   
+The next important step is to illustrate precisely how the two commitment schemes, **opret** and **tapret** works and which are the features they need to fullfill, in partircular related to determinism of the commitment.   
 
 ## Deterministic Bitcoin Commitment 
+
+The main requirement for a Bitcoin commitment scheme to be valid is that:
+> The witness closing transaction must provably contain a single commitment
+
+With this requirements it is not possible to construct some "alternative story" related to the commitment of the client-side data in the same transaction. This way the message around which we close the single-use seal is unique. In order to fullfill the requirement, independently of the number of outputs in a transaction, *one and only one output* for each commitment scheme (opret and tapret) is valid:
+
+> Uniqueness of the RGB commitment: the only valid outputs which can contain an RGB message commitment are:
+> 1. The first OP_RETURN output (if present) for `opret` commitment scheme
+> 2. The first taproot output (if present) for `tapret` commitment scheme
+
+It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally those commitments will commit to different client-side validated data, as we will see later, the data indicates explicitly the commitment method used to referce them in order to be validated.   
+
+### Opret
+
+It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
+
+`OP_RETURN` `OP_PUSHBYTE``<32-byte hash>
+
+The total size of the *ScriptPubKey* is 34 bytes
+
+### Tapret
+
+
+## Multi Protocol Commitment
+
+This section will address the following important points:
+
+1. How the value which is committed according to either `opret` or `tapret` schemes is constructed?
+2. How it is possible to store     
+
 
  

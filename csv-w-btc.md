@@ -75,15 +75,15 @@ With this requirements it is not possible to construct some "alternative story" 
 > 1. The first OP_RETURN output (if present) for `opret` commitment scheme
 > 2. The first taproot output (if present) for `tapret` commitment scheme
 
-It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally those commitments will commit to different client-side validated data, as we will see later, the data indicates explicitly the commitment method used to referce them in order to be validated.   
+It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally those commitments will commit to different client-side validated data, as we will see later, the data indicates explicitly the commitment method used to reference them in order to be validated.   
 
 ### Opret
 
 It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
 
-`OP_RETURN` `OP_PUSHBYTE``<32-byte hash>
+`OP_RETURN``OP_PUSHBYTE_32``<32-byte hash>`
 
-The total size of the *ScriptPubKey* is 34 bytes
+So The total size of the *ScriptPubKey* is 34 bytes
 
 ### Tapret
 

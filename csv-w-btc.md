@@ -81,7 +81,7 @@ It is worth noting that a transaction can contain both a single `opret` and a si
 
 It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
 
-`OP_RETURN``OP_PUSHBYTE_32``<32-byte hash>`
+`OP_RETURN` `OP_PUSHBYTE_32` `<32-byte Multi Protocol Commitment (MPC) tree root hash>`
 
 So The total size of the *ScriptPubKey* is 34 bytes
 

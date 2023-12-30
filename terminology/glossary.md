@@ -6,34 +6,35 @@ description: Terminology used in RGB sorted in alphabetical order
 
 #### Anchor
 
-Most upper-level commitment of a [client-side-validation](#client-side-validation) scheme inside a transaction. In RGB protocol is constituted by the root hash of a [Multi Protocol Commitment](#) and by a tapret proof (if used in the commitment scheme). 
-
+Set of client-side data that proof the inclusion of a unique commitment inside a transaction. In RGB protocol it is constituted by:
+* The Bitcoin transacion ID
+* The [MPC](#multi-protocol-commitment---mpc)
+* The [DBC](#deterministic-bitcoin-commitment---dbc)
 #### Assignement
 
-The RGB-equivalent of a transaction output modifying the state of a contract.
+The RGB-equivalent of a transaction output modifying some properties of the state of a [contract](#contract).
 
 #### Bundle
 
-A set of RGB assignements[#assignemen] whose state transitions are grouped together at client-side level as they reference to the same contract schema (e.g. asset). 
+A set of RGB [assignements](#assignement) whose state transitions are grouped together at client-side level as they reference to the same contract schema (e.g. asset). 
 
 
 #### Client-side Validation
 
-The operation which allows the verification of some data exchanged between parties according to some defined protocolo rule. In RGB protocol these data are in form of [consignements](#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they dont't need to be registered on a public medium (e.g. the blockchain).
+The operation which allows the verification of some data exchanged between parties according to some defined protocolo rules. In RGB protocol these data are in form of [consignements](#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they dont't need to be registered on a public medium (e.g. the blockchain).
 
 #### Commitment
 
-Formal timestamped fingerprint expressed as the registration of an hash referring to some structured data over some defined medium (e.g. the blockchain)
-
+Formal timestamped fingerprint expressed as the registration of an hash referring to some structured data over some defined medium expressing time indication and chronological ordering (e.g. the blockchain)
 
 #### Consignment
 The data trasnfered between parties that are subject to client-side validation. There are 2 main types of consignemen:
-* Contract Consignment: provided by the contract issues including the main information about the contract
+* Contract Consignment: provided by the contract issuer including the main information about the contract
 * Transfer Consignment: provided by the payer user party and containing all the state transition hystory up to the [terminal consignment]()
 
 #### Container
 
-The way how stash data are exchanged between users.
+The way how [stash](#stash) data are exchanged between users.
 
 #### Contract
 
@@ -43,7 +44,7 @@ A set of rights established and executed digitally between certain parties. A co
 
 The set of up to date, private and public information related to a contract. In RGB the contract state is constituted by:
 * Global State - public informations
-* Owned State
+* Owned State - set of properties that can be altered only a specific private party (which, in RGB, is in control of the UTXO included in a related seal definition) 
 
 
 #### Contract Participant
@@ -54,7 +55,7 @@ An actor which participate in contract operations. Contract parties are classifi
 * Contract party: all actors which has ownership rights over RGB contract state
 * Public party: an actor constructing state extensions. Can exist only in contracts providing valencies and state extensions.
 
-#### Deterministic Bitcoin Commitments - DBC
+#### Deterministic Bitcoin Commitment - DBC
 
 The set of rules which allows for the registration of a provably single [commitment](#commitment) in a Bitcoin transaction. Specifically, RGB protocol embedds 2 forms of DBC:
 * Opret
@@ -117,6 +118,6 @@ The set of client-side data over which have undergone [validation](glossary-of-t
 The final state of a contract which include the last state transition constructed from a payee counterparty invoice.
 
 
-#### Valency;
+#### Valency
 
 A public rights having no state but which can be referenced and  applied through a state extension.

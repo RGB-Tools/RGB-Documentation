@@ -40,6 +40,8 @@ As shown in the table, the possible **commitment schemes** are associated with t
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d0bc6d55-0918-48c1-b97d-73071f98874b)
 
 
+## TxO2 Client-side Validation 
+
 In the next paragraphs we will focus on client side validation combined with single-use seal definition an closing operation of the **TxO2** scheme, showing them step by step below and using the 2 usual cryptographic characters: Alice, dealing with a seal operation, and Bob as an observer.
 
 1. First of all Alice, have some UTXO at her disposal **which reference some client validated data known only by her**.
@@ -75,25 +77,49 @@ With this requirements it is not possible to construct some "alternative story" 
 > 1. The first OP_RETURN output (if present) for `opret` commitment scheme
 > 2. The first taproot output (if present) for `tapret` commitment scheme
 
-It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally those commitments will commit to different client-side validated data, as we will see later, the data indicates explicitly the commitment method used to reference them in order to be validated.   
+It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally, those commitments will commit to different client-side validated data, as we will see later, the data indicates explicitly the commitment method used to reference them in order to be validated.   
 
 ### Opret
 
 It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
 
-`OP_RETURN` `OP_PUSHBYTE_32` `<32-byte Multi Protocol Commitment (MPC) tree root hash>`
+`OP_RETURN` `OP_PUSHBYTE_32` `<32-byte  Tagged Multi Protocol Commitment (MPC) tree root hash>`
 
-So The total size of the *ScriptPubKey* is 34 bytes
+So the total size of the *ScriptPubKey* is 34 bytes. We will 
 
 ### Tapret
+
+Tapret scheme represents a more complex form of deterministic commitment, and represent an improvement in terms of on-chain footprint and privacy of the contract. The main idea behind this application is to hide the commitment inside the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki). It is worth noting that to preserve the highest degree of flexibility the `tapret` commitment scheme can be used both by creating a new taproot transaction used only for RGB commitment purposes, or **can be inserted in an already-existent taproot transaction created for payment purposes of the receiving party outside of RGB**. This way, an even greater degree of privacy and plausible deniability is achieved. 
+
+To this end it is usefull to make a short recap of the structure and the construction of a [taproot tweaked ScriptPubKey Q](https://lightning.engineering/posts/2023-04-19-taproot-musig2-recap/), which in this example is constituted by a Key Path Spend with internal key `P` and a 3-script tree in the Script Path Spend.
+
+```
+  Q        =       P    +     T
+
+
+                           *G
+
+
+                            t         TaggedHash("TapTweak",P || Script_root)
+
+
+                                                        TaggedHash("TapBranch",AB||C)
+
+
+                                      TaggedHash("TapBranch",hA||hB)               TaggedHash("TapLeaf",C)
+
+
+            TaggedHash("TapLeaf",A)           TaggedHash("TapLeaf",B)
+```
+
 
 
 ## Multi Protocol Commitment
 
 This section will address the following important points:
 
-1. How the value which is committed according to either `opret` or `tapret` schemes is constructed?
-2. How it is possible to store     
+1. How the tagged value which is committed according to either `opret` or `tapret` schemes is constructed?
+2. How it is possible to store in a single commitment the state change of more than one contract/asset?     
 
 
  

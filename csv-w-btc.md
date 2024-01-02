@@ -82,9 +82,12 @@ It is worth noting that a transaction can contain both a single `opret` and a si
 ### Opret
 
 It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
-
-`OP_RETURN` `OP_PUSHBYTE_32` `<Tagged Multi Protocol Commitment (MPC) Merkle root>`
-
+```
+34-byte_Opret_Commitment =
+OP_RETURN OP_PUSHBYTE_32 <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle root>
+|________| |___________| |__________________________________________________________|
+  1-byte       1-byte                           32 bytes                      
+```
 The `Tagged Multi Protocol Commitment (MPC) Merkle root` is a 32-bytes hash so the total size of the commitment in the *ScriptPubKey* is 34 bytes.
 
 ### Tapret
@@ -93,22 +96,24 @@ Tapret scheme represents a more complex form of deterministic commitment, and re
 
 First of all, before showing how the commitment it is actually embedded in a taproot transaction, we will show the exact form of the commitment which is a **64-byte** string [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) in the following way:
 ```
-OP_RESERVED OP_RESERVED ... ... ... ... ...   OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <32-byte Tagged Multi Protocol Commitment (MPC) Merkle root>  <Nonce>
-|________________________________________________________| |________| |_____________| |___________________________________________________________| |_____|
-|              OP_RESERVED x 29 times = 29 bytes             1-byte       1-byte                               32 bytes                             1 byte
-|___________________________________________________________________________________| |___________________________________________________________________|
-                  TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes                                            MPC commitment + NONCE = 33-bytes
+64-byte_Tapret_Commitment =
+
+OP_RESERVED OP_RESERVED ... OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle root>  <Nonce>
+|______________________________________| |________| |_____________| |___________________________________________________________| |______|
+| OP_RESERVED x 29 times = 29 bytes        1 byte       1 byte                               32 bytes                              1 byte
+|___________________________________________________________________________________| |__________________________________________________|
+                  TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes                                            MPC commitment + NONCE = 33 bytes
 ```
-So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte Nonce whose utility will be address later.   
+So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte `Nonce` whose utility will be address later.   
 
 In order to preserve highest degree of implementation flexibility, privacy and scalability, **Tapret scheme has been designed to integrate many different cases which occurs according to the bitcoin spending need of the user**, in particular we differentiate between the following tapret scenarios:
-* **Single incorporation of RGB Tapret commitment into a taproot transaction wihout other scripts**
-* **Integrate the Tapret RGB commitment in an already-defined taproot transaction containing a Script Path Spending structure**  
+* **Single incorporation of RGB Tapret commitment into a taproot transaction wihout Script Path Spend structure**
+* **Integrate the Tapret RGB commitment into a taproot transaction containing a pre-existing Script Path Spend structure**  
 
 We will explore each one of these scenarios below.
 
-#### Single incorporation
-ì
+#### Tapret Incorporation without Script Path Spend
+
 In order to show this first scenario, below we show the standard a taproot output Key `Q` constituted by just an internal `P` key and **no Script Path Spending**
 
 ```
@@ -122,12 +127,35 @@ In order to show this first scenario, below we show the standard a taproot outpu
 ```
 * `P` is the Internal Public Key of the *Key Path Spend*
 * `G` is the Generator point of secp256k1 curve
-* `tH_TWEAK(x)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || x)  which makes use of BIP86 to demostrate there is no Script Path Spend
+* `tH_TWEAK(P)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || P)  which makes use of [BIP86](https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki#address-derivation) to demostrate there  is no Script Path Spend
 
-####
+To insert tapret commitment in such a transaction, we modify the transaction in order to provide the commitment as a single script, according to the following scheme:
 
+``` 
++---+            +---+   +---+   +---+
+| Q |      =     | P | + | m | * | G |
++---+            +---+   +-^-+   +---+
+                           |
+             +----------------------------+
+             | tH_TWEAK(P || Script_root) |
+             +---------------------^------+
+                                   |
+         +-------------------------+------------+
+         | tH_BRANCH(64-byte_Tapret_Commitment) |
+         +--------------------------------------+
+```
 
-To this end  of the structure and the construction of a taproot output Key `Q`, which in this example is constituted by a Key Path Spend with internal key `P` and a 3-script tree in the Script Path Spend.
+* `P` is the Internal Public Key of the *Key Path Spend*
+* `G` is the Generator point of secp256k1 curve
+*  `m` is the tweaking hash
+* `tH_TAG(x)` = TaggedHash("tag_id",x) = SHA-256(SHA-256(*tag_id*) || SHA-256(*tag_id*) || x)
+     * `tH_TWEAK(x)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || x)
+     * `tH_BRANCH(x)` = SHA256(SHA-256(*TapBranch*) || SHA-256(*TapBranch*) || x)
+ 
+
+#### Tapret incorporation in pre-existing Script Path Spend
+
+To go through the construction of this more complex case we show below the structure of a taproot output Key `Q`, which in this example is constituted by a Key Path Spend with internal key `P` and a 3-script tree in the Script Path Spend.
 
 ```
 +---+            +---+   +---+   +---+
@@ -160,15 +188,61 @@ To this end  of the structure and the construction of a taproot output Key `Q`, 
 ```
 Where: 
 
-* `P` is the Internal Public Key of the *Key Path Spend*
-* `G` is the Generator point of secp256k1 curve 
 * `tH_TAG(x)` = TaggedHash("tag_id",x) = SHA-256(SHA-256(*tag_id*) || SHA-256(*tag_id*) || x)
-     * `tH_TWEAK(x)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || x)
-     * `tH_BRANCH(x)` = SHA256(SHA-256(*TapBranch*) || SHA-256(*TapBranch*) || x)
      * `tH_LEAF(x)` = SHA-256(SHA-256(*TapLeaf*) || SHA-256(*TapLeaf*) || version_leaf(x) || size(x) || x)
 * `A, B, C` are Bitcoin scripts  
 
-Now 
+The rule of RGB Tapret commitment imposes the following prescriptions:
+
+1. **The Tapret Commitment is inserted as an unspendable script at the 1st Level of the Script Tree, shifting all other scripts 1 level below.**
+
+The new Taproot Output Key `Q` including the tapret commitment is built as follows:
+```
++---+            +---+   +---+   +---+
+| Q |      =     | P | + | m | * | G |
++---+            +---+   +-^-+   +---+
+                           |
+                           +--------------------+
+                                                |
+                                +---------------+------------+
+                                | tH_TWEAK(P || Script_root) |
+                                +---------------------^------+
+                                                      |
+                                       +--------------+----------+
+                                       | tH_BRANCH(tHABC || tHT) |
+                                       +-------------^-------^---+
+                                                     |       |
+                     +-------------------------------+       +-------+
+                     |                                               |
+          +----------+-------------+               +-----------------+--------------------+
+          | tH_BRANCH(tHAB || tHC) |               | tH_BRANCH(64_byte_Tapret_Commitment) |
+          +------------^-------^---+               +--------------------------------------+
+                       |       |
+             +---------+       +-----------+
+             |                             |
++------------+----------+           +------+-----+
+| tH_BRANCH(tHA || tHB) |           | tH_LEAF(C) |
++------------^------^---+           +------^-----+
+             |      |                      |
+      +------+      +------+               |
+      |                    |               |
++-----+------+       +-----+------+        |
+| tH_LEAF(A) |       | tH_LEAF(B) |        |
++-----^------+       +-----^------+        |
+      |                    |               |
+    +-+-+                +-+-+           +-+-+
+    | A |                | B |           | C |
+    +---+                +---+           +---+
+```
+
+
+
+
+
+
+
+
+2. **According to Taproot rules, **every hashing operation of branch and leaves is performed in lexicographical ordering of the two operands**, thus depending if the  
 
 
 ## Multi Protocol Commitment

@@ -83,15 +83,51 @@ It is worth noting that a transaction can contain both a single `opret` and a si
 
 It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
 
-`OP_RETURN` `OP_PUSHBYTE_32` `<32-byte  Tagged Multi Protocol Commitment (MPC) tree root hash>`
+`OP_RETURN` `OP_PUSHBYTE_32` `<Tagged Multi Protocol Commitment (MPC) Merkle root>`
 
-So the total size of the *ScriptPubKey* is 34 bytes. We will 
+The `Tagged Multi Protocol Commitment (MPC) Merkle root` is a 32-bytes hash so the total size of the commitment in the *ScriptPubKey* is 34 bytes.
 
 ### Tapret
 
-Tapret scheme represents a more complex form of deterministic commitment, and represent an improvement in terms of on-chain footprint and privacy of the contract. The main idea behind this application is to hide the commitment inside the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki). It is worth noting that to preserve the highest degree of flexibility the `tapret` commitment scheme can be used both by creating a new taproot transaction used only for RGB commitment purposes, or **can be inserted in an already-existent taproot transaction created for payment purposes of the receiving party outside of RGB**. This way, an even greater degree of privacy and plausible deniability is achieved. 
+Tapret scheme represents a more complex form of deterministic commitment, and represent an improvement in terms of on-chain footprint and privacy of the contract. The main idea behind this application is to hide the commitment inside the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki). 
 
-To this end it is usefull to make a short recap of the structure and the construction of a [taproot tweaked ScriptPubKey Q](https://lightning.engineering/posts/2023-04-19-taproot-musig2-recap/), which in this example is constituted by a Key Path Spend with internal key `P` and a 3-script tree in the Script Path Spend.
+First of all, before showing how the commitment it is actually embedded in a taproot transaction, we will show the exact form of the commitment which is a **64-byte** string [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) in the following way:
+```
+OP_RESERVED OP_RESERVED ... ... ... ... ...   OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <32-byte Tagged Multi Protocol Commitment (MPC) Merkle root>  <Nonce>
+|________________________________________________________| |________| |_____________| |___________________________________________________________| |_____|
+|              OP_RESERVED x 29 times = 29 bytes             1-byte       1-byte                               32 bytes                             1 byte
+|___________________________________________________________________________________| |___________________________________________________________________|
+                  TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes                                            MPC commitment + NONCE = 33-bytes
+```
+So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte Nonce whose utility will be address later.   
+
+In order to preserve highest degree of implementation flexibility, privacy and scalability, **Tapret scheme has been designed to integrate many different cases which occurs according to the bitcoin spending need of the user**, in particular we differentiate between the following tapret scenarios:
+* **Single incorporation of RGB Tapret commitment into a taproot transaction wihout other scripts**
+* **Integrate the Tapret RGB commitment in an already-defined taproot transaction containing a Script Path Spending structure**  
+
+We will explore each one of these scenarios below.
+
+#### Single incorporation
+ì
+In order to show this first scenario, below we show the standard a taproot output Key `Q` constituted by just an internal `P` key and **no Script Path Spending**
+
+```
++---+            +---+   +---+   +---+
+| Q |      =     | P | + | m | * | G |
++---+            +---+   +-^-+   +---+
+                           |
+                    +-------------+
+                    | tH_TWEAK(P) |
+                    +-------------+
+```
+* `P` is the Internal Public Key of the *Key Path Spend*
+* `G` is the Generator point of secp256k1 curve
+* `tH_TWEAK(x)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || x)  which makes use of BIP86 to demostrate there is no Script Path Spend
+
+####
+
+
+To this end  of the structure and the construction of a taproot output Key `Q`, which in this example is constituted by a Key Path Spend with internal key `P` and a 3-script tree in the Script Path Spend.
 
 ```
 +---+            +---+   +---+   +---+
@@ -131,6 +167,8 @@ Where:
      * `tH_BRANCH(x)` = SHA256(SHA-256(*TapBranch*) || SHA-256(*TapBranch*) || x)
      * `tH_LEAF(x)` = SHA-256(SHA-256(*TapLeaf*) || SHA-256(*TapLeaf*) || version_leaf(x) || size(x) || x)
 * `A, B, C` are Bitcoin scripts  
+
+Now 
 
 
 ## Multi Protocol Commitment

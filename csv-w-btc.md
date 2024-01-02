@@ -94,24 +94,43 @@ Tapret scheme represents a more complex form of deterministic commitment, and re
 To this end it is usefull to make a short recap of the structure and the construction of a [taproot tweaked ScriptPubKey Q](https://lightning.engineering/posts/2023-04-19-taproot-musig2-recap/), which in this example is constituted by a Key Path Spend with internal key `P` and a 3-script tree in the Script Path Spend.
 
 ```
-  Q        =       P    +     T
-
-
-                           *G
-
-
-                            t         TaggedHash("TapTweak",P || Script_root)
-
-
-                                                        TaggedHash("TapBranch",AB||C)
-
-
-                                      TaggedHash("TapBranch",hA||hB)               TaggedHash("TapLeaf",C)
-
-
-            TaggedHash("TapLeaf",A)           TaggedHash("TapLeaf",B)
++---+            +---+   +---+   +---+
+| Q |      =     | P | + | m | * | G |
++---+            +---+   +-^-+   +---+
+                           |
+             +----------------------------+
+             | tH_TWEAK(P || Script_root) |
+             +---------------------^------+
+                                   |
+                     +-------------+----------+
+                     | tH_BRANCH(tHAB || tHC) |
+                     +------------^-------^---+
+                                  |       |
+                        +---------+       +---------+
+                        |                           |
+           +------------+----------+         +------+-----+
+           | tH_BRANCH(tHA || tHB) |         | tH_LEAF(C) |
+           +------------^------^---+         +------^-----+
+                        |      |                    |
+                 +------+      +------+             |
+                 |                    |             |
+           +-----+------+       +-----+------+      | 
+           | tH_LEAF(A) |       | tH_LEAF(B) |      |
+           +-----^------+       +-----^------+      |
+                 |                    |             | 
+               +-+-+                +-+-+         +-+-+
+               | A |                | B |         | C |
+               +---+                +---+         +---+
 ```
+Where: 
 
+* `P` is the Internal Public Key of the *Key Path Spend*
+* `G` is the Generator point of secp256k1 curve 
+* `tH_TAG(x)` = TaggedHash("tag_id",x) = SHA-256(SHA-256(*tag_id*) || SHA-256(*tag_id*) || x)
+     * `tH_TWEAK(x)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || x)
+     * `tH_BRANCH(x)` = SHA256(SHA-256(*TapBranch*) || SHA-256(*TapBranch*) || x)
+     * `tH_LEAF(x)` = SHA-256(SHA-256(*TapLeaf*) || SHA-256(*TapLeaf*) || version_leaf(x) || size(x) || x)
+* `A, B, C` are Bitcoin scripts  
 
 
 ## Multi Protocol Commitment

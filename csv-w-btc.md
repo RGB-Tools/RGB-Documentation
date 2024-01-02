@@ -1,7 +1,7 @@
 # Client-side Validation with Bitcoin
 
-In this section we will explore the application of client-side validation and single-use seal to Bitcoin Blockchain, introducing the main architectural features behind **RGB** protocol.
-As mentioned in the [previous chapter](intro-tech.md) this cryptographic operations can be generally applied to different blockchain and even to different pubblication media. However, the outstanding properties of Bitcoin consensus algorithm in particular related to decentralization, censorship resistance and permissionlessness make it the ideal technologycal stak for developing advanced programmability features such as those required by digital bearer rights and smart contracts.
+In this section we will explore the application of client-side validation and single-use seal to Bitcoin Blockchain, introducing the main architectural features behind **RGB protocol**.
+As mentioned in the [previous chapter](intro-tech.md) these cryptographic operations can be generally applied to different blockchain and even to different pubblication media. However, the outstanding properties of Bitcoin consensus algorithm in particular related to decentralization, censorship resistance and permissionlessness make it the ideal technologycal stak for developing advanced programmability features such as those required by digital bearer rights and smart contracts.
 
 ## Single-use Seals in Bitcoin Transactions and RGB
 
@@ -84,11 +84,11 @@ It is worth noting that a transaction can contain both a single `opret` and a si
 It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
 ```
 34-byte_Opret_Commitment =
-OP_RETURN OP_PUSHBYTE_32 <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle root>
+OP_RETURN OP_PUSHBYTE_32 <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root>
 |________| |___________| |__________________________________________________________|
   1-byte       1-byte                           32 bytes                      
 ```
-The `Tagged Multi Protocol Commitment (MPC) Merkle root` is a 32-bytes hash so the total size of the commitment in the *ScriptPubKey* is 34 bytes.
+The `32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root` is a 32-bytes hash so that the total size of the commitment in the *ScriptPubKey* is 34 bytes.
 
 ### Tapret
 
@@ -130,7 +130,6 @@ In order to show this first scenario, below we show the standard a taproot outpu
 * `tH_TWEAK(P)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || P)  which makes use of [BIP86](https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki#address-derivation) to demostrate there  is no Script Path Spend
 
 To insert tapret commitment in such a transaction, we modify the transaction in order to provide the commitment as a single script, according to the following scheme:
-
 ``` 
 +---+            +---+   +---+   +---+
 | Q |      =     | P | + | m | * | G |
@@ -151,7 +150,8 @@ To insert tapret commitment in such a transaction, we modify the transaction in 
 * `tH_TAG(x)` = TaggedHash("tag_id",x) = SHA-256(SHA-256(*tag_id*) || SHA-256(*tag_id*) || x)
      * `tH_TWEAK(x)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || x)
      * `tH_BRANCH(x)` = SHA256(SHA-256(*TapBranch*) || SHA-256(*TapBranch*) || x)
- 
+
+The proof of inclusion and uniqueness in the Taproot Script tree is constituted by only the Internal Key `P`. 
 
 #### Tapret incorporation in pre-existing Script Path Spend
 
@@ -190,7 +190,7 @@ Where:
 
 * `tH_TAG(x)` = TaggedHash("tag_id",x) = SHA-256(SHA-256(*tag_id*) || SHA-256(*tag_id*) || x)
      * `tH_LEAF(x)` = SHA-256(SHA-256(*TapLeaf*) || SHA-256(*TapLeaf*) || version_leaf(x) || size(x) || x)
-* `A, B, C` are Bitcoin scripts  
+* `A, B, C` are some Bitcoin scripts of this Taproot Tree  
 
 The rule of RGB Tapret commitment imposes the following prescriptions:
 
@@ -235,15 +235,66 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
     +---+                +---+           +---+
 ```
 
+2. According to Taproot rules, **every hashing operation of branch and leaves is performed in lexicographic order of the two operands**. Thus, two cases can occur, leading to two different proof of uniqueness of the commitment:
+     1. If the tapret commitment hash (`tHT`) **is greater** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the right  of Script Tree**. In this case, as per RGB protocol rules, the commitment in this position is cosidered as a valid proof of uniqueness and the merkel proof of inclusion and uniqueness of the commitmentis consituted by `tHABC` and `P` only
+     2.  If the tapret commitment hash (`tHT`) **is smaller** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the left of the Script Tree**. In this case, it must be demonstrated that on the right side of the Tree there is no other tapret commitment. To do so, `tHAB` and `tHC` need to be disclosed and constitute the merkle proof of inclusione and uniqueness together with `P`.  
 
+**tHABC < tHT**
+```
++---+            +---+   +---+   +---+
+| Q |      =     | P | + | m | * | G |
++---+            +---+   +-^-+   +---+
+                           |
+                           +--------------------+
+                                                |
+                                +---------------+------------+
+                                | tH_TWEAK(P || Script_root) |
+                                +---------------------^------+
+                                +---------------+------------+
+                                | tH_TWEAK(P || Script_root) |
+                                +---------------------^------+
+                                                      |
+                                       +--------------+----------+
+                                       | tH_BRANCH(tHABC || tHT) |
+                                       +-------------^-------^---+
+                                                     |       |
+                     +-------------------------------+       +-------+
+                     |                                               |
+          +----------+-------------+               +-----------------+--------------------+
+          | tH_BRANCH(tHAB || tHC) |               | tH_BRANCH(64_byte_Tapret_Commitment) |
+          +------------------------+               +--------------------------------------+
+```
 
+* **tHABC > tHT**    
 
-
-
-
-
-2. **According to Taproot rules, **every hashing operation of branch and leaves is performed in lexicographical ordering of the two operands**, thus depending if the  
-
+```
++---+            +---+   +---+   +---+
+| Q |      =     | P | + | m | * | G |
++---+            +---+   +-^-+   +---+
+                           |
+                           +--------------------+
+                                                |
+                                +---------------+------------+
+                                | tH_TWEAK(P || Script_root) |
+                                +---------------------^------+
+                                                      |
+                                       +--------------+----------+
+                                       | tH_BRANCH( tHT || tHABC)|   
+                                       +-------------^-------^---+
+                                                     |       |
+                                  +------------------+       +------------------+
+                                  |                                             |
+             +--------------------+-----------------+              +------------+-----------+
+             | tH_BRANCH(64_byte_Tapret_Commitment) |              | tH_BRANCH(tHAB || tHC) |
+             +--------------------------------------+              +------------^-------^---+
+                                                                                |       |
+                                                                   +------------+       +--------+
+                                                                   |                             |
+                                                      +------------+----------+           +------+-----+
+                                                      | tH_BRANCH(tHA || tHB) |           | tH_LEAF(C) |
+                                                      +-----------------------+           +------------+
+```
+As an additional method of optimization the `<Nonce>` which represent the last byte of the `64_byte_Tapret_Commitment` allows for the user contructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`  thus placing it in the right side of the tree and definitely avoiding to reveal the constituents of the script branch (in this example `tHaB` and `tHC`) 
 
 ## Multi Protocol Commitment
 

@@ -101,14 +101,14 @@ First of all, before showing how the commitment it is actually embedded in a tap
 OP_RESERVED OP_RESERVED ... OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle root>  <Nonce>
 |______________________________________| |________| |_____________| |___________________________________________________________| |______|
 | OP_RESERVED x 29 times = 29 bytes        1 byte       1 byte                               32 bytes                              1 byte
-|___________________________________________________________________________________| |__________________________________________________|
+|_________________________________________________________________| |____________________________________________________________________|
                   TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes                                            MPC commitment + NONCE = 33 bytes
 ```
 So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte `Nonce` whose utility will be address later.   
 
 In order to preserve highest degree of implementation flexibility, privacy and scalability, **Tapret scheme has been designed to integrate many different cases which occurs according to the bitcoin spending need of the user**, in particular we differentiate between the following tapret scenarios:
-* **Single incorporation of RGB Tapret commitment into a taproot transaction wihout Script Path Spend structure**
-* **Integrate the Tapret RGB commitment into a taproot transaction containing a pre-existing Script Path Spend structure**  
+* **Single incorporation** of RGB Tapret commitment into a taproot transaction **wihout Script Path Spend structure**
+* **Integrate** the Tapret RGB commitment into a taproot transaction containing a **pre-existing Script Path Spend structure**  
 
 We will explore each one of these scenarios below.
 
@@ -239,7 +239,7 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
      1. If the tapret commitment hash (`tHT`) **is greater** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the right  of Script Tree**. In this case, as per RGB protocol rules, the commitment in this position is cosidered as a valid proof of uniqueness and the merkel proof of inclusion and uniqueness of the commitmentis consituted by `tHABC` and `P` only
      2.  If the tapret commitment hash (`tHT`) **is smaller** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the left of the Script Tree**. In this case, it must be demonstrated that on the right side of the Tree there is no other tapret commitment. To do so, `tHAB` and `tHC` need to be disclosed and constitute the merkle proof of inclusione and uniqueness together with `P`.  
 
-**tHABC < tHT**
+**`tHABC < tHT`**
 ```
 +---+            +---+   +---+   +---+
 | Q |      =     | P | + | m | * | G |
@@ -247,9 +247,6 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
                            |
                            +--------------------+
                                                 |
-                                +---------------+------------+
-                                | tH_TWEAK(P || Script_root) |
-                                +---------------------^------+
                                 +---------------+------------+
                                 | tH_TWEAK(P || Script_root) |
                                 +---------------------^------+
@@ -265,7 +262,7 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
           +------------------------+               +--------------------------------------+
 ```
 
-* **tHABC > tHT**    
+* **`tHABC > tHT`**    
 
 ```
 +---+            +---+   +---+   +---+
@@ -294,7 +291,7 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
                                                       | tH_BRANCH(tHA || tHB) |           | tH_LEAF(C) |
                                                       +-----------------------+           +------------+
 ```
-As an additional method of optimization the `<Nonce>` which represent the last byte of the `64_byte_Tapret_Commitment` allows for the user contructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`  thus placing it in the right side of the tree and definitely avoiding to reveal the constituents of the script branch (in this example `tHaB` and `tHC`) 
+As an additional method of optimization the `<Nonce>` which represent the last byte of the `64_byte_Tapret_Commitment` allows for the user contructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`, thus placing it in the right side of the tree and definitely avoiding to reveal the constituents of the script branch (in this example `tHaB` and `tHC`) 
 
 ## Multi Protocol Commitment
 

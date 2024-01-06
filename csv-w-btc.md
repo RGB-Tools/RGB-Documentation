@@ -65,7 +65,7 @@ The key point of single-use seal usage in combination with client-side validatio
 
 The next important step is to illustrate precisely how the two commitment schemes, **opret** and **tapret** works and which are the features they need to fullfill, in partircular related to determinism of the commitment.   
 
-## Deterministic Bitcoin Commitment 
+## Deterministic Bitcoin Commitment - DBC
 
 For RGB commitment operations, the main requirement for a Bitcoin commitment scheme to be valid is that:
 > The witness closing transaction must provably contain a single commitment.
@@ -295,12 +295,26 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
 
 As an additional method of optimization the `<Nonce>` which represent the last byte of the `64_byte_Tapret_Commitment` allows for the user contructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`, thus placing it in the right side of the tree and definitely avoiding to reveal the constituents of the script branch (in this example `tHaB` and `tHC`) 
 
-## Multi Protocol Commitment
+## Multi Protocol Commitment - MPC
 
-This section will address the following important points:
+Multi Protocol commitments address the following important requirement:
 
 1. How the tagged value which is committed according to either `opret` or `tapret` schemes is constructed?
-2. How it is possible to store in a single commitment the state change of more than one contract/asset?     
+2. How it is possible to store in a single commitment the state change of more than one contract / state transition?     
+
+In practice the previous points are address through an **ordered merkelization** of the multiple contracts / state transitions associated to the UTXO which are being spent by the **witness closing transaction** in which such multiple transitions of eventualy commited by mean of DBCs.
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/db6c410c-9ce1-4575-b0b4-e7c09f38d502)
+
+### Tree root
+
+The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) commitment is  the <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root>` constructed according BIP-341 specification as follows:
+
+`tH_MPC(x) = SHA-256(SHA-256(*urn:lnpbp:lnpbp0004:tree:v01#23A*) || SHA-256(*urn:lnpbp:lnpbp0004:tree:v01#23A) || x)`
+
+
+
+
 
 
  

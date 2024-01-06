@@ -9,11 +9,11 @@ From previously, we recall that Single-use Seals creation undergo two fundamenta
 
 There are 2 main ways in which a Single-use Seal can be **defined** in Bitcoin transactions:
 
-* **Public keys or addresses** - the seal is defined selecting an address or a public key which has not been used yet (i.e. have not been used to lock some bitcoins)
+* **Public keys or addresses** - the seal is defined selecting an address or a public key which has not been used yet (i.e. has not been used by any locking script, thus is not locking any bitcoin)
 * **Bitcoin transaction outputs** – the seal is defined by selecting a specific UTXO available to some wallet.
 
 This definition methods can be employed in a combination of **closing methods** which differentiate themselves according to how a **spending transaction**:
-1. Uses the seal definition: use of the address in locking script / spend of the UTXO  
+1. Uses the seal definition: use of the address in locking script / spend of the UTXO.  
 2. Host the message over which the seal is closed according to a **commitment scheme** (i.e. in which part of the transaction the message is committed and stored).
      
 The following table illustrates the 4 possible combinations of seal definition and seal closing:
@@ -25,18 +25,17 @@ The following table illustrates the 4 possible combinations of seal definition a
 | PkI          | Public key value        | Transaction input       | Taproot-only - Not working with legacy wallets      |  Bitcoin-based identities      | Sigtweak, witweak                |                  
 | TxOI         | Transaction output      | Transaction input       | Taproot-only - Not working with legacy wallets      |  none yet                      | Sigtweak, witweak                | 
 
-**RGB protocol uses the TxO2** scheme in which both seal definition and the seal closing uses the Outputs (the "**O2**" in **TxO2** acronym stand for **2 Outputs** meaning that both the seal definition and the seal closing uses transaction Outputs).
+**RGB protocol uses the TxO2** scheme in which both seal definition and the seal closing uses trasnsaction outputs (the "**O2**" in **TxO2** acronym stand for **2 Outputs**).
 
-As shown in the table, the possible **commitment schemes** are associated with the places of the transaction in which the messagge is committed which is further differentiate whether the message is committed in transaction input or output:
+As shown in the table, several **Commitment schemes** can be used for each ** seal closing method**. Each method is differentiated by the location used by the related transactions to host the commitment, and in particular, whether the message is committed in a location belonging to the transaction input or output:
 * Transaction Input:
-     * Sigtweak - the commitment is placed inside the random 32-byte **r** component constituting the **<r,s>** ECDSA signature pair of an input. It make uses of [Sign-to-contract (S2C)](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#sign-to-contract)
-     * Witweak - the commitment is placed inside the segregated witness data of the transaction
+     * Sigtweak - the commitment is placed inside the random 32-byte **r** component constituting the **<r,s>** ECDSA signature pair of an input. It make uses of [Sign-to-contract (S2C)](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#sign-to-contract).
+     * Witweak - the commitment is placed inside the segregated witness data of the transaction.
 * Transaction Output (ScriptPubKey):
      * Keytweak - It uses the [Pay-to-contract](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#pay-to-contract) construction through which the outpu's public key of the output is "tweaked" (i.e. modified) in order to contain a deterministic reference to the message.   
      * **Opret** - The message committed is placed as an unspendable output after`OP_RETURN` opcode.
      * **Tapret (taptweak)** - This scheme represent a form of tweak in which the message is committed into an `OP_RETURN` tagged string placed into a leaf in the `Script path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) which thus change the value of the PubKey.
     
-
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d0bc6d55-0918-48c1-b97d-73071f98874b)
 
 
@@ -52,11 +51,11 @@ In the next paragraphs we will focus on client side validation combined with sin
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/c232438e-8571-492e-828d-d2c5e31760b8)
 
-3. Once Alice spend its UTXO,  only Bob knows that this spend has an additional meaning even if everybody (i.e. the audience of Bitcoin Blockchain) can see this event.
+3. Once Alice spend its UTXO, only Bob knows that this spend has an additional meaning even if everybody (i.e. the audience of Bitcoin Blockchain) can see this event.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f770fd32-e903-49b0-a3ea-d604fd189770)
 
-4. Indeed, the UTXO spent by Alice through the **witness transaction** contains a commitment to the client-side validated data. By passing the original data to Bob, she is able to prove to Bob that those data are duly referenced by the commitment placed by Alice in the spending transaction. The verification operation is performed by Bob independenly, using the appropriate methods that are part of the client-side validation protocol (e.g. RGB protocol).  
+4. Indeed, the UTXO spent by Alice through the **witness closing transaction** contains a commitment to the client-side validated data. By passing the original data to Bob, she is able to prove to Bob that those data are duly referenced by the commitment placed by Alice in the spending transaction. The verification operation is performed by Bob independenly, using the appropriate methods that are part of the client-side validation protocol (e.g. RGB protocol).  
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f6440aae-202a-4569-bea7-f46664c00e92)
 
@@ -68,16 +67,16 @@ The next important step is to illustrate precisely how the two commitment scheme
 
 ## Deterministic Bitcoin Commitment 
 
-The main requirement for a Bitcoin commitment scheme to be valid is that:
-> The witness closing transaction must provably contain a single commitment
+For RGB commitment operations, the main requirement for a Bitcoin commitment scheme to be valid is that:
+> The witness closing transaction must provably contain a single commitment.
 
 With this requirements it is not possible to construct some "alternative story" related to the commitment of the client-side data in the same transaction. This way the message around which we close the single-use seal is unique. In order to fullfill the requirement, independently of the number of outputs in a transaction, *one and only one output* for each commitment scheme (opret and tapret) is valid:
 
 > Uniqueness of the RGB commitment: the only valid outputs which can contain an RGB message commitment are:
-> 1. The first OP_RETURN output (if present) for `opret` commitment scheme
-> 2. The first taproot output (if present) for `tapret` commitment scheme
+> 1. The first OP_RETURN output (if present) for `opret` commitment scheme.
+> 2. The first taproot output (if present) for `tapret` commitment scheme.
 
-It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally, those commitments will commit to different client-side validated data, as we will see later, the data indicates explicitly the commitment method used to reference them in order to be validated.   
+It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally, those commitments will commit to different client-side validated data that, as we will see later, indicates explicitly the commitment method used to reference themself.   
 
 ### Opret
 
@@ -92,23 +91,23 @@ The `32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root` is a 32-bytes h
 
 ### Tapret
 
-Tapret scheme represents a more complex form of deterministic commitment, and represent an improvement in terms of on-chain footprint and privacy of the contract. The main idea behind this application is to hide the commitment inside the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki). 
+Tapret scheme contitutes a more complex form of deterministic commitment and represents an improvement in terms of on-chain footprint and privacy of contract operations. The main idea behind this application is to hide the commitment inside the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki). 
 
-First of all, before showing how the commitment it is actually embedded in a taproot transaction, we will show the exact form of the commitment which is a **64-byte** string [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) in the following way:
+First of all, before showing how the commitment it is actually embedded in a taproot transaction, we will show the exact **form of the commitment which is a 64-byte** string [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) in the following way:
 ```
 64-byte_Tapret_Commitment =
 
-OP_RESERVED OP_RESERVED ... OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle root>  <Nonce>
-|______________________________________| |________| |_____________| |___________________________________________________________| |______|
-| OP_RESERVED x 29 times = 29 bytes        1 byte       1 byte                               32 bytes                              1 byte
-|_________________________________________________________________| |____________________________________________________________________|
-                  TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes                                            MPC commitment + NONCE = 33 bytes
+OP_RESERVED ...  ... .. OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle root>  <Nonce>
+|__________________________________| |________| |_____________| |___________________________________________________________| |______|
+ OP_RESERVED x 29 times = 29 bytes     1 byte       1 byte                               32 bytes                              1 byte
+|_____________________________________________________________| |____________________________________________________________________|
+        TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes                          MPC commitment + NONCE = 33 bytes
 ```
-So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte `Nonce` whose utility will be address later.   
+So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte `Nonce` whose utility will be address [later](#nonce-optimization).   
 
 In order to preserve highest degree of implementation flexibility, privacy and scalability, **Tapret scheme has been designed to integrate many different cases which occurs according to the bitcoin spending need of the user**, in particular we differentiate between the following tapret scenarios:
-* **Single incorporation** of RGB Tapret commitment into a taproot transaction **wihout Script Path Spend structure**
-* **Integrate** the Tapret RGB commitment into a taproot transaction containing a **pre-existing Script Path Spend structure**  
+* **Single incorporation** of RGB Tapret commitment into a taproot transaction **wihout Script Path Spend structure**.
+* **Integrate** the Tapret RGB commitment into a taproot transaction containing a **pre-existing Script Path Spend structure**.
 
 We will explore each one of these scenarios below.
 
@@ -236,10 +235,11 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
 ```
 
 2. According to Taproot rules, **every hashing operation of branch and leaves is performed in lexicographic order of the two operands**. Thus, two cases can occur, leading to two different proof of uniqueness of the commitment:
-     1. If the tapret commitment hash (`tHT`) **is greater** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the right  of Script Tree**. In this case, as per RGB protocol rules, the commitment in this position is cosidered as a valid proof of uniqueness and the merkel proof of inclusion and uniqueness of the commitmentis consituted by `tHABC` and `P` only
-     2.  If the tapret commitment hash (`tHT`) **is smaller** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the left of the Script Tree**. In this case, it must be demonstrated that on the right side of the Tree there is no other tapret commitment. To do so, `tHAB` and `tHC` need to be disclosed and constitute the merkle proof of inclusione and uniqueness together with `P`.  
+     1. If the tapret commitment hash (`tHT`) **is greater** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the right  of Script Tree**. In this case, as per RGB protocol rules, the commitment in this position is cosidered as a valid proof of uniqueness and the merkel proof of inclusion and uniqueness of the commitmentis consituted by `tHABC` and `P` only.
+     2.  If the tapret commitment hash (`tHT`) **is smaller** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the left of the Script Tree**. In this case, it must be demonstrated that on the right side of the Tree there is no other tapret commitment. To do so, `tHAB` and `tHC` need to be disclosed and constitute the merkle proof of inclusione and uniqueness together with `P`.
 
-**`tHABC < tHT`**
+&nbsp;
+* **`tHABC < tHT`**
 ```
 +---+            +---+   +---+   +---+
 | Q |      =     | P | + | m | * | G |
@@ -262,8 +262,8 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
           +------------------------+               +--------------------------------------+
 ```
 
+&nbsp;
 * **`tHABC > tHT`**    
-
 ```
 +---+            +---+   +---+   +---+
 | Q |      =     | P | + | m | * | G |
@@ -291,6 +291,8 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
                                                       | tH_BRANCH(tHA || tHB) |           | tH_LEAF(C) |
                                                       +-----------------------+           +------------+
 ```
+#### Nonce optimization
+
 As an additional method of optimization the `<Nonce>` which represent the last byte of the `64_byte_Tapret_Commitment` allows for the user contructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`, thus placing it in the right side of the tree and definitely avoiding to reveal the constituents of the script branch (in this example `tHaB` and `tHC`) 
 
 ## Multi Protocol Commitment

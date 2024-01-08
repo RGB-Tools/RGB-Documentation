@@ -306,11 +306,44 @@ In practice the previous points are address through an **ordered merkelization**
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/db6c410c-9ce1-4575-b0b4-e7c09f38d502)
 
-### Tree root
+### MPC Tree root
 
 The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) commitment is  the <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root>` constructed according BIP-341 specification as follows:
 
 `tH_MPC(x) = SHA-256(SHA-256(*urn:lnpbp:lnpbp0004:tree:v01#23A*) || SHA-256(*urn:lnpbp:lnpbp0004:tree:v01#23A) || x)`
+
+### MPC Tree Construction
+```
+
+                                +---------------+------------+
+                                |            tH_MPC(x) |
+                                +---------------------^------+
+                                                      |
+                                       +--------------+----------+
+                                       | tH_BRANCH( tHT || tHABC)|   
+                                       +-------------^-------^---+
+                                                     |       |
+                                  +------------------+       +------------------+
+                                  |                                             |
+             +--------------------+-----------------+              +------------+-----------+
+             | tH_BRANCH(64_byte_Tapret_Commitment) |              | tH_BRANCH(tHAB || tHC) |
+             +--------------------------------------+              +------------^-------^---+
+                                                                                |       |
+                                                                   +------------+       +--------+
+                                                                   |                             |
+                                                      +------------+----------+           +------+-----+
+                                                      | tH_BRANCH(tHA || tHB) |           | tH_LEAF(C) |
+                                                      +-----------------------+           +------------+
+
+
+
+```
+
+
+
+
+
+
 
 
 

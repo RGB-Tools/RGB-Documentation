@@ -299,8 +299,8 @@ As an additional method of optimization the `<Nonce>` which represent the last b
 
 Multi Protocol commitments address the following important requirement:
 
-1. How the tagged value which is committed according to either `opret` or `tapret` schemes is constructed?
-2. How it is possible to store in a single commitment the state change of more than one contract / state transition?     
+1. How the tagged value which is committed according to either `opret` or `tapret` schemes is constructed
+2. How it is possible to store in a single commitment the state changes associated to more than one contract      
 
 In practice the previous points are address through an **ordered merkelization** of the multiple contracts / state transitions associated to the UTXO which are being spent by the **witness closing transaction** in which such multiple transitions of eventualy commited by mean of DBCs.
 
@@ -320,7 +320,7 @@ In order to construct the MPC tree we must **deterministically provide a positio
 
 In essence, the construction a suitable tree of width `w` hosting each contract `c_i` in a unique position position represent a sort of mining process. The bigger is the number of contract `C` and the bigger should be the number of leaves `w`. Assuming a random distribution of the `pos_i`, as per [Birthday Paradox](https://en.wikipedia.org/wiki/Birthday_problem), we have ~50% probability that a collision in the position occurs in a tree with `w ~ C^2` ).
 
-In order to avoid too big MPC trees, and beeing the occurence of collision a random process, an additional optimization has been introduced. The modulus operation has been modified as following: pos_i = `c_i + cofactor mod w` where `cofactor` is a 16-byte random number that can be chosen as a "nonce" to get distinct `pos_i` values with `w` being fixed. The tree construction process start from the smallest tree such that `w > C`, then trying a certain number of `cofactor` attempts, if none of them is able to produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
+In order to avoid too big MPC trees, and being the occurence of collision a random process, an additional optimization has been introduced. The modulus operation has been modified according to the followinf formula: `pos_i = c_i + cofactor mod w` where `cofactor` is a 16-byte random number that can be chosen as a "nonce" to get distinct `pos_i` values with `w` being fixed. The tree construction process start from the smallest tree such that `w > C`, then trying a certain number of `cofactor` attempts, if none of them is able to produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
 
 #### Contract Leaves (Inhabited)
 
@@ -334,18 +334,19 @@ Where:
 
 #### Entropy leaves (Uninhabited)
 
-For the remaining `w - C` uninhabited, a value must be committed. In order to do that, each leaf in position `j != pos_i` for every `i = 0,...,C-1` is populated in the following way:
+For the remaining `w - C` uninhabited leaves, a value must be committed. In order to do that, each leaf in position `j != pos_i` for every `i = 0,...,C-1` is populated in the following way:
 
-`tH_MPC_LEAF(j) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || entropy || j )
+`tH_MPC_LEAF(j) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || entropy || j )`
 
  Where:
  * `entropy` is a 64-byte random value chosen by the user contructing the tree
 
-The followign diagram shows the costruction of a sample MPC tree where: of  and populated by C = 3 contracts, and 
+The followign diagram shows the costruction of a sample MPC tree where: 
+* `C = 3`
 * `d = 3 (w = 8)`
 * `tH_MPC_BRANCH(tH1 || tH2) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || d || w || tH1 || tH2)`
-*  `d` and `w` is the tree depth and width respectively
-*  `pos_1 = 7, pos_2 = 4, pos_3 = 2` 
+* `d` and `w` is the tree depth and width respectively
+* `pos_1 = 7, pos_2 = 4, pos_3 = 2` 
 
 ```
                                                                                    +-------------------------------+
@@ -373,7 +374,7 @@ The followign diagram shows the costruction of a sample MPC tree where: of  and 
         +------+                   +-----+                   +-----+                   +-----+                   +-----+                   +-----+                   +-----+                    +----+
         |                          |                         |                         |                         |                         |                         |                          | 
 +-------+----------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+       +--------+---------+ 
-|   entropy || 0   |      |   entropy || 1   |      | c_3 || BUNDLE_3  |      |   entropy || 3   |      | c_2 || BUNDLE_2  |      |  entropy || 5    |      |  entropy || 5    |       |  c_1 || BUNDLE_1 | 
+|   entropy || 0   |      |   entropy || 1   |      | c_3 || BUNDLE_3  |      |   entropy || 3   |      | c_2 || BUNDLE_2  |      |  entropy || 5    |      |  entropy || 6    |       |  c_1 || BUNDLE_1 | 
 +------------------+      +------------------+      +------------------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+       +--------+---------+
 
 

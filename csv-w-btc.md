@@ -83,11 +83,11 @@ It is worth noting that a transaction can contain both a single `opret` and a si
 It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN outputof the witness transaction in the following way:
 ```
 34-byte_Opret_Commitment =
-OP_RETURN OP_PUSHBYTE_32 <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root>
-|________| |___________| |__________________________________________________________|
-  1-byte       1-byte                           32 bytes                      
+OP_RETURN OP_PUSHBYTE_32 <tH_MPC_ROOT>
+|________| |___________| |____________|
+  1-byte       1-byte       32 bytes                      
 ```
-The `32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root` is a 32-bytes hash so that the total size of the commitment in the *ScriptPubKey* is 34 bytes.
+`tH_MPC_ROOT` is a 32-byte Tagged Multi Protocol Commitment (MPC) Merkle_Root hash so that the total size of the commitment in the *ScriptPubKey* is 34 bytes.
 
 ### Tapret
 
@@ -97,11 +97,11 @@ First of all, before showing how the commitment it is actually embedded in a tap
 ```
 64-byte_Tapret_Commitment =
 
-OP_RESERVED ...  ... .. OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle root>  <Nonce>
-|__________________________________| |________| |_____________| |___________________________________________________________| |______|
- OP_RESERVED x 29 times = 29 bytes     1 byte       1 byte                               32 bytes                              1 byte
-|_____________________________________________________________| |____________________________________________________________________|
-        TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes                          MPC commitment + NONCE = 33 bytes
+OP_RESERVED ...  ... .. OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <tH_MPC_ROOT>  <Nonce>
+|__________________________________| |________| |_____________| |____________| |______|
+ OP_RESERVED x 29 times = 29 bytes     1 byte       1 byte         32 bytes    1 byte
+|_____________________________________________________________| |_____________________|
+        TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes               MPC commitment + NONCE = 33 bytes
 ```
 So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte `Nonce` whose utility will be address [later](#nonce-optimization).   
 
@@ -308,32 +308,42 @@ In practice the previous points are address through an **ordered merkelization**
 
 ### MPC Tree root
 
-The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) commitment is  the <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root>` constructed according BIP-341 specification as follows:
+The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) commitment is the <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root>` constructed in a BIP-341-fashion as follows:
 
-`tH_MPC(x) = SHA-256(SHA-256(*urn:lnpbp:lnpbp0004:tree:v01#23A*) || SHA-256(*urn:lnpbp:lnpbp0004:tree:v01#23A) || x)`
+`tH_MPC_ROOT(x) = SHA-256(SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || x)`
 
 ### MPC Tree Construction
-```
 
-                                +---------------+------------+
-                                |            tH_MPC(x) |
-                                +---------------------^------+
-                                                      |
-                                       +--------------+----------+
-                                       | tH_BRANCH( tHT || tHABC)|   
-                                       +-------------^-------^---+
-                                                     |       |
-                                  +------------------+       +------------------+
-                                  |                                             |
-             +--------------------+-----------------+              +------------+-----------+
-             | tH_BRANCH(64_byte_Tapret_Commitment) |              | tH_BRANCH(tHAB || tHC) |
-             +--------------------------------------+              +------------^-------^---+
-                                                                                |       |
-                                                                   +------------+       +--------+
-                                                                   |                             |
-                                                      +------------+----------+           +------+-----+
-                                                      | tH_BRANCH(tHA || tHB) |           | tH_LEAF(C) |
-                                                      +-----------------------+           +------------+
+In order to construct the MPC tree we must **deterministically provide a position of the leaf belonging to each contract**, thus: 
+
+> Setting `C` has the number of contract `c_i` to be included in the MPC we can build a tree with `w` leaves with `w > C` (corresponding to a depth `d` such that `2^d = w`), such that each contract identifier `c_i` representing a different contract is placed at unique position `pos_i = `c_i mod w`    
+
+The bigger is the number of contract `C` and the bigger should be the number of leaves `w` in order to have a unique different position for each contract `c_i`   
+
+```
+depth = 8 
+                                                                                  +-------------------------------+
+                                                                                  | tH_MPC_ROOT(tHABCD || tHEFGH) |
+                                                                                  +----------------^---------^----+
+                                                                                                   |         |
+                                             +-----------------------------------------------------+         +---------------------------------------+
+                                             |                                                                                                       |
+                               +-------------+---------------+                                                                         +-------------+---------------+
+                               | tH_MPC_BRANCH(tHAB || tHCD) |                                                                         | tH_MPC_BRANCH(tHEF || tHGH) |
+                               +----------------^--------^---+                                                                         +-----------------+--------+--+
+                                                |        |                                                                                               |        |
+                    +---------------------------+        +--------------+                                                   +------------------<---------+        +------------+
+                    |                                                   |                                                   |                                                  |
+      +-------------+-------------+                       +-------------+-------------+                       +-------------+-------------+                      +-------------+-------------+
+      | tH_MPC_BRANCH(tHA || tHB) |                       | tH_MPC_BRANCH(tHC || tHD) |                       | tH_MPC_BRANCH(tHE || tHF) |                      | tH_MPC_BRANCH(tHG || tHH) |
+      +----------------^------^---+                       +----------------^------^---+                       +----------------^------^---+                      +----------------^------^---+
+                       |      |                                            |      |                                            |      |                                           |      |
+        +--------------+      +-----+                       +--------------+      +- ---+                       +--------------+      + ----+                      +--------------+      +-----+
+        |                           |                       |                           |                       |                           |                      |                           |
++-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +------+---------+        +--------+-------+
+| tH_MPC_LEAF(A) |        | tH_MPC_LEAF(B) |        | tH_MPC_LEAF(C) |        | tH_MPC_LEAF(D) |        | tH_MPC_LEAF(E) |        | tH_MPC_LEAF(F) |        | tH_MPC_LEAF(G) |        | tH_MPC_LEAF(H) |
++----------------+        +----------------+        +----------------+        +----------------+        +----------------+        +----------------+        +----------------+        +----------------+
+
 
 
 

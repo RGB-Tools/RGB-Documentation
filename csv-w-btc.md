@@ -324,9 +324,9 @@ In order to avoid too big MPC trees, and being the occurence of collision a rand
 
 #### Contract Leaves (Inhabited)
 
-Once `C` distinct positions `pos_i` are found the corresponding leaves are populated in the following way:
+Once `C` distinct positions `pos_i` with `i = 0,...,C-1` are found, the corresponding leaves are populated in the following way:
 
-`tH_MPC_LEAF(c_i) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || c_i || BUNDLE_i )` 
+`tH_MPC_LEAF(c_i) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || 0x10 || c_i || BUNDLE_i )` 
 
 Where:
 * `c_i` is the 32-byte contract_id which is the hash of the [genesis]() of the contract itself
@@ -334,9 +334,9 @@ Where:
 
 #### Entropy leaves (Uninhabited)
 
-For the remaining `w - C` uninhabited leaves, a value must be committed. In order to do that, each leaf in position `j != pos_i` for every `i = 0,...,C-1` is populated in the following way:
+For the remaining `w - C` uninhabited leaves, a dummy value must be committed. In order to do that, each leaf in position `j != pos_i` is populated in the following way:
 
-`tH_MPC_LEAF(j) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || entropy || j )`
+`tH_MPC_LEAF(j) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || 0x11 || entropy || j )`
 
  Where:
  * `entropy` is a 64-byte random value chosen by the user contructing the tree
@@ -370,13 +370,10 @@ The followign diagram shows the costruction of a sample MPC tree where:
  +-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +------+---------+        +--------+-------+
  | tH_MPC_LEAF(A) |        | tH_MPC_LEAF(B) |        | tH_MPC_LEAF(C) |        | tH_MPC_LEAF(D) |        | tH_MPC_LEAF(E) |        | tH_MPC_LEAF(F) |        | tH_MPC_LEAF(G) |        | tH_MPC_LEAF(H) |
  +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+
-               |                         |                         |                         |                         |                         |                         |                         |
-        +------+                   +-----+                   +-----+                   +-----+                   +-----+                   +-----+                   +-----+                    +----+
-        |                          |                         |                         |                         |                         |                         |                          | 
-+-------+----------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+       +--------+---------+ 
-|   entropy || 0   |      |   entropy || 1   |      | c_3 || BUNDLE_3  |      |   entropy || 3   |      | c_2 || BUNDLE_2  |      |  entropy || 5    |      |  entropy || 6    |       |  c_1 || BUNDLE_1 | 
-+------------------+      +------------------+      +------------------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+       +--------+---------+
-
+               |                         |                         |                         |                         |                         |                         |                         | 
++--------------+-------+  +--------------+-------+  +--------------+----------+  +-----------+---------+  +------------+------------+  +---------+------------+  +---------+------------+  +---------+---------------+ 
+| 0x11 || entropy || 0 |  | 0x11 || entropy || 1 |  | 0x10 || c_3 || BUNDLE_3 |  | 0x11 | entropy || 3 |  | 0x10 || c_2 || BUNDLE_2 |  | 0x11 || entropy || 5 |  | 0x11 || entropy || 6 |  | 0x10 || c_1 || BUNDLE_1 | 
++----------------------+  +----------------------+  +-------------------------+  +---------------------+  +-------------------------+  +----------------------+  +----------------------+  +-------------------------+
 
 ```
 

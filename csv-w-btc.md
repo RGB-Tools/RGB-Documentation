@@ -308,7 +308,7 @@ In practice the previous points are address through an **ordered merkelization**
 
 ### MPC Tree root
 
-The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) commitment is the <32_byte_Tagged_Multi_Protocol_Commitment_(MPC)_Merkle_Root>` constructed in a BIP-341-fashion as follows:
+The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) commitment is the `tH_MPC_ROOT(x)` constructed in a BIP-341-fashion as follows:
 
 `tH_MPC_ROOT(x) = SHA-256(SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || x)`
 
@@ -316,35 +316,65 @@ The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) com
 
 In order to construct the MPC tree we must **deterministically provide a position of the leaf belonging to each contract**, thus: 
 
-> Setting `C` has the number of contract `c_i` to be included in the MPC we can build a tree with `w` leaves with `w > C` (corresponding to a depth `d` such that `2^d = w`), such that each contract identifier `c_i` representing a different contract is placed at unique position `pos_i = `c_i mod w`    
+> Setting `C` has the number of contract `c_i` to be included in the MPC we can build a tree with `w` leaves with `w > C` (corresponding to a depth `d` such that `2^d = w`), such that each contract identifier `c_i` representing a different contract is placed at unique position `pos_i = c_i mod w`    
 
-The bigger is the number of contract `C` and the bigger should be the number of leaves `w` in order to have a unique different position for each contract `c_i`   
+In essence, the construction a suitable tree of width `w` hosting each contract `c_i` in a unique position position represent a sort of mining process. The bigger is the number of contract `C` and the bigger should be the number of leaves `w`. Assuming a random distribution of the `pos_i`, as per [Birthday Paradox](https://en.wikipedia.org/wiki/Birthday_problem), we have ~50% probability that a collision in the position occurs in a tree with `w ~ C^2` ).
+
+In order to avoid too big MPC trees, and beeing the occurence of collision a random process, an additional optimization has been introduced. The modulus operation has been modified as following: pos_i = `c_i + cofactor mod w` where `cofactor` is a 16-byte random number that can be chosen as a "nonce" to get distinct `pos_i` values with `w` being fixed. The tree construction process start from the smallest tree such that `w > C`, then trying a certain number of `cofactor` attempts, if none of them is able to produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
+
+#### Contract Leaves (Inhabited)
+
+Once `C` distinct positions `pos_i` are found the corresponding leaves are populated in the following way:
+
+`tH_MPC_LEAF(c_i) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || c_i || BUNDLE_i )` 
+
+Where:
+* `c_i` is the 32-byte contract_id which is the hash of the [genesis]() of the contract itself
+* `BUNDLE_i` is the 32-byte hash that is calculated from the data of the bundle of state transition.  
+
+#### Entropy leaves (Uninhabited)
+
+For the remaining `w - C` uninhabited, a value must be committed. In order to do that, each leaf in position `j != pos_i` for every `i = 0,...,C-1` is populated in the following way:
+
+`tH_MPC_LEAF(j) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || entropy || j )
+
+ Where:
+ * `entropy` is a 64-byte random value chosen by the user contructing the tree
+
+The followign diagram shows the costruction of a sample MPC tree where: of  and populated by C = 3 contracts, and 
+* `d = 3 (w = 8)`
+* `tH_MPC_BRANCH(tH1 || tH2) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || d || w || tH1 || tH2)`
+*  `d` and `w` is the tree depth and width respectively
+*  `pos_1 = 7, pos_2 = 4, pos_3 = 2` 
 
 ```
-depth = 8 
-                                                                                  +-------------------------------+
-                                                                                  | tH_MPC_ROOT(tHABCD || tHEFGH) |
-                                                                                  +----------------^---------^----+
-                                                                                                   |         |
-                                             +-----------------------------------------------------+         +---------------------------------------+
-                                             |                                                                                                       |
-                               +-------------+---------------+                                                                         +-------------+---------------+
-                               | tH_MPC_BRANCH(tHAB || tHCD) |                                                                         | tH_MPC_BRANCH(tHEF || tHGH) |
-                               +----------------^--------^---+                                                                         +-----------------+--------+--+
-                                                |        |                                                                                               |        |
-                    +---------------------------+        +--------------+                                                   +------------------<---------+        +------------+
-                    |                                                   |                                                   |                                                  |
-      +-------------+-------------+                       +-------------+-------------+                       +-------------+-------------+                      +-------------+-------------+
-      | tH_MPC_BRANCH(tHA || tHB) |                       | tH_MPC_BRANCH(tHC || tHD) |                       | tH_MPC_BRANCH(tHE || tHF) |                      | tH_MPC_BRANCH(tHG || tHH) |
-      +----------------^------^---+                       +----------------^------^---+                       +----------------^------^---+                      +----------------^------^---+
-                       |      |                                            |      |                                            |      |                                           |      |
-        +--------------+      +-----+                       +--------------+      +- ---+                       +--------------+      + ----+                      +--------------+      +-----+
-        |                           |                       |                           |                       |                           |                      |                           |
-+-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +------+---------+        +--------+-------+
-| tH_MPC_LEAF(A) |        | tH_MPC_LEAF(B) |        | tH_MPC_LEAF(C) |        | tH_MPC_LEAF(D) |        | tH_MPC_LEAF(E) |        | tH_MPC_LEAF(F) |        | tH_MPC_LEAF(G) |        | tH_MPC_LEAF(H) |
-+----------------+        +----------------+        +----------------+        +----------------+        +----------------+        +----------------+        +----------------+        +----------------+
-
-
+                                                                                   +-------------------------------+
+                                                                                   | tH_MPC_ROOT(tHABCD || tHEFGH) |
+                                                                                   +----------------^---------^----+
+                                                                                                    |         |
+                                              +-----------------------------------------------------+         +---------------------------------------+
+                                              |                                                                                                       |
+                                +-------------+---------------+                                                                         +-------------+---------------+
+                                | tH_MPC_BRANCH(tHAB || tHCD) |                                                                         | tH_MPC_BRANCH(tHEF || tHGH) |
+                                +----------------^--------^---+                                                                         +-----------------+--------+--+
+                                                 |        |                                                                                               |        |
+                     +---------------------------+        +--------------+                                                   +------------------<---------+        +------------+
+                     |                                                   |                                                   |                                                  |
+       +-------------+-------------+                       +-------------+-------------+                       +-------------+-------------+                      +-------------+-------------+
+       | tH_MPC_BRANCH(tHA || tHB) |                       | tH_MPC_BRANCH(tHC || tHD) |                       | tH_MPC_BRANCH(tHE || tHF) |                      | tH_MPC_BRANCH(tHG || tHH) |
+       +----------------^------^---+                       +----------------^------^---+                       +----------------^------^---+                      +----------------^------^---+
+                        |      |                                            |      |                                            |      |                                           |      |
+         +--------------+      +-----+                       +--------------+      +- ---+                       +--------------+      + ----+                      +--------------+      +-----+
+         |                           |                       |                           |                       |                           |                      |                           |
+ +-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +-------+--------+        +---------+------+        +------+---------+        +--------+-------+
+ | tH_MPC_LEAF(A) |        | tH_MPC_LEAF(B) |        | tH_MPC_LEAF(C) |        | tH_MPC_LEAF(D) |        | tH_MPC_LEAF(E) |        | tH_MPC_LEAF(F) |        | tH_MPC_LEAF(G) |        | tH_MPC_LEAF(H) |
+ +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+        +-------------^--+
+               |                         |                         |                         |                         |                         |                         |                         |
+        +------+                   +-----+                   +-----+                   +-----+                   +-----+                   +-----+                   +-----+                    +----+
+        |                          |                         |                         |                         |                         |                         |                          | 
++-------+----------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+       +--------+---------+ 
+|   entropy || 0   |      |   entropy || 1   |      | c_3 || BUNDLE_3  |      |   entropy || 3   |      | c_2 || BUNDLE_2  |      |  entropy || 5    |      |  entropy || 5    |       |  c_1 || BUNDLE_1 | 
++------------------+      +------------------+      +------------------+      +--------+---------+      +--------+---------+      +--------+---------+      +--------+---------+       +--------+---------+
 
 
 ```

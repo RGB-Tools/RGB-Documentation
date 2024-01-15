@@ -40,7 +40,7 @@ Seen from a more consensus-focussed point of view, the properties of the theorem
 *A more in-depth view of th inherent degree of application of the Trilemma to Distributed Consensus System*  
 
 In syntesis:
-* **Blockchain ** preserve Integrity and Decentralization but **lacks Scalability** and Confidentiality as each node need to replicate *publicly and in-full* every state transition.
+* **Blockchain** preserve Integrity and Decentralization but **lacks Scalability** and Confidentiality as each node need to replicate *publicly and in-full* every state transition.
 * **State Channels** preserve Decentralization and Scalability but **doesn't preserve Integrity** as the state can be changed or updated asyncrnously by the counterparties.
 * **Stashes of Client Side validated data** are Scalable and maintain Integrity, however they **are not replicated** by the vast majority of nodes of the network **lacking Availability**. For this reason these data are not decentralized as a single point of centralization which backup them is required to recover them in case of loss.  
 
@@ -87,7 +87,7 @@ For this reason, the **logic of validation can be reversed** in the following te
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3c241331-abfa-42d9-af48-2d9bcb1aad33)
 
-**Cliwent-side Validation ensure the respect of the following properties:
+**Client-side Validation** ensure the respect of the following properties:
 * Scalability: as the commitment of the verified state, which need to be stored by everyone, has a small size footprint (order on tens of byte)
 * Privacy: by using a hash one-way function (such as SHA-256), the original data (the pre-image) which has produced the commitment cannot be reconstructed, and, in addition, they are kept private by the parties.
 

@@ -163,7 +163,7 @@ We therefore need a **“chain” of Single-Use-Seals**, where **the closure of 
  * messages are committed to client-side validated data;
  * seal definitions are bitcoin UTxO;
  * the commitment is a hash entered within a Bitcoin transaction;
- * the seal closure can be a UTxO that is spent or an address to which a transaction credits some bitcoin.
+ * the seal closure can be a UTxO that is spent or an address to which a transaction credits some bitcoin. 
 
 ### Library for Client-side Validation
 Repository:

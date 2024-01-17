@@ -162,7 +162,7 @@ The combination of Single-Use-Seals and Client-Side-Validation enables a distrib
 We therefore need a **“chain” of Single-Use-Seals**, where **the closure of the previous seal incorporates the definition of subsequent seal(s): this is what RGB does together with Bitcoin**:
  * messages are committed to client-side validated data;
  * seal definitions are bitcoin UTxO;
- * the commitment is a hash entered within a Bitcoin transaction; 
+ * the commitment is a hash entered within a Bitcoin transaction;
  * the seal closure can be a UTxO that is spent or an address to which a transaction credits some bitcoin.
 
 ### Library for Client-side Validation

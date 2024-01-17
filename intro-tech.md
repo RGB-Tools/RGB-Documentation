@@ -173,6 +173,6 @@ Rust Crates:
 * https://crates.io/crates/client_side_validation
 * https://crates.io/crates/single_use_seals
  
-In the next section we will explore in detail how RGB implements the concept of Single-Use-Seal by storing the commitments of its operation in the Bitcoin blockchain.
+In the next chapter we will explore in detail how RGB implements the concept of Single-Use-Seal by storing the commitments of its operation in the Bitcoin blockchain.
 
 [def]: image.png

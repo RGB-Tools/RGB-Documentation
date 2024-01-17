@@ -1,7 +1,7 @@
 # Client-side Validation with Bitcoin
 
-In this section we will explore the application of client-side validation and single-use seal to Bitcoin Blockchain, introducing the main architectural features behind **RGB protocol**.
-As mentioned in the [previous chapter](intro-tech.md) these cryptographic operations can be generally applied to different blockchain and even to different publication media. However, the outstanding properties of Bitcoin consensus algorithm in particular related to decentralization, censorship resistance and permissionlessness make it the ideal technological stack for developing advanced programmability features such as those required by digital bearer rights and smart contracts.
+In this chapter we will explore the application of Client-Side-Validation and Single-Use-Seal to Bitcoin blockchain, introducing the main architectural features behind **RGB protocol**.
+As mentioned in the [previous chapter](intro-tech.md), these cryptographic operations can be applied in general to different blockchains and also to different publication media. However, the outstanding properties of Bitcoin consensus algorithm, particularly those related to decentralization, censorship resistance and permissionlessness, make it the ideal technology stack for the development of advanced programmability features, such as those required by digital bearer rights and smart contracts.
 
 ## Single-use Seals in Bitcoin Transactions and RGB
 

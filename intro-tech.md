@@ -63,125 +63,116 @@ The goal of every validation process in a distributed system is the **ability to
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/463eea67-d5e9-401c-916e-bce7357a538e)
 
-In Bitcoin Blockchain, for instance, such process maps the change in the [UTXO set](https://en.wikipedia.org/wiki/Unspent_transaction_output) determined by the transactions collected into the sequence of ordered blocks. Thus, every block represents a **state update**.
+In Bitcoin Blockchain, for instance, such process verify the correctness of the changes in the [UTXO set](https://en.wikipedia.org/wiki/Unspent_transaction_output) determined by the transactions collected into the sequence of ordered blocks. Thus, every block represents a **state update**.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/1d209128-de76-40ab-b291-373b1c74440a)
 
-The main drawback of Layer 1 validation process is that **every node needs to validate store each transaction from everybody and store the related data** once block inclusion took place. This architecture lead to two main issues:
-* Scalability: the size limit of the blocks vs. the demand of blockspace per unit time shared by all the participants willing to transact limit the transaction throughput (i.e. 1 MB on ~10 minutes on average on bitcoin)   
-* Privacy: the detail of each transactions are broadcasted and stored in public form (in particular: the amounts transacted and the receiving adressess, although pseudonimous)
+The main drawback of Layer 1 validation process is that **each node has to validate each transaction from everybody and store the related data** once block inclusion takes place. This architecture leads to two main issues:
+* Scalability: the size limit of the blocks vs. the demand of blockspace per unit time shared by all willing participants limits the transaction throughput (i.e. ~4 MB on ~10 minutes on average on bitcoin)   
+* Privacy: details of each transaction are broadcasted and stored in public form (in particular: the amounts transacted and the receiving adressess, although pseudonyms).
   
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/403da928-31a8-4e08-8707-9c1f853df067)
 
-However, from the point of view of a transaction recipient, the only aspects that matters are:
-* the last state transition motivated by a transaction addrressed to him.
-* the chronological sequence of transactions (and thus state transitions) that lead to that last state transition.
+However, from the point of view of the recipient of a transaction, the only aspects that matter are:
+* the last state transition motivated by a transaction addrressed to him;
+* the chronological sequence of transactions (and thus state transitions) leading up to the last state transition.
 
-Basically what is important to him is the [Directed Acyclic Graph](#) which connect the history of the state transitions from the [genesis]() to the last state addressed to him (a **Shard** of the whole data)
+Basically what is important to him is the [Directed Acyclic Graph](#) which connects the history of the state transitions from the [genesis]() to the last state addressed to him (a **Shard** of the whole data).
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/6f81258f-1326-46e8-a951-16bc61163784)
 
 For this reason, the **logic of validation can be reversed** in the following terms:
-* Each party validates **its own part of the history** and thus the digital properties that matters to it.
-* A compact reference of the **validated state transition is committed to the first layer** in order to be timestamped. This construction constitue a **Proof-of-Pubblication** and act as an **anti double-spend measure**. 
+* Each part validates its **own part of the history** and thus the digital properties that matters to him.
+* A compact reference of the **validated state transition is committed in the first layer** to be time-stamped. This construction constitutes a **Proof-of-Publication** and acts as an **anti double-spending measure**. 
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3c241331-abfa-42d9-af48-2d9bcb1aad33)
 
-**Client-side Validation** ensure the respect of the following properties:
-* Scalability: as the commitment of the verified state, which need to be stored by everyone, has a small size footprint (order on tens of byte)
-* Privacy: by using a hash one-way function (such as SHA-256), the original data (the pre-image) which has produced the commitment cannot be reconstructed, and, in addition, they are kept private by the parties.
+**Client-side Validation** ensures the following properties are met:
+* Scalability: since the commitment of the verified state, which must be stored by all, has a small footprint (order of tens of bytes).
+* Privacy: using a one-way function (such as SHA-256), the original data (the preimage) that produced the commitment cannot be reconstructed and, moreover, is kept private by the parties.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f429b7b9-2ddc-4701-94f0-296ce8144be0)
 
-The commitment structure used in Client-side Validation (such as in RGB protocol which we will cover in depth later) allows important additional scalability features:
-* aggregate state transitions of different properties (for example two different contracts pertaining to 2 different digital assets).
+The commitment structure used in Client-Side Validation (as in the RGB protocol, which we will cover in detail later) allows for important additional scalability features:
+* aggregate state transitions of different properties (e.g., two different contracts related to 2 different digital assets).
 * bundle more than one state transition of the same asset in the same commitment.   
 
-In order to guarentee the efficacy of the commitment scheme and a precise chronologica ordering stemmed from the blockchain layer, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.
+In order to guarentee the efficacy of the commitment scheme and precise chronological ordering derived from the blockchain layer, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.
 
-## Single-use Seals
+## Single-Use-Seals
 
-A Single-use seal is a form of **cryptographical commitment** which resemble that of the application of a physical seal to a box containing some objects, which allows to prove a sequence of events limiting the risk that this sequence of events can be altered after being set. This implies that such commitment scheme, [proposed](https://petertodd.org/2016/commitments-and-single-use-seals) by Peter Todd in ~2016, is more advanced than `simple commitments` and `timestamping`.
+Single-Use-Seals are cryptographic primitives [proposed](https://petertodd.org/2016/commitments-and-single-use-seals) by Peter Todd in ~2016. They are a kind of **cryptographic commitment** that resembles the application of a physical seal to a container. They can be used to prove a sequence of events to a party, thereby limiting the risk that this sequence of events may be altered after it has been established. This implies that such commitment schemes are a more sophisticated form of both `simple commitments` (i.e. digest/hash) and `timestamping`.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/984ef35b-6410-4eac-8163-d08b0ccc049e)
 
-In order to work properly, Single-use seals require:
+In order to work properly, Single-Use-Seals require a **Proof-of-Publication Medium**: it may be a medium with global consensus (such as blockchain) but not necessarily decentralized which has the ability to be difficult to forge or replicate once issued and made public, such as a newspaper.
 
-* a **Proof of Pubblication Medium**  - This can be a medium with global consensus (like blockchain layer) but not necessarily decentralized, for example a newspaper, which has the ability to be difficult to forge or replicate once issued and made public.
-* to prove that a certain message `m` has been received by *every* member of a certain audience
-* to prove that no other alternative medium has not been used to publish the message
+The **Proof-of-Publication Medium** will be used:
+* to prove that *every* member `p` in a audience `P` has received message `m`;
+* to prove that message `m` has not been published;
+* to prove that some member `q` is in the audience `P`.
 
-With these properties we can state a more formal definition:
+With these properties we can give a more formal definition:
 
-> A single-use Seal is a formal promise to commit to a (yet) unknown message in the future, once and only once, such that commitment fact will be provably known to all members of a certain audience.
+> _Single-Use-Seal is a formal promise to commit to a (yet) unknown message in the future, once and only once, such that the fact of commitment is demonstrably known to all members of a certain audience._
 
-With such definition and the general properties reported above, a single use seal can achieve simultaneously the following 3 properties:
+With this definition and the general properties above, we can compare the properties of the various cryptographic primitives mentioned with Single-Use-Seals:
 
- * the pubblication of the commitment doesn't reveal the original message (e.g. using a one-way hash function)  - this property is also shared by simple commitment and timestamps
- * it proofs the commitment time and the fact that the original message existed before a certain date - this property is shared by timestamps only
- * it proofs that no alternative valid commitment can exists - this property is unique of single use seals
+|                                                                      | Simple commitment (digest/hash) | Timestamps   | Single-Use-Seals |
+|----------------------------------------------------------------------|---------------------------------|--------------|------------------|
+| Commitment publication does not reveal the message                   | Yes                             | Yes          | Yes              |
+| Proof of the commitment time / message existence before certain date | Not Possible                    | Possible     | Possible         |
+| Prove that no alternative commitment can exist                       | Not Possible                    | Not Possible | Possible         |
 
-So, how we can contruct practically a Single-use Seal? And what can be used? In a general way, it's working principles comprises 3 steps:
+So how can we practically construct a disposable seal and what can be used? In general, the principles of operation include 3 steps:
 
-* Seal Definition
-* Seal Closing
-* Seal Verification
+* Seal Definition;
+* Seal Closing;
+* Seal Verification.
 
-For the sake of the examples we will be using the well known cryprographic characters Alice and Bob.
+For the examples we will use the well-known computer science characters, Alice and Bob.
 
 **Seal Defintion** 
  
 In Seal definition, Alice promise to Bob (either in private or in public) to create some **message** (in practice an hash of some data):
-
-* at a well definied point in time and space 
-* using a precise pubblication medium
+* at a well-defined point in time and space;
+* using an agreed publication medium.
 
 **Seal Closing**
 
-When Alice publish the **message** following all the rules stated in the **seal definition**, in addition, she produces a **witness** which is the proof that the seal has been actually closed.  
+When Alice publishes the **message** following all the rules stated in the **seal definition**, in addition, she produces also a **witness**, which is the proof that the seal has indeed been closed.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3711069c-af89-494f-be31-dfeaa960d841)
 
-
 **Seal Verification**
       
-Once closed, the seal, being "single-use", cannot be opened nor closed again. The only thing that can be done by Bob, is to verify if the seal has been actually closed around the commitment of the message, using as inputs: the seal, the witness and the commitment (to the message).
+Once closed the seal, being "single-use", cannot be opened nor closed again. The only thing Bob can do is to check whether the seal has actually been closed around the message commitment, using as inputs: the seal, the witness and the commitment (to the message).
 
 In Computer Science Language the whole procedure can be summed-up as follows:
 ```
-Define() -> seal  (done by Alice, accepted by Bob)
+seal <- Define()                         # Done by Alice, accepted by Bob.
 
-Close(seal, commitment(message)) -> witness    (close a seal over a message, done by Alice)
+witness <- Close(seal, message)          # Close a seal over a message, done by Alice.
 
-Verify(seal, witness, commitment(message)) ->  true|false  (verify that the seal was closed, done by Bob)
+bool <- Verify(seal, witness, message)   # Verify that the seal was closed, done by Bob.
 ```
 
-So the combination of single-use seals and client-side-validation allows for the creation of a distributed system that do not require global consensus (“blockchain”) in order to store all the data that matter to some counterparties, and this provide high level of scalability and privacy. However, this is not enough to make the system work. As the definition of a single-use seal is made on the client-side and it in not necessary to include it in the global consensus medium, **a party can’t prove that the definition of the seal has ever took place** even if you a member of audience observing the pubblication medium.
+The combination of Single-Use-Seals and Client-Side-Validation enables a distributed system that does not require global consensus (i.e. a blockchain) to store all the data that matters to some counterparts, providing a high level of scalability and privacy. However, this is not enough to make the system work. Because the definition of a Single-Use-Seal is done on the client side and does not need to be included in the global consensus medium, **a party can’t prove that the definition of the seal ever took place** even if one is a member of the audience observing the publication medium.
 
- `Thus we need a **“chain” of single-use-seals**, where **the seal closing of previous seal embedds the definition of the next seal(s): this is what RGB does together with Bitcoin**:
- * the messages are commitment to client-side validated data
- * the seal definitions are bitcoin UTXO
- * the commitment is an hash placed inside bitcoin transaction
- * the seal closing can be either an UTXO being spent or an addressed to which a transaction credit some bitcoins 
+We therefore need a **“chain” of Single-Use-Seals**, where **the closure of the previous seal incorporates the definition of subsequent seal(s): this is what RGB does together with Bitcoin**:
+ * messages are committed to client-side validated data;
+ * seal definitions are bitcoin UTxO;
+ * the commitment is a hash entered within a Bitcoin transaction;
+ * the seal closure can be a UTxO that is spent or an address to which a transaction credits some bitcoin.
 
 ### Library for Client-side Validation
 Repository:
 * https://github.com/LNP-BP/client_side_validation
 
 Rust Crates:
-  * https://crates.io/crates/client_side_validation
-  * https://crates.io/crates/single_use_seals
+* https://crates.io/crates/client_side_validation
+* https://crates.io/crates/single_use_seals
  
- In the next session we will explore in details how RGB implements the single use seal concept, storing commitments of its operation in the bitcoin blockchain.
-
-
-
- 
-
-
-
-
-
-
+In the next chapter we will explore in detail how RGB implements the concept of Single-Use-Seal by storing the commitments of its operation in the Bitcoin blockchain.
 
 [def]: image.png

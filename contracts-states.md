@@ -63,10 +63,19 @@ In order to properly encode data into the state in a reproducible way a [Strict 
    For instance, this kind of construction is able to make detectable the change of a single variable name, which **doesn't change the memory layout** but which **do change the semantics**.
 * Finally, Strict Type System allows for **versioning** of the compilation schema, thus enabling the tracking of consensus changes in contracts and in the compilation engine.
   
-In order to have a depiction of the location of Strict Endoding among other programming language, the following picture can be useful:
+In order to have a visual comparison of Strict Encoding with other data structure systems and programming language, the following picture can be useful:
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d5a1d267-f673-4154-a3d6-3de38b2491a3)
 
-As a matter of fact Strict Encoding is defined in both an extremely pure functional level (thus very far away from Oriented Object Programming (OOP) philosophy) and at a very low level (nearly hardware definition, so far away from more abstract programming languages).
+As a matter of fact Strict Encoding is defined in both an extremely pure functional level (thus very far away from Oriented Object Programming (OOP) philosophy) and at a very low level (nearly hardware definition, so far away from more abstract structures and languages).
+
+### Size limitation
+
+The RGB protocol consensus rule apply a **maximum size limit** of 2^16 bite (64kB):
+* To the size of **any data type** (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...) 
+* To the **number of elements of each collection**, including the collection which represent the state itself (**?**)
+This has been designed in order to:
+* Avoid unlimited growth of the client side-validate data per each state transition.
+* Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alonside RGB.
 
 
 

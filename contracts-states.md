@@ -24,7 +24,10 @@ In RGB design a wider range of issues regarding programmability of smart contrac
     * the possibility to *observe* some properties or operations performed by other parties over the contract
     * the possibility to *perform a set of operations* permitted by the contract
 
-**No other counterpart can interact or even observe** the operation performed on the contract, if not allowed by the authorized parties. Inside RGB this characteristics means that there is always an **owner** which is a party which possesses the right to perform some operation on the contract, which are defined by the contract itself.
+**No other counterpart can interact or even observe** the operation performed on the contract, if not allowed by the authorized parties. Inside RGB this characteristics means that there is always an **owner** which is a party which possesses the right to perform some operation on the contract, which are defined by the contract itself. 
+
+These combined properties allow for the achievement of 2 among the most important properties at the core of RGB value proposition which are: **scalability** and **censorship resistance** at unprecedented levels.
+
 
 In order to achieve this goals, a RGB contract is composed by 2 main components:
 * State
@@ -39,11 +42,33 @@ In fact the Business Logic of the contract represent the rules that allows to th
 
 The state represent a set of conditions which are expressed by the contract itself.
 This sets of conditions, in reality, are a **set of arbitrary rich data** which:
-* are strongly typed, which means that each variable possesses a clear type definition (e.g. u8) and both lower and upped bounds.
-* can be nested, meaning that a type can be constructed from other types 
+* are **strongly typed**, which means that **each variable possesses a clear type definition (e.g. u8) and both lower and upped bounds**.
+* can be **nested**, meaning that a type can be constructed from other types 
 * can be organized in `lists` `sets` or `maps`
 
-An additional element is that the state are constructed in order to be **atomic** so that their **ownership** and possibility of modification represents a well defined operation.
+An additional element is that the contract states are constructed in order to be **atomic** so that their **ownership** is always a well defined property, which is **reflected in the ownership of the UTxO** embedded in the seal definition.
+
+### Strict Type System
+
+In order to properly encode data into the state in a reproducible way a [Strict Type System]() together with [Strict Encoding]() has been adopted in RGB. This means that:
+* The encoding of the data is done according to a precise [schema](#terminilogy/glossary.md#schema) which, unlike JSON or YAML, define a precise structure and layout of the data thus allowing also for deterministic ordering of each data element herein.
+* The ordering of the elements inside every collection of elemets (i.e. in lists, sets or maps) is deterministic as well.
+* Bounduaries (lower and higher) are defined for every variable and for the number of element in a collection (the so called **Confinement**).
+* All data field are byte-alligned.
+* The serialization and hashing of the data is performed in a deterministic way (Strict Encoding) allowing for creating **reproducible commitments** of the data irrespective of the system on which such operation is performed.
+* The creation of the data according to the schema is **performed through a simple description language which compile in Binary form** from Rust Language. In the future extension to other languages will be supported.
+* Additionally, the compiling according to the Strict Type System produces 2 types of outputs:
+  * A Memory Layout at compile time
+  * Associated Semantic identifiers to the memory layout (i.e. commitment to each field's name of the data)  
+   For instance, this kind of construction is able to make detectable the change of a single variable name, which **doesn't change the memory layout** but which **do change the semantics**.
+* Finally, Strict Type System allows for **versioning** of the compilation schema, thus enabling the tracking of consensus changes in contracts and in the compilation engine.
+  
+In order to have a depiction of the location of Strict Endoding among other programming language, the following picture can be useful:
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d5a1d267-f673-4154-a3d6-3de38b2491a3)
+
+As a matter of fact Strict Encoding is defined in both an extremely pure functional level (thus very far away from Oriented Object Programming (OOP) philosophy) and at a very low level (nearly hardware definition, so far away from more abstract programming languages).
+
+
 
 
 

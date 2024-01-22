@@ -77,6 +77,9 @@ This has been designed in order to:
 * Avoid unlimited growth of the client side-validate data per each state transition.
 * Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alonside RGB.
 
+### State components
+
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3f4ad599-558f-4c61-849f-1d6ed7834c40)
 
 
 

@@ -17,5 +17,5 @@ This guide targets the broader technical audience willing to understand in depth
    * Multi Protocol Commitments - MPC
    * Anchors
 * [RGB Contracts and States](contracts-states.md)
-* [RGB State Transitions and Business Logic]()
+* [RGB State Transitions](state-transitions.md)
 * [Glossary](terminology/glossary.md)

@@ -1,17 +1,14 @@
 # State Transitions
 
-
-
-In order to tackle the most characteristic features of RBG Consensus we will be walking through the following steps:
-1. Analyze how a **State Transitions** works from the the Client-side perspective and the related *point of contacts* which tether such operation with the Bitcoin Blockchain commitments which were discussed in the [Client-side Validation with Bitcoin](csv-w-btc.md) section.  
-2. Study the components of the RGB State in terms of structure and data, and the operation that undergo in state transition operation according to the RGB architecture rules.
+Before addressing the specifics and the technicalities of setting-up **contracts** and related contract **states**, it is important to underline that **seal definition** and **seal closing**, and in particular the costruction of a **chain of defined-closed seals**  are meant to provide the ability to implement properly the most important operation of the client-side validated realm: **State Transition**   
+To that end, in the following paragraphs we will analyze the mechanism behind **State Transitions** from the the Client-side perspective and the related *point of contacts* which tether such operation with the Bitcoin Blockchain commitments discussed in the [Client-side Validation with Bitcoin](csv-w-btc.md) section.  
 
 
 ## State definition and its evolutions 
 
 First of all, it's important to visualize in simple terms what a *State Transition* actually is. 
 
-Of course, to do that, a definition of [State]() is required, without going into the specific implementation details of RGB which will be covered later. Simply put:
+Of course, to do that, a basic definition of [State]() is required, without going into the specific implementation details of RGB which will be covered later. Simply put:
 
 > A State can be defined as a unique configuration of information / data that represents the conditions of a contract in some precise moment in time.
 
@@ -21,7 +18,7 @@ Thus a State Transition, in general terms, represents any **update of data** fro
 
 The chain of state transitions is the ordered path that make contract data evolve from the very **first contract definition**, called the [**Genesis**]() up to the [**Terminal State**]() representing the most updated state at the tip of the [DAG](terminology/glossary.md#directed-acyclic-graph---dag) of state transitions.
 
-The order relation among the state transitions in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain
+The order relation among the state transitions in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain which, in turn, provide, timestamping and **source of ordering**.
 
 
 ## Introduction to State Transition 

@@ -67,6 +67,7 @@ In order to properly encode data into the state in a reproducible way a [Strict 
 * Finally, Strict Type System allows for **versioning** of the compilation schema, thus enabling the tracking of consensus changes in contracts and in the compilation engine.
   
 In order to have a visual comparison of Strict Encoding with other data structure systems and programming language, the following picture can be useful:
+
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d5a1d267-f673-4154-a3d6-3de38b2491a3)
 
 As a matter of fact Strict Encoding is defined in both an extremely pure functional level (thus very far away from Oriented Object Programming (OOP) philosophy) and at a very low level (nearly hardware definition, so far away from more abstract structures and languages).
@@ -81,6 +82,7 @@ This has been designed in order to:
 * Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alonside RGB.
 
 ### State components
+
 
 In order to describe each component of the RGB state, in the diagram below is represented the complete block layout of a [state transition] which can be one out of 3 **Transition Types**:
 
@@ -104,21 +106,21 @@ The **Old State** is referenced through:
 * **Redeems** which are a reference to previously defined Valencies
 
 
-## Assignements
+#### Assignements
 
-### Seals
+##### Seals
 
-### Owned States
+##### Owned States
 
-## Global State
+#### Global State
 
-## Metadata
+#### Metadata
 
-## Valencies
+#### Valencies
 
-## Inputs 
+#### Inputs 
 
-## Redeems
+#### Redeems
 
 
 

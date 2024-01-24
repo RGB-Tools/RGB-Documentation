@@ -5,18 +5,18 @@ As mentioned in the [previous chapter](intro-tech.md), these cryptographic opera
 
 ## Single-use Seals in Bitcoin Transactions and RGB
 
-From previously, we recall that Single-use Seals creation undergo two fundamental operations: **Seal Definition** and **Seal Closing**. We will now explore how these two operations can be implemented **using Bitcoin as a publication medium**, and in particular making use of some elements of **Bitcoin Transactions**. 
+From the previous chapter, we recall that the creation of Single-use Seals is subject to two basic operations: **Seal Definition** and **Seal Closing**. We will now explore how these two operations can be implemented **using Bitcoin as a publication medium**, and in particular making use of some elements of the **Bitcoin Transactions**. 
 
 There are 2 main ways in which a Single-use Seal can be **defined** in Bitcoin transactions:
 
-* **Public keys or addresses** - the seal is defined selecting an address or a public key which has not been used yet (i.e. has not been used by any locking script, thus is not locking any bitcoin)
-* **Bitcoin transaction outputs** – the seal is defined by selecting a specific UTXO available to some wallet.
+* **Public keys or addresses** - the seal is defined by selecting an address or public key that has not yet been used (i.e. it has not been used by any locking script, so it is not locking any bitcoin)
+* **Bitcoin transaction outputs** – the seal is defined by the selection a specific UTxO available to some wallet.
 
-This definition methods can be employed in a combination of **closing methods** which differentiate themselves according to how a **spending transaction**:
-1. Uses the seal definition: use of the address in locking script / spend of the UTXO.  
-2. Host the message over which the seal is closed according to a **commitment scheme** (i.e. in which part of the transaction the message is committed and stored).
+The defined methods can be used in a combination of **closing methods** that differ according to how a **spending transaction**:
+1. uses the seal definition: use of the address in the locking script or spending of the UTxO;
+2. hosts the message on which the seal is closed according to a **commitment scheme** (i.e. in which part of the transaction the message is committed and stored).
      
-The following table illustrates the 4 possible combinations of seal definition and seal closing:
+The following table shows the 4 possible combinations of defining and closing the seal:
 
 | Scheme name  | Seal Definition         | Seal Closing            | Additional Requirements                             |  Main application              | Possible commitment schemes      |
 |--------------|-------------------------|-------------------------|-----------------------------------------------------|--------------------------------|----------------------------------|
@@ -25,45 +25,45 @@ The following table illustrates the 4 possible combinations of seal definition a
 | PkI          | Public key value        | Transaction input       | Taproot-only - Not working with legacy wallets      |  Bitcoin-based identities      | sigtweak, witweak                |                  
 | TxOI         | Transaction output      | Transaction input       | Taproot-only - Not working with legacy wallets      |  none yet                      | sigtweak, witweak                | 
 
-**RGB protocol uses the TxO2** scheme in which both seal definition and the seal closing uses transaction outputs (the "**O2**" in **TxO2** acronym stand for **2 Outputs**).
+**RGB protocol uses the TxO2** scheme in which both seal definition and the seal closure use transaction outputs (the term "**O2**" in **TxO2** acronym stands for **2 Outputs**).
 
-As shown in the table, several **Commitment schemes** can be used for each ** seal closing method**. Each method is differentiated by the location used by the related transactions to host the commitment, and in particular, whether the message is committed in a location belonging to the transaction input or output:
+As shown in the table, several **commitment schemes** can be used for each **seal closing method**. Each method differs in the location used by related transactions to host the commitment and, in particular, whether the message is committed to a location belonging to the input or output of the transaction:
 * Transaction Input:
-     * Sigtweak - the commitment is placed inside the random 32-byte **r** component constituting the **<r,s>** ECDSA signature pair of an input. It make uses of [Sign-to-contract (S2C)](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#sign-to-contract).
-     * Witweak - the commitment is placed inside the segregated witness data of the transaction.
-* Transaction Output (ScriptPubKey):
-     * Keytweak - It uses the [Pay-to-contract](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#pay-to-contract) construction through which the output's public key of the output is "tweaked" (i.e. modified) in order to contain a deterministic reference to the message.   
-     * **Opret** - The message committed is placed as an unspendable output after`OP_RETURN` opcode.
-     * **Tapret (taptweak)** - This scheme represent a form of tweak in which the message is committed into an `OP_RETURN` tagged string placed into a leaf in the `Script path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) which thus change the value of the PubKey.
+     * Sigtweak - the commitment is placed within the 32-byte random **r** component that forms the  ECDSA signature pair **<r,s>** of an input. It make uses of [Sign-to-contract (S2C)](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#sign-to-contract).
+     * Witweak - commitment is placed within the segregated witness data of the transaction.
+* Transaction Output (scriptPubKey):
+     * Keytweak - It uses the [Pay-to-contract](https://blog.eternitywall.com/2018/04/13/sign-to-contract/#pay-to-contract) construction by which the public key of the output of the output is "tweaked" (i.e., modified) to contain a deterministic reference to the message.   
+     * **Opret** - The committed message is placed as an unspendable output after the opcode `OP_RETURN`.
+     * **Tapret (taptweak)** - This scheme represents a form of tweak in which the message is committed to a string tagged `OP_RETURN` placed in a leaf of the `Script path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) which then modifies the value of the PubKey.
     
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d0bc6d55-0918-48c1-b97d-73071f98874b)
 
 
 ## TxO2 Client-side Validation 
 
-In the next paragraphs we will focus on client side validation combined with single-use seal definition an closing operation of the **TxO2** scheme, showing them step by step below and using the 2 usual cryptographic characters: Alice, dealing with a seal operation, and Bob as an observer.
+In the next few paragraphs we will focus on client-side validation combined with the definition of a single-use seal and a **TxO2** scheme closure operation, showing them step by step below and using the two usual cryptographic characters: Alice, struggling with a seal operation, and Bob as an observer.
 
-1. First of all Alice, have some UTXO at her disposal **which reference some client validated data known only by her**.
+1. First of all, Alice has some UTxOs **that refer to data validated by the client and known only to her**.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/ad0684d1-294c-49e7-b80a-3ae6c5156a38)
 
-2. Alice communicate to Bob that the spending of some UTXO represent the signal that something has happened.
+2. Alice informs Bob that the spending of some UTxOs represents a sign that something has happened.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/c232438e-8571-492e-828d-d2c5e31760b8)
 
-3. Once Alice spend its UTXO, only Bob knows that this spend has an additional meaning even if everybody (i.e. the audience of Bitcoin Blockchain) can see this event.
+3. Once Alice spends her UTxO, only Bob knows that this expenditure has additional meaning, even though everyone (i.e., the Bitcoin blockchain audience) can see this event.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f770fd32-e903-49b0-a3ea-d604fd189770)
 
-4. Indeed, the UTXO spent by Alice through the **witness closing transaction** contains a commitment to the client-side validated data. By passing the original data to Bob, she is able to prove to Bob that those data are duly referenced by the commitment placed by Alice in the spending transaction. The verification operation is performed by Bob independently, using the appropriate methods that are part of the client-side validation protocol (e.g. RGB protocol).  
+1. In fact, the UTxO spent by Alice through the **witness closure transaction** contains a commitment to the validated client-side data. By passing the original data to Bob, she is able to prove to Bob that this data is properly referenced by the commitment made by Alice in the spending transaction. The verification operation is performed by Bob independently, using the appropriate methods that are part of the client-side validation protocol (e.g., RGB protocol).  
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f6440aae-202a-4569-bea7-f46664c00e92)
 
-The key point of single-use seal usage in combination with client-side validation consists in the uniqueness of the spending event and the data committed (i.e. the message) to it, which cannot be altered in the future. The whole operation can be summed up in the following terms.
+The key point of using the single-use seal in combination with client-side validation is the uniqueness of the spending event and the data committed (i.e., the message) in it, which cannot be changed in the future. The whole operation can be summarized in the following terms.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/dd575319-8eb8-48c2-837a-b6b7bf4faa81)
 
-The next important step is to illustrate precisely how the two commitment schemes, **opret** and **tapret** works and which are the features they need to fulfill, in partircular related to determinism of the commitment.   
+The next important step is to illustrate precisely how the two commitment schemes, **opret** and **tapret**, work and which are the features they must meet, particularly with regard to commitment determinism.   
 
 ## Deterministic Bitcoin Commitment - DBC
 

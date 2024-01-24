@@ -2,12 +2,12 @@
 
 
 
-In order to tackle the most characteristic features of RBG Consensus we will be following this ensuing steps:
+In order to tackle the most characteristic features of RBG Consensus we will be walking through the following steps:
 1. Analyze how a **State Transitions** works from the the Client-side perspective and the related *point of contacts* which tether such operation with the Bitcoin Blockchain commitments which were discussed in the [Client-side Validation with Bitcoin](csv-w-btc.md) section.  
 2. Study the components of the RGB State in terms of structure and data, and the operation that undergo in state transition operation according to the RGB architecture rules.
 
 
-# State definition and its evolutions 
+## State definition and its evolutions 
 
 First of all, it's important to visualize in simple terms what a *State Transition* actually is. 
 
@@ -19,9 +19,9 @@ Thus a State Transition, in general terms, represents any **update of data** fro
 
 ![Alt text](img/state-transition-1.png)
 
-The chain of state transitions is the ordered path that make contract data evolve from the very **first contract definition**, called the **Genesis** up to the **Terminal State** representing the most updated state at the tip of the [DAG](terminology/glossary.md#directed-acyclic-graph---dag) of state transitions.
+The chain of state transitions is the ordered path that make contract data evolve from the very **first contract definition**, called the [**Genesis**]() up to the [**Terminal State**]() representing the most updated state at the tip of the [DAG](terminology/glossary.md#directed-acyclic-graph---dag) of state transitions.
 
-The oder relation among the state transitions in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain
+The order relation among the state transitions in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain
 
 
 ## Introduction to State Transition 
@@ -53,8 +53,6 @@ After checking the correctness of the consignement Bob can give "green light" (f
 
 
 ![Alt text](img/stab4.png)
-
-
 
 
 ## Anatomy of a State Transition

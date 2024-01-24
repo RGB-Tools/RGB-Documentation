@@ -83,14 +83,17 @@ This has been designed in order to:
 
 ### State components
 
+![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3f4ad599-558f-4c61-849f-1d6ed7834c40)
 
-In order to describe each component of the RGB state, in the diagram below is represented the complete block layout of a [state transition] which can be one out of 3 **Transition Types**:
+#### Transitions Type
+
+In order to describe each component of the RGB state, in the diagram above is represented the complete block layout of an arbitrary type [state transition] which can be one out of 3 **Transition Types**:
 
 * **Genesis**
 * **State Transition**
 * **State Extension**
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/3f4ad599-558f-4c61-849f-1d6ed7834c40)
+
 
 The **State**, which is actually the ** New updated State** enforced by a State Transition is constituted by the following components:
 

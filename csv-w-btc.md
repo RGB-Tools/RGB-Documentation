@@ -329,7 +329,7 @@ Once `C` distinct positions `pos_i` with `i = 0,...,C-1` are found, the correspo
 `tH_MPC_LEAF(c_i) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || 0x10 || c_i || BUNDLE_i )` 
 
 Where:
-* *`0x10` is the integer identifier of contract leaves; 
+* `0x10` is the integer identifier of contract leaves; 
 * `c_i` is the 32-byte contract_id which is the hash of the [genesis]() of the contract itself;
 * `BUNDLE_i` is the 32-byte hash that is calculated from the data of the bundle of state transition.  
 

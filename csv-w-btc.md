@@ -70,30 +70,30 @@ The next important step is to illustrate precisely how the two commitment scheme
 For RGB commitment operations, the main requirement for a Bitcoin commitment scheme to be valid is that:
 > The witness closing transaction must provably contain a single commitment.
 
-With this requirements it is not possible to construct some "alternative story" related to the commitment of the client-side data in the same transaction. This way the message around which we close the single-use seal is unique. In order to fulfill the requirement, independently of the number of outputs in a transaction, *one and only one output* for each commitment scheme (opret and tapret) is valid:
+With these requirements, it is not possible to construct an "alternate history" related to client-side data commitment in the same transaction. Thus, the message around which the single-use seal is closed is unique. To meet the requirement, regardless of the number of outputs in a transaction, *one and only one output* is valid for each commitment scheme (opret and tapret):
 
-> Uniqueness of the RGB commitment: the only valid outputs which can contain an RGB message commitment are:
-> 1. The first OP_RETURN output (if present) for `opret` commitment scheme.
-> 2. The first taproot output (if present) for `tapret` commitment scheme.
+> Uniqueness of RGB commitment: the only valid outputs that can contain an RGB message commitment are:
+> 1. The first output OP_RETURN (if present) for the `opret` commitment scheme.
+> 2. The first taproot output (if present) for the `tapret` commitment scheme.
 
-It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two distinct outputs. Naturally, those commitments will commit to different client-side validated data that, as we will see later, indicates explicitly the commitment method used to reference themselves.   
+It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two separate outputs. Of course, these commitments will commit to different client-side validated data which, as we shall see later, explicitly indicate the commitment method used to refer to themselves.
 
 ### Opret
 
-It's the most simple and immediate scheme. The commitment is placed in the first OP_RETURN output the witness transaction in the following way:
+This is the simplest and most straightforward scheme. The commitment is inserted into the first output OP_RETURN of the witness transaction in the following way:
 ```
 34-byte_Opret_Commitment =
 OP_RETURN OP_PUSHBYTE_32 <tH_MPC_ROOT>
 |________| |___________| |____________|
   1-byte       1-byte       32 bytes                      
 ```
-`tH_MPC_ROOT` is a 32-byte Tagged Multi Protocol Commitment (MPC) Merkle_Root hash so that the total size of the commitment in the *ScriptPubKey* is 34 bytes.
+`tH_MPC_ROOT` is a 32-byte Tagged Multi Protocol Commitment (MPC) Merkle_Root hash, so that the total commitment size in the *ScriptPubKey* is 34 bytes.
 
 ### Tapret
 
-Tapret scheme constitutes a more complex form of deterministic commitment and represents an improvement in terms of on-chain footprint and privacy of contract operations. The main idea behind this application is to hide the commitment inside the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki). 
+The Tapret scheme is a more complex form of deterministic commitment and is an improvement in terms of chain footprint and privacy of contract operations. The main idea of this application is to hide the commitment within the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki). 
 
-First of all, before showing how the commitment it is actually embedded in a taproot transaction, we will show the exact **form of the commitment which is a 64-byte** string [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) in the following way:
+First, before showing how the commitment is actually embedded in a taproot transaction, we will show the exact **form of the commitment which is a 64-byte** string [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) as follows:
 ```
 64-byte_Tapret_Commitment =
 
@@ -103,17 +103,17 @@ OP_RESERVED ...  ... .. OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <tH_MPC_ROOT>  <
 |_____________________________________________________________| |_____________________|
         TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes               MPC commitment + NONCE = 33 bytes
 ```
-So the 64-byte `tapret` commitment is an `Opret` commitment prepended with 29 bytes of OP_RESERVED operator and to which is appended a 1-byte `Nonce` whose utility will be address [later](#nonce-optimization).   
+Thus the 64-byte `tapret` commitment is an `Opret` commitment preceded by 29 bytes of the OP_RESERVED operator and to which is added a 1-byte `Nonce` whose usefulness will be addressed [later](#nonce-optimization).   
 
-In order to preserve highest degree of implementation flexibility, privacy and scalability, **Tapret scheme has been designed to integrate many different cases which occurs according to the bitcoin spending need of the user**, in particular we differentiate between the following tapret scenarios:
+In order to preserve highest degree of implementation flexibility, privacy and scalability, **the Tapret scheme is designed to integrate many different cases that occur according to the user's bitcoin spending needs**, specifically we distinguish the following Tapret scenarios:
 * **Single incorporation** of RGB Tapret commitment into a taproot transaction **without Script Path Spend structure**.
-* **Integrate** the Tapret RGB commitment into a taproot transaction containing a **pre-existing Script Path Spend structure**.
+* **Integrate** of Tapret RGB commitment into a taproot transaction containing a **pre-existing Script Path Spend structure**.
 
-We will explore each one of these scenarios below.
+We will analyze each of these scenarios below.
 
 #### Tapret Incorporation without Script Path Spend
 
-In order to show this first scenario, below we show the standard a taproot output Key `Q` constituted by just an internal `P` key and **no Script Path Spending**
+To show this first scenario, the standard of a taproot exit key `Q` consisting only of an internal key `P` and **no Spending script path** is shown below
 
 ```
 +---+            +---+   +---+   +---+
@@ -126,9 +126,9 @@ In order to show this first scenario, below we show the standard a taproot outpu
 ```
 * `P` is the Internal Public Key of the *Key Path Spend*
 * `G` is the Generator point of secp256k1 curve
-* `tH_TWEAK(P)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || P)  which makes use of [BIP86](https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki#address-derivation) to demonstrate there  is no Script Path Spend
+* `tH_TWEAK(P)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || P) which makes use of [BIP86](https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki#address-derivation) to show that there is no Script Path Spend
 
-To insert tapret commitment in such a transaction, we modify the transaction in order to provide the commitment as a single script, according to the following scheme:
+To include tapret commitment in such a transaction, we modify the transaction to provide the commitment as a single script, according to the following scheme:
 ``` 
 +---+            +---+   +---+   +---+
 | Q |      =     | P | + | m | * | G |
@@ -150,11 +150,11 @@ To insert tapret commitment in such a transaction, we modify the transaction in 
      * `tH_TWEAK(x)` = SHA-256(SHA-256(*TapTweak*) || SHA-256(*TapTweak*) || x)
      * `tH_BRANCH(x)` = SHA256(SHA-256(*TapBranch*) || SHA-256(*TapBranch*) || x)
 
-The proof of inclusion and uniqueness in the Taproot Script tree is constituted by only the Internal Key `P`. 
+The proof of inclusion and uniqueness in the Taproot Script tree is only the internal key `P`.
 
 #### Tapret incorporation in pre-existing Script Path Spend
 
-To go through the construction of this more complex case we show below the structure of a taproot output Key `Q`, which in this example is constituted by a Key Path Spend with internal key `P` and a 3-script tree in the Script Path Spend.
+To move on to the construction of this more complex case, we show below the structure of a taproot output Key `Q`, which in this example consists of a Spend Key Path with internal key `P` and a 3-script tree in the Spend Script Path.
 
 ```
 +---+            +---+   +---+   +---+
@@ -191,9 +191,9 @@ Where:
      * `tH_LEAF(x)` = SHA-256(SHA-256(*TapLeaf*) || SHA-256(*TapLeaf*) || version_leaf(x) || size(x) || x)
 * `A, B, C` are some Bitcoin scripts of this Taproot Tree  
 
-The rule of RGB Tapret commitment imposes the following prescriptions:
+The RGB Tapret commitment rule imposes the following requirements:
 
-1. **The Tapret Commitment is inserted as an unspendable script at the 1st Level of the Script Tree, shifting all other scripts 1 level below.**
+1. **Tapret Commitment is entered as an unspendable script at the 1st level of the Script Tree, shifting all other scripts 1 level below.**
 
 The new Taproot Output Key `Q` including the tapret commitment is built as follows:
 ```
@@ -234,9 +234,9 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
     +---+                +---+           +---+
 ```
 
-2. According to Taproot rules, **every hashing operation of branch and leaves is performed in lexicographic order of the two operands**. Thus, two cases can occur, leading to two different proof of uniqueness of the commitment:
-     1. If the tapret commitment hash (`tHT`) **is greater** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the right side of Script Tree**. In this case, as per RGB protocol rules, the commitment in this position is considered as a valid proof of uniqueness and the Merkle Proof of inclusion and uniqueness of the commitments constituted by `tHABC` and `P` only.
-     2.  If the tapret commitment hash (`tHT`) **is smaller** than the upper level hash of the Script Path Spend (`tHABC`), it will be put on **the left side of the Script Tree**. In this case, it must be demonstrated that on the right side of the Tree there is no other tapret commitment. To do so, `tHAB` and `tHC` need to be disclosed and constitute the merkle proof of inclusion and uniqueness together with `P`.
+2. According to Taproot rules, **every branch and leaf hashing operation is performed in lexicographic order of the two operands**. Therefore, two cases can occur that lead to two different proofs of uniqueness of commitment:
+     1. If the hash of the tapret commitment (`tHT`) **is greater** than the top-level hash of the Script Path Spend (`tHABC`), it will be put on **the right side of Script Tree**. In this case, according to the rules of the RGB protocol, the commitment at this position is considered a valid proof of uniqueness and the Merkle Proof of the inclusion and uniqueness of commitments consists of only `tHABC` and `P`.
+     2. If the hash of the tapret commitment (`tHT`) **is smaller** than the top-level hash of the Script Path Spend (`tHABC`), it will be placed on **the left side of the Script Tree**. In this case, it is necessary to show that there are no other tapret commitments on the right side of the Tree. To do this, `tHAB` and `tHC` must be revealed and form the merkle proof of inclusion and uniqueness along with `P`.
 
 &nbsp;
 * **`tHABC < tHT`**
@@ -293,22 +293,22 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
 ```
 #### Nonce optimization
 
-As an additional method of optimization the `<Nonce>` which represent the last byte of the `64_byte_Tapret_Commitment` allows for the user constructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`, thus placing it in the right side of the tree and definitely avoiding to reveal the constituents of the script branch (in this example `tHaB` and `tHC`) 
+As an additional optimization method, the `<Nonce>` representing the last byte of the `64_byte_Tapret_Commitment` allows the user constructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`, thus placing it in the right-hand side of the tree and definitely avoiding revealing the constituents of the script branch (in this example `tHaB` and `tHC`) 
 
 ## Multi Protocol Commitment - MPC
 
-Multi Protocol commitments address the following important requirement:
+Multi Protocol commitments address the following important requirements:
 
-1. How the tagged value which is committed according to either `opret` or `tapret` schemes is constructed
-2. How it is possible to store in a single commitment the state changes associated to more than one contract      
+1. How the tagged value which is committed is constructed according to `opret` or `tapret` schemes.
+2. How state changes associated with more than one contract can be stored in a single commitment.
 
-In practice the previous points are address through an **ordered merkelization** of the multiple contracts / state transitions associated to the UTXO which are being spent by the **witness closing transaction** in which such multiple transitions of eventually committed by mean of DBCs.
+In practice, the preceding points are addressed through an **ordered merkelization** of the multiple contracts/state transitions associated with the UTxO that are expended by the **witness closing transaction** where such multiple transitions are eventually committed by means of DBC.
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/db6c410c-9ce1-4575-b0b4-e7c09f38d502)
 
 ### MPC Tree root
 
-The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) commitment is the `tH_MPC_ROOT(x)` constructed in a BIP-341-fashion as follows:
+The root of the MPC tree,, which goes either into [opret](#opret) or into [tapret](#tapret) commitment is the `tH_MPC_ROOT(x)` constructed in BIP-341 fashion as follows:
 
 `tH_MPC_ROOT(x) = SHA-256(SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || x)`
 
@@ -316,11 +316,11 @@ The MPC tree root, which goes either in [opret](#opret) or [tapret](#tapret) com
 
 In order to construct the MPC tree we must **deterministically provide a position of the leaf belonging to each contract**, thus: 
 
-> Setting `C` has the number of contract `c_i` to be included in the MPC we can build a tree with `w` leaves with `w > C` (corresponding to a depth `d` such that `2^d = w`), such that each contract identifier `c_i` representing a different contract is placed at unique position `pos_i = c_i mod w`    
+> By setting `C` the number of contracts `c_i` to be included in the MPC we can construct a tree with `w` leaves with `w > C` (corresponding to a depth `d` such that `2^d = w`), such that each contract identifier `c_i` representing a different contract is placed in unique position `pos_i = c_i mod w`    
 
-In essence, the construction a suitable tree of width `w` hosting each contract `c_i` in a unique position position represent a sort of mining process. The bigger is the number of contract `C` and the bigger should be the number of leaves `w`. Assuming a random distribution of the `pos_i`, as per [Birthday Paradox](https://en.wikipedia.org/wiki/Birthday_problem), we have ~50% probability that a collision in the position occurs in a tree with `w ~ C^2` ).
+In essence, the construction a suitable tree of width `w` that hosts each contract `c_i` in a unique position represents a kind of mining process. The greater the number of contract `C`, the greater should be the number of leaves `w`. Assuming a random distribution of `pos_i`, as per [Birthday Paradox](https://en.wikipedia.org/wiki/Birthday_problem), we have ~50% probability of a collision occurring at the position in a tree with `w ~ C^2`.
 
-In order to avoid too big MPC trees, and being the occurrence of collision a random process, an additional optimization has been introduced. The modulus operation has been modified according to the following formula: `pos_i = c_i + cofactor mod w` where `cofactor` is a 16-byte random number that can be chosen as a "nonce" to get distinct `pos_i` values with `w` being fixed. The tree construction process start from the smallest tree such that `w > C`, then trying a certain number of `cofactor` attempts, if none of them is able to produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
+To avoid too large MPC trees and the occurrence of collisions being a random process, an additional optimization was introduced. The modulus operation was modified according to the following formula: `pos_i = c_i + cofactor mod w` where `cofactor` is a random number of 16 bytes that can be chosen as a "nonce" to obtain distinct values of `pos_i` with `w` fixed. The tree construction process starts from the smallest tree such that `w > C`, then tries a certain number of `cofactor` attempts, if none of them can produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
 
 #### Contract Leaves (Inhabited)
 
@@ -329,7 +329,7 @@ Once `C` distinct positions `pos_i` with `i = 0,...,C-1` are found, the correspo
 `tH_MPC_LEAF(c_i) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || 0x10 || c_i || BUNDLE_i )` 
 
 Where:
-* `c_i` is the 32-byte contract_id which is the hash of the [genesis]() of the contract itself
+* `c_i` is the 32-byte contract_id which is the hash of the [genesis]() of the contract itself;
 * `BUNDLE_i` is the 32-byte hash that is calculated from the data of the bundle of state transition.  
 
 #### Entropy leaves (Uninhabited)
@@ -339,7 +339,7 @@ For the remaining `w - C` uninhabited leaves, a dummy value must be committed. I
 `tH_MPC_LEAF(j) = SHA-256(SHA-256(urn:lnpbp:lnpbp4) || SHA-256(urn:lnpbp:lnpbp4) || 0x11 || entropy || j )`
 
  Where:
- * `entropy` is a 64-byte random value chosen by the user constructing the tree
+ * `entropy` is a 64-byte random value chosen by the user constructing the tree.
 
 The following diagram shows the construction of an example MPC tree where: 
 * `C = 3`
@@ -377,8 +377,8 @@ The following diagram shows the construction of an example MPC tree where:
 ```
 ### MPC Tree Verification
 
-From the perspective of a verifier, in order to demonstrate assess the presence of client-side validate pertaining to some contract `c_i` collected in BUNDLE_i, **only a *Merkle Proof* pointing at it inside the tree is needed**. Thanks to this, different verifiers of different contracts doesn't have the complete view the Merkle Tree as the builder does, and that's guarantee together with the dummy entropy leaves an high degree of privacy.
-Using the example tree in the previous diagram, a verifier of e.g. contract `c_3` will be supplied by the tree constructor with the following *Merkle Proof*:
+From a verifier's perspective, in order to prove the presence of client-side validate related to some contract `c_i` collected in BUNDLE_i, **only a *Merkle Proof* pointing at it inside the tree is needed**. Because of this, different verifiers of different contracts do not have the full view of the Merkle Tree as the builder does, and this guarantee, together with the dummy entropy, leaves a high degree of privacy.
+Using the example tree in the diagram above, a verifier of, say, the contract `c_3` will receive the following *Merkle Proof* from the tree builder:
 ```
                                                                             +-------------------------------+
                                                                             | tH_MPC_ROOT(tHABCD || tHEFGH) |
@@ -407,23 +407,23 @@ Using the example tree in the previous diagram, a verifier of e.g. contract `c_3
                                              +-------------------------+  +------+--------------+                                                                                                           
 ```
 
-So the Merkle Proof  provided in order to verify the existence and the uniqueness of the commitment of the contract in the tree is: `0x11 | entropy || 3` `tH_MPC_BRANCH(tHA || tHB)` `tH_MPC_BRANCH(tHEF || tHGH)`.
+So the Merkle Proof provided to verify the existence and uniqueness of contract commitment in the tree is: `0x11 | entropy || 3` `tH_MPC_BRANCH(tHA || tHB)` `tH_MPC_BRANCH(tHEF || tHGH)`.
 
 # Anchors
  
- Anchors are the client-side validated structure which sum-up all the data required to validate commitments of contracts, which have been described previously in this section. They are structured in the following way:
+Anchors are the client-side validated structure that summarizes all the data needed to validate contract commitments, which were described earlier in this section. They are structured as follows:
 
 `Txid` `MPC Proof` `DBC Proof`
 
 Where:
 
-* `Txid` is the 32-byte Bitcoin Transaction Id which contains the `opret` `tapret` commitment pertaining to the data. It should be noted that `TxId` could be theoretically reconstructed from the off-chain data of the state transitions pointing at each on-chain closing transaction, however for simplicity they are included in the anchor.
-* `MPC Proof` of contract `c_i` consists of `pos_i` `cofactor` `Merkle Proof` which were described above.
+* `Txid` is the 32-byte Bitcoin Transaction Id which contains the data-related `opret` `tapret` commitment. Note that `TxId` could theoretically be reconstructed from the off-chain data of state transitions pointing to each on-chain closing transaction, however for simplicity they are included in the anchor.
+* The `MPC Proof` of the contract `c_i` consists of `pos_i` `cofactor` `Merkle Proof` which were described above.
 * `DBC Proof`:
-     * If an `opret` commitment is used, there is no additional proof provided, since, as described above, the verifier inspect the first `OP_RETURN` output finding the proper `tH_MPC_ROOT`.
-     * If a `tapret` commitment is used, a so called **Extra Transaction Proof - ETP** should be provided which consists of:
+     * If an `opret` commitment is used, no additional proof is provided, since, as described above, the verifier inspects the first `OP_RETURN` output finding the correct `tH_MPC_ROOT`.
+     * If a `tapret` commitment is used, a so called **Extra Transaction Proof - ETP** must be provided, which consists of:
           * Internal Public Key `P` of the Taproot output used.
           * Partner node(s) of the `Taproot Script Path Spend` which is either:
-               * The top left branch (in the example `tHABC`) if the `tapret` commitment is one the right side of the tree.
-               * The right and left nodes of the top right branch (in the example `tHAB` and `tHC`) if the `tapret` commitment is one the left side of the tree.
+               * The top left branch (in the example `tHABC`) if the `tapret` commitment is on the right side of the tree.
+               * The left and right nodes of the upper right branch (in the example `tHAB` and `tHC`) if the `tapret` commitment is on the left side of the tree.
           * The `nonce`, if used, to optimize the Partner node part of the proof.

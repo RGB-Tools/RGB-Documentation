@@ -427,3 +427,15 @@ Where:
                * The top left branch (in the example `tHABC`) if the `tapret` commitment is on the right side of the tree.
                * The left and right nodes of the upper right branch (in the example `tHAB` and `tHC`) if the `tapret` commitment is on the left side of the tree.
           * The `nonce`, if used, to optimize the Partner node part of the proof.
+
+### Library for Client-side Validation and Deterministic Bitcoin Commitments
+Repository:
+
+* https://github.com/LNP-BP/client_side_validation
+
+Rust Crates:
+* https://crates.io/crates/rgb-core
+* https://crates.io/crates/client_side_validation
+* https://crates.io/crates/bp-dbc
+
+In the next chapter we will introduce concepts purely concerning the off-chain part of RGB, i.e., contracts, giving an abstract view of the partially replicated finite state machine that gives RGB a much greater expressiveness than can be achieved through Bitcoin Script without sacrificing confidentiality.

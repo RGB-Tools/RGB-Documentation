@@ -32,7 +32,7 @@ In order to achieve this goals, a RGB contract is composed by 2 main components:
 * **State**
 * **Business Logic (Behavior)** 
 
-In fact the Business Logic of the contract represent the rules that allows the entitled party (the owner) to change the state of the contract.
+In fact the Business Logic of the contract represent the rules that allows the entitled party (the owner) to change the state of the contract. We will explore later that the **Business Logic** is embedded in a particular structure of the contract called the [Schema]().
 
 ![Alt text](img/state-business-logic.png)
 
@@ -60,7 +60,7 @@ Alice has a [stash]() of client side validated data, which themselves reference 
 
 ![Alt text](img/stab1.png)
 
-Bob, in turn, possesses some unspent UTXO as well. This UTXO is completely unrelated to Alice's meaning that there is no direct spending event between them. 
+Bob, in turn, possesses some unspent UTXO as well. This UTXO is completely unrelated to Alice's, meaning that there is no direct spending event making a connection between them. 
 
 <!---
 ![Alt text](img/stab2a.png)
@@ -68,11 +68,11 @@ Bob, in turn, possesses some unspent UTXO as well. This UTXO is completely unrel
 
 ![Alt text](img/stab2b.png)
 
-Bob, trough some information data, encoded in an **[invoice]()**, instruct Alice to create a **New state** which follows the contract rules and which embed a **new seal definition** which points to the his UTXO in a concealed form. This way Alice is assigning Bob **some ownership** of the new state (e.g. the property of a certain amount of tokens). 
+Bob, through some information data, encoded in an **[invoice]()**, instruct Alice to create a **New state** which follows the contract rules and which embed a **new seal definition** which points to the his UTXO in a concealed form. This way Alice is assigning Bob **some ownership** of the new state (e.g. the property of a certain amount of tokens). 
 
 ![Alt text](img/stab3.png)
 
-After that, Alice using some [PSBT]() wallet tool, prepares a transaction which spend the UTXO which were pointed by the previous seal definition (the one that passes the ownership to her). This transaction, which is a **witness (seal closing) transaction**,  embeds in his output a commitment to the new state data which uses [Opret](/csv-w-btc.md#opret) or [Tapret](/csv-w-btc.md#tapret) rules depending on the method chosen. As explained previously, the Opret or Tapret commitment derive from a [MPC](/csv-w-btc.md#mpc-tree-construction) tree which can collect more than one contract's state transition. 
+After that, Alice using some [PSBT]() wallet tool, prepares a transaction which spend the UTXO which were pointed by the previous seal definition (the one that has passed the ownership to her). This transaction, which is a **witness (seal closing) transaction**,  embeds in his output a commitment to the new state data which uses [Opret](/csv-w-btc.md#opret) or [Tapret](/csv-w-btc.md#tapret) rules depending on the method chosen. As explained previously, the Opret or Tapret commitment derive from a [MPC](/csv-w-btc.md#mpc-tree-construction) tree which can collect more than one contract's state transition. 
 
 Before broadcasting the transaction prepared in this way she passes to Bob a package of data called [consignement]() which contain the stash of client side validated already in possession of alice in addition to the new state.
 
@@ -81,6 +81,13 @@ After checking the correctness of the consignement Bob can give "green light" (f
 
 
 ![Alt text](img/stab4.png)
+
+
+It's helpful to see the full details of the state transition both from the RGB client-side components, which will be covered in the next paragraphs, and the *connection points* to the Bitcoin Blockchain which embed the seal definition and the witness seal closure transaction
+
+![Alt text](img/state-transition-2-detail.png)
+
+
 
 
 ## Transition Bundle 

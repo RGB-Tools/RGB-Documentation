@@ -49,10 +49,10 @@ Thus a State Transition, in general terms, represents any **update of data** fro
 
 The chain of state transitions is the ordered path that make contract data evolve from the very **first contract definition**, called the [**Genesis**]() up to the [**Terminal State**]() representing the most updated state at the tip of the [DAG](terminology/glossary.md#directed-acyclic-graph---dag) of state transitions.
 
-The order relation among the state transitions in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain which, in turn, provide, timestamping and **source of ordering**.
+The order relation among the state transitions in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain which, in turn, provides, timestamping capabilities and **source of ordering**.
 
 
-## State Transition 
+## Mechanics of State Transition 
 
 The approach followed in this paragraph is the same as the one developed in the [TxO2 Client-side Validation](/csv-w-btc.md#txo2-client-side-validation) using our beloved cryptographic characters Alice and Bob. This time the explanation contains an important difference: this time Bob is not simply validating the client-side validated data that Alice shows him. He is effectively asking Alice to add some additional data which **will give Bob some degree of ownership** over the contract expressed as a hidden reference to one of his bitcoin UTxO. Let's see how the process works in practice.
 
@@ -74,10 +74,10 @@ Bob, through some information data, encoded in an **[invoice]()**, instruct Alic
 
 After that, Alice using some [PSBT]() wallet tool, prepares a transaction which spend the UTXO which were pointed by the previous seal definition (the one that has passed the ownership to her). This transaction, which is a **witness (seal closing) transaction**,  embeds in his output a commitment to the new state data which uses [Opret](/csv-w-btc.md#opret) or [Tapret](/csv-w-btc.md#tapret) rules depending on the method chosen. As explained previously, the Opret or Tapret commitment derive from a [MPC](/csv-w-btc.md#mpc-tree-construction) tree which can collect more than one contract's state transition. 
 
-Before broadcasting the transaction prepared in this way she passes to Bob a package of data called [consignement]() which contain the stash of client side validated already in possession of alice in addition to the new state.
+Before broadcasting the transaction prepared in this way she passes to Bob a package of data called [consignment]() which contain the stash of client side validated already in possession of alice in addition to the new state.
 
 
-After checking the correctness of the consignement Bob can give "green light" (for example by means of GPG signing) to Alice to let her broadcast the transaction. When confirmed, the **witness (seal closing) transaction** represent the conclusion of the state transition from Alice to Bob. 
+After checking the correctness of the consignment Bob can give "green light" (for example by means of GPG signing) to Alice to let her broadcast the transaction. When confirmed, the **witness (seal closing) transaction** represent the conclusion of the state transition from Alice to Bob. 
 
 
 ![Alt text](img/stab4.png)
@@ -87,16 +87,33 @@ It's helpful to see the full details of the state transition both from the RGB c
 
 ![Alt text](img/state-transition-2-detail.png)
 
+Just to give some context introduction, from the above diagram we introduce some terminology which will be covered later in detail. 
 
+the [**Assignment**]() construct, which is in fact an output of a different RGB State Operation directed to Alice (in this example the [**Genesis**](), which represents the first transition of any contract), is responsible for 2 things:
+* the **seal definition** pointing at a specific UTXO.  
+* the association of the *seal* to specific sets of data called **Owned States** which, depending on the contract properties, can be chosen among several properties. Just to give a simple example the amount of token transferred is a common kind of Owned State. 
 
+[**Global States**]() on the contrary reflects general and public properties of a contract that maintain consistency in the evolution and state changes of the contract.
 
-## Transition Bundle 
+Multiple **State Transition**, which represent the core RGB client-side validated operation, can be aggregated in a **Transaction Bundle**, so that **each bundling operation fits one and only one contract leaf in the [MPC tree](/csv-w-btc.md#mpc-tree-construction).  
 
+A single State Transition, at client side levels, contains always 2 elements:
+* the reference to one ore more assignments of previous State Operation, exspressed in form of **Inputs**
+* The new assignments of some **Owned states** to other Bitcoin UTXOs belonging to the new State Owner.
+
+All the data which participate in the State Transition are aggregated and hashed and fits into the Transaction Bundle which, finally, is hashed and committed in the contract leaf of the MPC Tree. Thanks to [DBC](/csv-w-btc.md#deterministic-bitcoin-commitment---dbc) the MPC Tree is committed into a tapret or opret output which, at the same time, closes the seal definition of the spent Bitcoin UTXOs and embedded a new seal definition defined through the new assignment of the the Owned State.  
+
+In the following paragraphs we will explore in depth all the elements and the process involved in the commitment operation of the State Transition.
+
+  
+### Transaction Bundle 
+
+As an important general feature of RGB protocol, it is possible to aggregate together several RGB state in transition in one.  
 
 
 ## Transitions Type
 
-In order to describe each component of the RGB state, in the diagram above is represented the complete block layout of an arbitrary type [state transition] which can be one out of 3 **Transition Types**:
+In order to describe each component of the RGB state, in the diagram above is represented the complete block layout of an arbitrary type [state transition] which can be one out of 3 **State Operation**:
 
 * **Genesis**
 * **State Transition**
@@ -116,13 +133,13 @@ In RGB, this set of data is actually a **set of arbitrary rich data** which:
 An additional element is that the contract states are constructed in order to be **atomic** so that their **ownership** is always a well defined property, which is **reflected in the ownership of the UTxO** embedded in the seal definition.
 
 
-## Components of State in Transitions
+## Components of a State in Transitions
 
 ![Alt text](img/state-components.png)
 
 The **State**, which is actually the ** New updated State** enforced by a State Transition is constituted by the following components:
 
-* **Assignements** in which are defined:
+* **Assignments** in which are defined:
   * Seals
   * Owned State 
 * **Global State**
@@ -134,7 +151,7 @@ The **Old State** is referenced through:
 * **Redeems** which are a reference to previously defined Valencies
 
 
-#### Assignements
+#### Assignments
 
 ##### Seals
 
@@ -156,9 +173,9 @@ The **Old State** is referenced through:
 
 In order to properly encode data into the state in a reproducible way a [Strict Type System](https://www.strict-types.org/) together with [Strict Encoding]() has been adopted in RGB. This means that:
 * The encoding of the data is done according to a precise [schema](#terminilogy/glossary.md#schema) which, unlike JSON or YAML, define a precise structure and layout of the data thus allowing also for deterministic ordering of each data element herein.
-* The ordering of the elements inside every collection of elemets (i.e. in lists, sets or maps) is deterministic as well.
-* Bounduaries (lower and higher) are defined for every variable and for the number of element in a collection (the so called **Confinement**).
-* All data field are byte-alligned.
+* The ordering of the elements inside every collection (i.e. in lists, sets or maps) is deterministic as well.
+* Boundaries (lower and higher) are defined for every variable and for the number of element in a collection (the so called **Confinement**).
+* All data field are byte-aligned.
 * The serialization and hashing of the data is performed in a deterministic way (Strict Encoding) allowing for creating **reproducible commitments** of the data irrespective of the system on which such operation is performed.
 * The creation of the data according to the schema is **performed through a simple description language which compile in Binary form** from Rust Language. In the future extension to other languages will be supported.
 * Additionally, the compiling according to the Strict Type System produces 2 types of outputs:
@@ -180,7 +197,7 @@ The RGB protocol consensus rule apply a **maximum size limit** of 2^16 bite (64k
 * To the **number of elements of each collection**, including the collection which represent the state itself (**?**)
 This has been designed in order to:
 * Avoid unlimited growth of the client side-validate data per each state transition.
-* Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alonside RGB.
+* Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alongside RGB.
 
 
 

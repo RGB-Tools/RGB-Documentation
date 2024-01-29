@@ -108,16 +108,19 @@ All the data which participate in the State Transition are aggregated and hashed
 In the following paragraphs we will explore in depth all the elements and the process involved in the commitment operation of the State Transition. All the topic covered from now on belong to RGB Consensus which is coded into the [RGB Core](https://github.com/RGB-WG/rgb-core/) Library.
 
   
-### Transaction Bundle 
+### Transition Bundle 
 
-As an important general feature of RGB protocol, it is possible to group together **several RGB state transitions belonging to the same contract** (i.e. having the same `contract_id`). This feature is particularly useful and necessary in *Multy-payer operations* such as Coinjoins and Lightning Channel Openings, where multiple paying parties (in addition to Alice) possess the same asset. With Transaction Bundles, each of them can decide to construct asynchronously and privately a State Transaction transferring the contract ownership to one (i.e. Bob) or many counterparts (in a *many-to-may relation), group those State transition in a bundle and, following [RGB rules for MPC and DBC](/csv-w-btc.md), construct a single Witness Seal Closure transaction, closing all the seal definitions referenced in the State transition of the bundle.   
+As an important general feature of RGB protocol, it is possible to group together **several RGB state transitions belonging to the same contract** (i.e. having the same `contract_id`). This feature is particularly useful, if not necessary, in *Multi-payer operations* such as Coinjoins and Lightning Channel Openings, where multiple paying parties (in addition to Alice) possess the same asset. With Transition Bundles, each party can decide to construct asynchronously and privately a State Transaction transferring the contract ownership to one (i.e. Bob) or many counterparts (in a *many-to-may relation), group those State transition in a bundle and, following [RGB rules for MPC and DBC](/csv-w-btc.md), construct a single Witness Seal Closure transaction, closing all the seal definitions referenced in the State transition of the bundle.   
 
 The [Transaction Bundle Structure](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/bundle.rs#L70) is composed by a map composed by the following elements:
-* The number of State Transition
-* The ordered `Op_id` identifying each State Transition
-* for each `Op_id` the ordered list of Inputs `V_in` of the Bitcoin Witness Seal Closure Transaction referencing the seal definition being spent, whose seal is being spent. 
+* The ordered list of `Op_id` identifying each State Transition inside the bundle, followed by the ordered state transition data called `Bundle_item`.
+* Each `Bundle_item` contains: 
+  *  The ordered list of Inputs `V_in` of the Bitcoin Witness Transaction referencing the seal definition being spent (closed) by each Input of the State Transition.
+  *  A marker, either `0` or `1` indicating the status of the state transition in a `convealed` or `revealed form` (more details later) 
 
 By referencing each Input `V_in` in an ordered way, the possibility to double-spend the same seal definition is two different state transitions is prevented in an effective way.
+
+In order to obtain the `bundle_id` to be inserted in the leaf of the MPC, a Merkle tree of the `op_id` is constructed in a deterministic way  <to complete>
 
 
 

@@ -116,13 +116,14 @@ The [Transaction Bundle Structure](https://github.com/RGB-WG/rgb-core/blob/maste
 * The ordered list of `Op_id` identifying each State Transition inside the bundle, followed by the ordered state transition data called `Bundle_item`.
 * Each `Bundle_item` contains: 
   *  The ordered list of Inputs `V_in` of the Bitcoin Witness Transaction referencing the seal definition being spent (closed) by each Input of the State Transition.
-  *  A marker, either `0` or `1` indicating the status of the state transition in a `convealed` or `revealed form` (more details later) 
+  *  A marker, either `0` or `1` indicating the status of the state transition in a `concealed` or `revealed` form (more details later) 
 
 By referencing each Input `V_in` in an ordered way, the possibility to double-spend the same seal definition is two different state transitions is prevented in an effective way.
 
 In order to obtain the `bundle_id` to be inserted in the leaf of the MPC, a Merkle tree of the `op_id` is constructed in a deterministic way  <to complete>
 
 
+![Alt text](/img/bundle-id-mpc.png)
 
 ## Transitions Type
 

@@ -98,17 +98,27 @@ the [**Assignment**]() construct, which is in fact an output of a different RGB 
 Multiple **State Transition**, which represent the core RGB client-side validated operation, can be aggregated in a **Transaction Bundle**, so that **each bundling operation fits one and only one contract leaf in the [MPC tree](/csv-w-btc.md#mpc-tree-construction).  
 
 A single State Transition, at client side levels, contains always 2 elements:
-* the reference to one ore more assignments of previous State Operation, exspressed in form of **Inputs**
+* the reference to one ore more assignments of previous State Operation, expressed in form of **Inputs**
 * The new assignments of some **Owned states** to other Bitcoin UTXOs belonging to the new State Owner.
 
-All the data which participate in the State Transition are aggregated and hashed and fits into the Transaction Bundle which, finally, is hashed and committed in the contract leaf of the MPC Tree. Thanks to [DBC](/csv-w-btc.md#deterministic-bitcoin-commitment---dbc) the MPC Tree is committed into a tapret or opret output which, at the same time, closes the seal definition of the spent Bitcoin UTXOs and embedded a new seal definition defined through the new assignment of the the Owned State.  
+![Alt text](/img/state-transition-3-bitcoin-rgb.png)
 
-In the following paragraphs we will explore in depth all the elements and the process involved in the commitment operation of the State Transition.
+All the data which participate in the State Transition are aggregated and hashed and fits into the Transaction Bundle which, finally, is hashed and committed in the contract leaf of the MPC Tree. Thanks to [DBC](/csv-w-btc.md#deterministic-bitcoin-commitment---dbc) the MPC Tree is committed into a tapret or opret output which, at the same time, closes the seal definition of the spent Bitcoin UTXOs and embedded a new seal definition defined through the new assignment of the the Owned State. The [Anchor](/csv-w-btc.md#anchors) represent the connection point between the commitment inside Bitcoin Blockchain (whose library and structure are colored in orange) and the RGB client-side validate structure (whose library and components are colored in red). 
+
+In the following paragraphs we will explore in depth all the elements and the process involved in the commitment operation of the State Transition. All the topic covered from now on belong to RGB Consensus which is coded into the [RGB Core](https://github.com/RGB-WG/rgb-core/) Library.
 
   
 ### Transaction Bundle 
 
-As an important general feature of RGB protocol, it is possible to aggregate together several RGB state in transition in one.  
+As an important general feature of RGB protocol, it is possible to group together **several RGB state transitions belonging to the same contract** (i.e. having the same `contract_id`). This feature is particularly useful and necessary in *Multy-payer operations* such as Coinjoins and Lightning Channel Openings, where multiple paying parties (in addition to Alice) possess the same asset. With Transaction Bundles, each of them can decide to construct asynchronously and privately a State Transaction transferring the contract ownership to one (i.e. Bob) or many counterparts (in a *many-to-may relation), group those State transition in a bundle and, following [RGB rules for MPC and DBC](/csv-w-btc.md), construct a single Witness Seal Closure transaction, closing all the seal definitions referenced in the State transition of the bundle.   
+
+The [Transaction Bundle Structure](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/bundle.rs#L70) is composed by a map composed by the following elements:
+* The number of State Transition
+* The ordered `Op_id` identifying each State Transition
+* for each `Op_id` the ordered list of Inputs `V_in` of the Bitcoin Witness Seal Closure Transaction referencing the seal definition being spent, whose seal is being spent. 
+
+By referencing each Input `V_in` in an ordered way, the possibility to double-spend the same seal definition is two different state transitions is prevented in an effective way.
+
 
 
 ## Transitions Type

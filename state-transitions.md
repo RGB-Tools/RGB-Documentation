@@ -4,7 +4,7 @@ Before addressing the technical implementation of **states** and their related d
 In the following paragraphs, after a brief introduction to **smart contracts** and **state**  we will devote our attention to the mechanism behind **State Transitions** from the the Client-side perspective and the related *point of contacts* which tether such operation with the Bitcoin Blockchain commitments discussed in the [Client-side Validation with Bitcoin](csv-w-btc.md) section.  
 
 
-## Smart Contracts
+## Introduction to Smart Contracts and their States
 
 Since RGB allows for the implementation of **smart contracts** in Bitcoin, it's the right time to give a definition of what actually a smart contract is. 
 
@@ -36,10 +36,7 @@ In fact the Business Logic of the contract represent the rules that allows the e
 
 ![Alt text](img/state-business-logic.png)
 
-
-## Introduction to Contract States
-
-At this point a first de[State]() is required, without going into the specific implementation details of RGB which will be covered later. Simply put:
+At this point, without going into the specific implementation details of RGB, which will be covered later, a first and basic definition of [State]() is required. Simply put:
 
 > A State can be defined as a unique configuration of information / data that represents the conditions of a contract in some precise moment in time.
 
@@ -77,7 +74,7 @@ After that, Alice using some [PSBT]() wallet tool, prepares a transaction which 
 Before broadcasting the transaction prepared in this way she passes to Bob a package of data called [consignment]() which contain the stash of client side validated already in possession of alice in addition to the new state.
 
 
-After checking the correctness of the consignment Bob can give "green light" (for example by means of GPG signing) to Alice to let her broadcast the transaction. When confirmed, the **witness (seal closing) transaction** represent the conclusion of the state transition from Alice to Bob. 
+After checking the correctness of the consignment Bob can give "green light" (for example by means of GPG signing) to Alice to let her broadcast the transaction. When confirmed, the **witness (seal closure) transaction** represent the conclusion of the state transition from Alice to Bob. 
 
 
 ![Alt text](img/stab4.png)
@@ -110,7 +107,9 @@ In the following paragraphs we will explore in depth all the elements and the pr
   
 ### Transition Bundle 
 
-As an important general feature of RGB protocol, it is possible to group together **several RGB state transitions belonging to the same contract** (i.e. having the same `contract_id`). This feature is particularly useful, if not necessary, in *Multi-payer operations* such as Coinjoins and Lightning Channel Openings, where multiple paying parties (in addition to Alice) possess the same asset. With Transition Bundles, each party can decide to construct asynchronously and privately a State Transaction transferring the contract ownership to one (i.e. Bob) or many counterparts (in a *many-to-may relation), group those State transition in a bundle and, following [RGB rules for MPC and DBC](/csv-w-btc.md), construct a single Witness Seal Closure transaction, closing all the seal definitions referenced in the State transition of the bundle.   
+As an important general feature of RGB protocol, it is possible to group together **several State Transitions belonging to the same contract** (i.e. having the same `contract_id`). In the most simple case, as the one shown above between Alice and Bob, a transition bundle is composed by a single state transition.
+
+ However, RGB embeds in its design the support for *Multi-payer operations* such as Coinjoins and Lightning Channel openings, where multiple paying parties (in addition to Alice) possess the same asset. With Transition Bundles, each party can decide to construct asynchronously and privately a State Transaction transferring the contract ownership to one (i.e. Bob) or many counterparts (in a *many-to-many* relation), group those State transition in a Bundle and, following [RGB rules for MPC and DBC](/csv-w-btc.md), construct a single Witness Seal Closure Transaction, closing all the seal definitions referenced in the State transition of the bundle.   
 
 The [Transaction Bundle Structure](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/bundle.rs#L70) is composed by a map composed by the following elements:
 * The ordered list of `Op_id` identifying each State Transition inside the bundle, followed by the ordered state transition data called `Bundle_item`.
@@ -125,33 +124,40 @@ In order to obtain the `bundle_id` to be inserted in the leaf of the MPC, a Merk
 
 ![Alt text](/img/bundle-id-mpc.png)
 
-## Transitions Type
+### Contract Operations
 
-In order to describe each component of the RGB state, in the diagram above is represented the complete block layout of an arbitrary type [state transition] which can be one out of 3 **State Operation**:
+The fundamental topic of state transitions, which was just described in the previous sections, allows general capabilities for the transfer of the ownership of some state properties from one party to another. However, state transitions are not the only kind operation possible in RGB protocol, as they are an element of the broader set of **Contract Operations**. In particular, in RGB we have at our disposal 3 types of contract operation available:     
 
-* **Genesis**
-* **State Transition**
+* **State Transition** 
+* **Genesis** 
 * **State Extension**
 
+The latter two can be defined as **State Generation** operation, and in the following paragraphs we will explore their properties.
 
-## RGB State
+In the figure below, all 3 contract operation are shown together with their position in a DAG pertaining to an RGB contract, which is ordered according to the respective anchors in the Bitcoin Blockchain. Genesis is in green, State Transitions are in Red, State Extensions are in blue.
+
+![Alt text](/img/contract-op-dag1.png)
+
+#### Genesis 
+
+Genesis represent the starting state of every RGB contract, it is simply not possible to define it in other ways. 
+In Genesis, according to the rules defined in a template called [Schema](), are defined the various property related to the contract states which will be constructed upon the Genesis state, both of [owned]() type and of [global]() type. 
+
+To give an example, in the case of a contract defining the creation of a token, in Genesis are inscribed:
+* the number of token issued in the genesis and their owner (the owner of the UTXO referenced in the seal definition)
+* the maximum number of token to be issued in total
+* the possibility of re-issuance and the designed party that have this rights
+
+As a natural implication, Genesis does no reference any previous state transition, nor it closes any previously defined seal. 
+
+#### State Extensions
 
 
-The state represent a set of conditions which are expressed in form of data and which are embedded in the contract itself.
-
-In RGB, this set of data is actually a **set of arbitrary rich data** which:
-* are **strongly typed**, which means that **each variable possesses a clear type definition (e.g. u8) and both lower and upped bounds**.
-* can be **nested**, meaning that a type can be constructed from other types 
-* can be organized in `lists` `sets` or `maps`
-
-An additional element is that the contract states are constructed in order to be **atomic** so that their **ownership** is always a well defined property, which is **reflected in the ownership of the UTxO** embedded in the seal definition.
-
-
-## Components of a State in Transitions
+### Components of a Contract Operation
 
 ![Alt text](img/state-components.png)
 
-The **State**, which is actually the ** New updated State** enforced by a State Transition is constituted by the following components:
+The **State**, which is actually the **New updated State** enforced by a State Transition is constituted by the following components:
 
 * **Assignments** in which are defined:
   * Seals
@@ -181,9 +187,17 @@ The **Old State** is referenced through:
 
 #### Redeems
 
-### Features of RGB State
+## Features of RGB State
 
 ### Strict Type System
+
+The state represent a set of conditions which are expressed in form of data and which are embedded in the contract itself.
+
+In RGB, this set of data is actually a **set of arbitrary rich data** which:
+* are **strongly typed**, which means that **each variable possesses a clear type definition (e.g. u8) and both lower and upped bounds**.
+* can be **nested**, meaning that a type can be constructed from other types.
+* can be organized in `lists` `sets` or `maps`
+
 
 In order to properly encode data into the state in a reproducible way a [Strict Type System](https://www.strict-types.org/) together with [Strict Encoding]() has been adopted in RGB. This means that:
 * The encoding of the data is done according to a precise [schema](#terminilogy/glossary.md#schema) which, unlike JSON or YAML, define a precise structure and layout of the data thus allowing also for deterministic ordering of each data element herein.
@@ -214,7 +228,7 @@ This has been designed in order to:
 * Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alongside RGB.
 
 
-
+### The Validation - Ownership Paradigm in RGB 
 
 
 

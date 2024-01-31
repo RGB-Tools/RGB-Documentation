@@ -49,7 +49,9 @@ The chain of state transitions is the ordered path that make contract data evolv
 The order relation among the state transitions in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain which, in turn, provides, timestamping capabilities and **source of ordering**.
 
 
-## Mechanics of State Transition 
+## State Transitions and Contract Operations
+
+### Mechanics of State Transitions
 
 The approach followed in this paragraph is the same as the one developed in the [TxO2 Client-side Validation](/csv-w-btc.md#txo2-client-side-validation) using our beloved cryptographic characters Alice and Bob. This time the explanation contains an important difference: this time Bob is not simply validating the client-side validated data that Alice shows him. He is effectively asking Alice to add some additional data which **will give Bob some degree of ownership** over the contract expressed as a hidden reference to one of his bitcoin UTxO. Let's see how the process works in practice.
 
@@ -124,7 +126,7 @@ In order to obtain the `bundle_id` to be inserted in the leaf of the MPC, a Merk
 
 ![Alt text](/img/bundle-id-mpc.png)
 
-### Contract Operations
+### Contract Operations and Active State
 
 The fundamental topic of state transitions, which was just described in the previous sections, allows general capabilities for the transfer of the ownership of some state properties from one party to another. However, state transitions are not the only kind operation possible in RGB protocol, as they are an element of the broader set of **Contract Operations**. In particular, in RGB we have at our disposal 3 types of contract operation available:     
 
@@ -138,22 +140,46 @@ In the figure below, all 3 contract operation are shown together with their posi
 
 ![Alt text](/img/contract-op-dag1.png)
 
+It is important to note that the main difference between ordinary State Transitions and both two State Generation Operations lie in the lack of seal closure part. For this reason, **both Genesis and State Extensions need a State Transition that closes the particular seal definition constructed by them**.
+
+
+Another evident yet fundamental aspect to take into account is that the **Active State** is the last state at the tip of the [DAG]() of contract operation that reference themselves, in the order committed to the Bitcoin Blockchain, from the Genesis.
+
 #### Genesis 
 
-Genesis represent the starting state of every RGB contract, it is simply not possible to define it in other ways. 
-In Genesis, according to the rules defined in a template called [Schema](), are defined the various property related to the contract states which will be constructed upon the Genesis state, both of [owned]() type and of [global]() type. 
+Genesis represent the **starting state of every RGB contract**, it is constructed by a [contract issuer]() and every state transition or state extensions must be eventually connected to it through the DAG of contract operations.  
+In Genesis, according to the rules defined in a contract template called [Schema](), are defined the various property related to the contract states which will be constructed upon the Genesis state, both of [owned]() type and of [global]() type. 
 
 To give an example, in the case of a contract defining the creation of a token, in Genesis are inscribed:
 * the number of token issued in the genesis and their owner (the owner of the UTXO referenced in the seal definition)
 * the maximum number of token to be issued in total
 * the possibility of re-issuance and the designed party that have this rights
 
-As a natural implication, Genesis does no reference any previous state transition, nor it closes any previously defined seal. 
+As a natural implication, Genesis does no reference any previous state transition, nor it closes any previously defined seal. As mentioned above, in order to be effectively validated on the on-chain history, a Genesis shall be referenced by a first state transition (e.g. a self-spend to the issuer or a first distribution round), which finalizes the "first ownership" of the contract through an anchor to the Bitcoin Blockchain. 
 
 #### State Extensions
 
+This kind of smart contract operation represents quite a **new feature** in the smart contract realm.
+With state extensions, **some *digital rights* defined in the contract can be redeemed by some specifically defined parties or by the occurrence of some precise events**. This contract operation is used to confer some complex rights to other parties different from the contract issuer (which is the creator of the Genesis) for example those related to:
+
+* *Distributed issuance* of some token. 
+* *Token swap*. 
+* *Re-issuance events* which can involve bitcoin / other assets *burning* to some specific address(es). 
+
+
+In RGB taxonomy, the digital right been being redeemed in State Extensions is called a [Valency](), and, at the client-side level, it is treated in the same ways as as an [assignment]() being referenced in an RBB input. In this case, such particular "input" part is called a [Redeem](). As Genesis, state extensions do not close any seal. They redeem valencies defined in Genesis or in state transitions  in turn, must be closed by a subsequent state transition. 
+
+![Alt text](/img/state-extension-1.png)
+
+Following the figure above we can have an example of the working mechanism of state extension in practice:
+* As a first step, some kind of valency (e.g. a issuance right) is defined in the Genesis by the contract issuer. For example, the valency can grant a bounded-amount secondary issuance of a token defined in the contact, only if authorized by a valid signature related to a specific public key embedded in the valency.
+* A rightful party construct a state extension referencing this valency in the redeem part of the operation. At the same time, some owned right together with some seal definition pointing at an UTXO is constructed as assignments in the same state extension. Following the example, the state extension include a signature of the public key defined in the valency and assign the new amount of token issued to a Bitcoin UTXO as a seal definition.      
+* The seal definition specified in the state extension is closed through a State Transition constructed by the UTXO owner, which the seal definition pointed at. So the owner of the state is able to spend the newly issued tokens to himself or to other parties.
+
 
 ### Components of a Contract Operation
+
+Let's now deep-dive in all the components of a contract operation, which is able to change the state of the contact. They are shown in the diagram below
 
 ![Alt text](img/state-components.png)
 
@@ -167,7 +193,7 @@ The **State**, which is actually the **New updated State** enforced by a State T
 * **Valencies**
 
 The **Old State** is referenced through:
-* **Inputs**
+* **Inputs** connected to previous assignments.
 * **Redeems** which are a reference to previously defined Valencies
 
 

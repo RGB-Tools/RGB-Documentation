@@ -17,9 +17,9 @@ This guide targets the broader technical audience willing to understand in depth
    * Multi Protocol Commitments - MPC
    * Anchors
 * [State Transitions](state-transitions.md)
-   * Smart Contracts
-   * Introduction to Contract States
-   * State Transitions
-   * RGB State
+   * Introduction to Smart Contracts and their states
+   * State Transition and Contract Operations
+   * Components of a Contract Operation
+   * Features of RGB State
 * [Contract Schema and Interfaces](schema-interface.md)  
 * [Glossary](terminology/glossary.md)

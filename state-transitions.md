@@ -179,22 +179,35 @@ Following the figure above we can have an example of the working mechanism of st
 
 ### Components of a Contract Operation
 
-Let's now deep-dive in all the components of a contract operation, which is able to change the state of the contact. They are shown in the diagram below
+Let's now deep-dive in all the components of a contract operation, which are able to change the state of the contact and are eventually client-side verified by the rightful recipient in a deterministic way. 
 
 ![Alt text](img/state-components.png)
 
-The **State**, which is actually the **New updated State** enforced by a State Transition is constituted by the following components:
+With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated: 
+
+The component of the **New state** are
 
 * **Assignments** in which are defined:
   * Seals
   * Owned State 
 * **Global State**
-* **Metadata**
 * **Valencies**
 
 The **Old State** is referenced through:
-* **Inputs** connected to previous assignments.
+* **Inputs** connected to previous assignments of connected old States
 * **Redeems** which are a reference to previously defined Valencies
+
+In addition to this subdivision we also have:
+* **Transition Type** indicating one out of: **State Transition** / **Genesis** / **State Extension**
+* **Metadata** allowing for the declarion of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.  
+
+We will explore each of these component in a dedicated paragraph:
+
+#### Contract State
+
+Before addressing each state component, it's fundamental to clarify through which elements a contract state is expressed in the RGB protocol:
+
+
 
 
 #### Assignments

@@ -181,11 +181,11 @@ Following the figure above we can have an example of the working mechanism of st
 
 Let's now deep-dive in all the components of a contract operation, which are able to change the state of the contact and are eventually client-side verified by the rightful recipient in a deterministic way. 
 
-![Alt text](img/state-components.png)
+![Alt text](/img/state-components.png)
 
 With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated: 
 
-The component of the **New state** are
+The component of the **New state** are:
 
 * **Assignments** in which are defined:
   * Seals
@@ -194,20 +194,45 @@ The component of the **New state** are
 * **Valencies**
 
 The **Old State** is referenced through:
-* **Inputs** connected to previous assignments of connected old States
-* **Redeems** which are a reference to previously defined Valencies
+* **Inputs** connected to previous assignments of the related old states
+* **Redeems** which are a reference to previously defined [Valencies]()
 
 In addition to this subdivision we also have:
 * **Transition Type** indicating one out of: **State Transition** / **Genesis** / **State Extension**
-* **Metadata** allowing for the declarion of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.  
+* **Metadata** allowing for the declarion of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
-We will explore each of these component in a dedicated paragraph:
+We will explore each one of these component in a dedicated paragraph.
 
 #### Contract State
 
-Before addressing each state component, it's fundamental to clarify through which elements a contract state is expressed in the RGB protocol:
+Before addressing each state component, it's fundamental to clarify through which elements a contract state is expressed in the RGB protocol. Specifically, in RGB, the **State** of a contract is fully expressed by:
+* A single **Global State** 
+* One or more **Owned State(s)** which can belong to either 2 different categories:
+  * Private State
+  * Public States
 
+![Alt text](/img/state-global-owned-1.png)
 
+Global State are embedded in state transition as a single component block while owned state are defined inside the Assignement component toegether with a seal definition.
+
+##### Global State
+
+The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** as it defines some general characteristic of the contract which must be publicky visible. A Globale State is always a public state, and can be written in Genesis by the contract issuer and later changed in state transition or in state extensions by a rightfull party defined in the genesis itself.
+
+As an important feature, the Global State is usually made available by the contract issuers or  by contract participants and distributed through public networks both centralized or decentralized (e.g. Websites, IPFS, Nostr, Torrent, etc.). It's important to point out that the **availability** of the global state is incentivized only by economic means of usage and diffusion of the contract: the invoved parties are interested and bears the cost of the storage solution which means the accessisility of such kind of data.
+
+Every Component of a Global State is composed by one ore more elements which embeds:
+
+* A `Type` which embeds a deterministic [semantic definition]()
+* The actual `Data`
+
+For example A Global State of newly issued token written in Genesis, dependent on a particular [Schema](), contains generally:
+* the ticker
+* the Full name of the token
+* the precision of decimal figures
+* the maximum supply of the token
+* the date of issuance
+* a text with some Legal disclaimer
 
 
 #### Assignments
@@ -216,7 +241,7 @@ Before addressing each state component, it's fundamental to clarify through whic
 
 ##### Owned States
 
-#### Global State
+
 
 #### Metadata
 

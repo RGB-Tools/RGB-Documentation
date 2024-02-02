@@ -226,7 +226,7 @@ Every Component of a Global State is composed by one ore more elements which emb
 * A `Type` which embeds a deterministic [semantic definition]()
 * The actual `Data`
 
-For example A Global State of newly issued token written in Genesis, dependent on a particular [Schema](), contains generally:
+For example A Global State of newly issued token written in Genesis, dependent on the `Non inflatable Asset [Schema]()` and  [Contract Interface]() `RGB 20` , contains generally:
 * the ticker
 * the Full name of the token
 * the precision of decimal figures
@@ -285,15 +285,23 @@ As a matter of fact Strict Encoding is defined in both an extremely pure functio
 ### Size limitation
 
 The RGB protocol consensus rule apply a **maximum size limit** of 2^16 bite (64kB):
-* To the size of **any data type** (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...) 
-* To the **number of elements of each collection**, including the collection which represent the state itself (**?**)
+* To the size of **any data type** (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
+* To the **number of elements of each collection**
 This has been designed in order to:
 * Avoid unlimited growth of the client side-validate data per each state transition.
 * Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alongside RGB.
 
 
-### The Validation - Ownership Paradigm in RGB 
+### The Validation != Ownership Paradigm in RGB 
 
+One of the most important features of RGB in respect to the majority of blockchain-based smart contract systems rests on the **clear separation between the validation task and ownership property** which are defined by the protocol at the most fundamental level.
 
+![alt text](/img/validation-ownership-1.png)
 
+In practice:
+* The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consitency and adherence of state transitions to the smart contract rule. This process belong entirely accomplished by RGB-specifi libraries.
+* The **Ownership** property, which, through the seal definition pointing to a Bitcoin UTXO, **defines who can change the state**. The security level of this property, depends entirely upon the security model of Bitcoin itself.
 
+This kind of separation prevents the possibility of mix the non-Turing complete capabilities of smart contract with the always public access to modification of contract states which took place in the majority of public blockchain with advanced programming capabilities. On the opposite, the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks where yet unknown vulnerabilities of smart contracts have been exploited by public acess to the contract state, encoded in the blockchain.
+
+Additionally, by relying on Bitcoin trasnaction structure, RGB can exploit the features of the Lightning Network in a straightforward way.

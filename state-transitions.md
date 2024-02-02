@@ -237,6 +237,9 @@ For example A Global State of newly issued token written in Genesis, dependent o
 
 #### Assignments
 
+Assignement 
+
+
 ##### Seals
 
 ##### Owned States
@@ -302,6 +305,6 @@ In practice:
 * The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consitency and adherence of state transitions to the smart contract rule. This process belong entirely accomplished by RGB-specifi libraries.
 * The **Ownership** property, which, through the seal definition pointing to a Bitcoin UTXO, **defines who can change the state**. The security level of this property, depends entirely upon the security model of Bitcoin itself.
 
-This kind of separation prevents the possibility of mix the non-Turing complete capabilities of smart contract with the always public access to modification of contract states which took place in the majority of public blockchain with advanced programming capabilities. On the opposite, the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks where yet unknown vulnerabilities of smart contracts have been exploited by public acess to the contract state, encoded in the blockchain.
+This kind of separation prevents the possibility of mix the non-Turing complete capabilities of smart contract with the public access of contract states which is embedded in nearly all blockchains with advanced programming capabilities. On the opposite, **the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks** where yet unknown vulnerabilities of smart contracts have been exploited by publicly accessing the contract state encoded in the blockchain.
 
 Additionally, by relying on Bitcoin trasnaction structure, RGB can exploit the features of the Lightning Network in a straightforward way.

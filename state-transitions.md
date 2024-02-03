@@ -199,7 +199,7 @@ The **Old State** is referenced through:
 
 In addition to this subdivision we also have:
 * **Transition Type** indicating one out of: **State Transition** / **Genesis** / **State Extension**
-* **Metadata** allowing for the declarion of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
+* **Metadata** allowing for the declaration of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
 We will explore each one of these component in a dedicated paragraph.
 
@@ -213,13 +213,13 @@ Before addressing each state component, it's fundamental to clarify through whic
 
 ![Alt text](/img/state-global-owned-1.png)
 
-Global State are embedded in state transition as a single component block while owned state are defined inside the Assignement component toegether with a seal definition.
+Global State are embedded in state transition as a single component block while owned state are defined inside the Assignment component together with a seal definition.
 
 ##### Global State
 
-The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** as it defines some general characteristic of the contract which must be publicky visible. A Globale State is always a public state, and can be written in Genesis by the contract issuer and later changed in state transition or in state extensions by a rightfull party defined in the genesis itself.
+The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** as it defines some general characteristic of the contract which must be publicly visible. A Global State is always a public state, and can be written in Genesis by the contract issuer and later changed in state transition or in state extensions by a rightful party defined in the genesis itself.
 
-As an important feature, the Global State is usually made available by the contract issuers or  by contract participants and distributed through public networks both centralized or decentralized (e.g. Websites, IPFS, Nostr, Torrent, etc.). It's important to point out that the **availability** of the global state is incentivized only by economic means of usage and diffusion of the contract: the invoved parties are interested and bears the cost of the storage solution which means the accessisility of such kind of data.
+As an important feature, the Global State is usually made available by the contract issuers or  by contract participants and distributed through public networks both centralized or decentralized (e.g. Websites, IPFS, Nostr, Torrent, etc.). It's important to point out that the **availability** of the global state is incentivized only by economic means of usage and diffusion of the contract: the involved parties are interested and bears the cost of the storage solution which means the accessibility of such kind of data.
 
 Every Component of a Global State is composed by one ore more elements which embeds:
 
@@ -237,7 +237,7 @@ For example A Global State of newly issued token written in Genesis, dependent o
 
 #### Assignments
 
-Assignement 
+Assignment 
 
 
 ##### Seals
@@ -302,9 +302,11 @@ One of the most important features of RGB in respect to the majority of blockcha
 ![alt text](/img/validation-ownership-1.png)
 
 In practice:
-* The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consitency and adherence of state transitions to the smart contract rule. This process belong entirely accomplished by RGB-specifi libraries.
+* The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consistency and adherence of state transitions to the smart contract rule. This process belong entirely accomplished by RGB-specific libraries.
 * The **Ownership** property, which, through the seal definition pointing to a Bitcoin UTXO, **defines who can change the state**. The security level of this property, depends entirely upon the security model of Bitcoin itself.
 
 This kind of separation prevents the possibility of mix the non-Turing complete capabilities of smart contract with the public access of contract states which is embedded in nearly all blockchains with advanced programming capabilities. On the opposite, **the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks** where yet unknown vulnerabilities of smart contracts have been exploited by publicly accessing the contract state encoded in the blockchain.
 
-Additionally, by relying on Bitcoin trasnaction structure, RGB can exploit the features of the Lightning Network in a straightforward way.
+Additionally, by relying on Bitcoin transaction structure, RGB can exploit the features of the Lightning Network in a straightforward way.
+
+### RGB specific libraries

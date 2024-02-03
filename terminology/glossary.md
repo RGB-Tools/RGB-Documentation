@@ -72,11 +72,15 @@ An optional fingerprint that past owners of a contract can register allowing ver
 
 #### Extra Transaction Proof - ETP
 
+The part of the Anchor which embeds the additional data necessary for the validation of tapret commitment. It is constituted by 
+
 #### Genesis
 
-The set of data, regulated by a contract [schema](), which represent the starting point of every contract of RGB. It's equivalent of Bitcoin Genesis Block in the Client-side Validation domain. 
+The set of data, regulated by a contract [schema](#schema), which represent the starting point of every contract of RGB. It's equivalent of Bitcoin Genesis Block in the Client-side Validation domain. 
 
 #### Global State
+
+
 
 #### Interface
 

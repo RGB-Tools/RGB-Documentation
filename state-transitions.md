@@ -202,16 +202,16 @@ Let's now deep-dive in all the components of a contract operation, which are abl
                        |  |                                           |   |                                                  |  |
                        |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
                        |  | | Input #1                              | |   | | Assignment #1                                | |  |
-       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
-       | OP_ID +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
-       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+        | OpId +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
+        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
                        |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
                        |  |                                           |   |                                                  |  |
                        |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
                        |  | | Input #2                              | |   | | Assignment #2                                | |  |
-       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
-       | OP_ID +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
-       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+        | OpId +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
+        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
                        |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
                        |  |                                           |   |                                                  |  |
                        |  |         ...            ...      ...       |   |     ...          ...             ...             |  |
@@ -220,11 +220,11 @@ Let's now deep-dive in all the components of a contract operation, which are abl
                        |                                                                                                        |
                        |  +-------------------------------------------+   +--------------------------------------------------+  |
                        |  | Redeems of Valencies                      |   | Valencies                                        |  |
-                       |  |                                           |   |                                                  |  |            +-------+
-                       |  | +-----------------------------+           |   |                                                  |  |    +-------> OP_ID |
-       +-------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |       +-------+
-       | OP_ID +--------------> Previous_OP_ID | | Type | | ...   ... |   |  | Type |  | Type |  | Type |  ...   ...   ...   |  |    |
-       +-------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |
+                       |  |                                           |   |                                                  |  |            +------+
+                       |  | +-----------------------------+           |   |                                                  |  |    +-------> OpId |
+        +------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |       +------+
+        | OpId +--------------> Previous_OP_ID | | Type | | ...   ... |   |  | Type |  | Type |  | Type |  ...   ...   ...   |  |    |
+        +------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |
                        |  | +-----------------------------+           |   |                                                  |  |    |
                        |  |                                           |   |                                                  |  |    |
                        |  |                                           |   |                                                  |  |    |
@@ -235,7 +235,7 @@ Let's now deep-dive in all the components of a contract operation, which are abl
 
 With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated: 
 
-The component of the **New state** are:
+The component of the **New state**, which we will be exploring one by one in a dedicated paragraph, are:
 
 * **Assignments** in which are defined:
   * Seals
@@ -251,7 +251,7 @@ In addition to this subdivision we also have:
 * **Transition Type** indicating one out of: **State Transition** / **Genesis** / **State Extension**
 * **Metadata** allowing for the declaration of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
-We will explore each one of these component in a dedicated paragraph.
+All this element participate in the calculation of the `OpId` which is, indeed, the ordered SHA-256 hashing of all the constructs ...< to complete>  
 
 #### Contract State
 
@@ -276,7 +276,7 @@ Every Component of a Global State is composed by one ore more elements which emb
 * A `Type` which embeds a deterministic [semantic definition]()
 * The actual `Data`
 
-For example A Global State of newly issued token written in Genesis, dependent on the `Non inflatable Asset [Schema]()` and  [Contract Interface]() `RGB 20` , contains generally, as common `Types`:
+For example A Global State of newly issued token written in Genesis, dependent on the [`Non inflatable Asset Schema`]() and  [Contract Interface]() `RGB 20` , contains generally, as common `Types`:
 * the ticker
 * the Full name of the token
 * the precision of decimal figures
@@ -292,13 +292,12 @@ They are composed by two main components:
 * the Seal Definition
 * The Owned State
 
-
 As a peculiar feature of RGB, each one of this two parts can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining high privacy and scalability in both state transition construction and subsequent validation, in a selective way, by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed`` form can be used to validate the same data that were inserted in a previous state transition(s) with their hash digest in a concealed form. 
 In the picture below. all 4 combination of Reveal/Conceal form are shown:
 
 ![Alt text](/img/assignment-reveal-conceal.png)
 
-Some example of the usefulness of this feature will be recalled in the following paragraphs
+Some example of the usefulness of this feature will be recalled in the following paragraphs.
 
 ##### Seal Definition
 
@@ -312,6 +311,8 @@ Some example of the usefulness of this feature will be recalled in the following
   * `Genesis seal` which is a "self-referenced" definition, meaning that the **The transaction used as a seal definition coincides with the witness transaction including the present assignment**. As the final `txid` of the transaction depends on all the data of the state transition, including `txptr` it would be impossible to calculate it due to the circular reference implied. In practice the `Genesis Seal` is a void field which has become necessary to handle several situation in which an external UTXO is not available: a notable situation is the generation and update of Lightning Network commitment transactions.  
 
 ##### Owned States
+
+This second component of the Assignment is responsible for the definition and storage of the data assigned by the Seal Definition. In RGB an Owned State can be defined with only one among 4 State Type: `Declarative`, `Fungible`, `Structured`, `Attachments`.
 
 
 

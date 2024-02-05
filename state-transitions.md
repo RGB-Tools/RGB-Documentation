@@ -181,7 +181,57 @@ Following the figure above we can have an example of the working mechanism of st
 
 Let's now deep-dive in all the components of a contract operation, which are able to change the state of the contact and are eventually client-side verified by the rightful recipient in a deterministic way. 
 
-![Alt text](/img/state-components.png)
+```
+                       +--------------------------------------------------------------------------------------------------------+
+                       |                                                                                                        |
+                       |  +-------------------------------------------+   +--------------------------------------------------+  |
+                       |  |             Transition Type               |   | Global State                                     |  |
+                       |  +-------------------------------------------+   |                                                  |  |
+                       |                                                  |                                                  |  |
+                       |  +-------------------------------------------+   | +---------------------+                          |  |
+                       |  | Metadata                                  |   | | +------+ +--------+ |                          |  |
+                       |  |                                           |   | | | Type | |  Data  | |   ...   ...   ...        |  |
+                       |  | +--------------------------------------+  |   | | +------+ +--------+ |                          |  |
+                       |  | |           Structured Data            |  |   | +---------------------+                          |  |
+                       |  | +--------------------------------------+  |   |                                                  |  |
+                       |  |                                           |   |                                                  |  |
+                       |  +-------------------------------------------+   +--------------------------------------------------+  |
+                       |                                                                                                        |
+                       |  +-------------------------------------------+   +--------------------------------------------------+  |
+                       |  | Inputs                                    |   | Assignments                                      |  |
+                       |  |                                           |   |                                                  |  |
+                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  | | Input #1                              | |   | | Assignment #1                                | |  |
+       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+       | OP_ID +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
+       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  |                                           |   |                                                  |  |
+                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  | | Input #2                              | |   | | Assignment #2                                | |  |
+       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+       | OP_ID +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
+       +-------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  |                                           |   |                                                  |  |
+                       |  |         ...            ...      ...       |   |     ...          ...             ...             |  |
+                       |  |                                           |   |                                                  |  |
+                       |  +-------------------------------------------+   +--------------------------------------------------+  |
+                       |                                                                                                        |
+                       |  +-------------------------------------------+   +--------------------------------------------------+  |
+                       |  | Redeems of Valencies                      |   | Valencies                                        |  |
+                       |  |                                           |   |                                                  |  |            +-------+
+                       |  | +-----------------------------+           |   |                                                  |  |    +-------> OP_ID |
+       +-------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |       +-------+
+       | OP_ID +--------------> Previous_OP_ID | | Type | | ...   ... |   |  | Type |  | Type |  | Type |  ...   ...   ...   |  |    |
+       +-------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |
+                       |  | +-----------------------------+           |   |                                                  |  |    |
+                       |  |                                           |   |                                                  |  |    |
+                       |  |                                           |   |                                                  |  |    |
+                       |  +-------------------------------------------+   +--------------------------------------------------+  |    |
+                       |                                                                                                        |    |
+                       +--------------------------------------------------------------------------------------------------------+----+
+```
 
 With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated: 
 
@@ -213,7 +263,7 @@ Before addressing each state component, it's fundamental to clarify through whic
 
 ![Alt text](/img/state-global-owned-1.png)
 
-Global State are embedded in state transition as a single component block while owned state are defined inside the Assignment component together with a seal definition.
+Global State are embedded in state transition as a single component block while Owned State are defined inside the assignment component together with a seal definition.
 
 ##### Global State
 
@@ -226,7 +276,7 @@ Every Component of a Global State is composed by one ore more elements which emb
 * A `Type` which embeds a deterministic [semantic definition]()
 * The actual `Data`
 
-For example A Global State of newly issued token written in Genesis, dependent on the `Non inflatable Asset [Schema]()` and  [Contract Interface]() `RGB 20` , contains generally:
+For example A Global State of newly issued token written in Genesis, dependent on the `Non inflatable Asset [Schema]()` and  [Contract Interface]() `RGB 20` , contains generally, as common `Types`:
 * the ticker
 * the Full name of the token
 * the precision of decimal figures
@@ -237,10 +287,29 @@ For example A Global State of newly issued token written in Genesis, dependent o
 
 #### Assignments
 
-Assignment 
+Assignments are the fundamental constructs that are responsible for the **Seal Definition** operation and the related **Owned State** which such the Seal Definition is bounded to. They are the core parts which allows for the **rightful transfer** of some digital property described in the Owned State, to a New Owner identified by the possession of a specific Bitcoin UTXO. Assignment can be compared to Outputs of Bitcoin Transaction, but embeds eventually more capabilities and potentialities. 
+They are composed by two main components:
+* the Seal Definition
+* The Owned State
 
 
-##### Seals
+As a peculiar feature of RGB, each one of this two parts can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining high privacy and scalability in both state transition construction and subsequent validation, in a selective way, by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed`` form can be used to validate the same data that were inserted in a previous state transition(s) with their hash digest in a concealed form. 
+In the picture below. all 4 combination of Reveal/Conceal form are shown:
+
+![Alt text](/img/assignment-reveal-conceal.png)
+
+Some example of the usefulness of this feature will be recalled in the following paragraphs
+
+##### Seal Definition
+
+[Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) is itself a structure composed by 4 fields: `txptr` `vout` `blinding` `method`. 
+
+* Starting from the bottom of the list, **method** is a 1-byte field which indicate the seal closing method, which will be used in the related [witness transaction](/terminology/glossary.md#--). It's either [tapret](/csv-w-btc.md#tapret) or [opret](/csv-w-btc.md#tapret).
+* **blinding** is a 8-byte random number, which allows for the effective concealment of the data of the seal once hashed, improving resistance to brute-force attacks. 
+* **vout** is the transaction output of the transaction `txptr` (if present).
+* **txptr** is a more complex object than a simple Bitcoin Transaction hash. In particular it can have two forms, either:
+  * `Graph seal` is the most straightforward case where an existing UTXO (having a specific `txid`) is referred as seal definition.
+  * `Genesis seal` which is a "self-referenced" definition, meaning that the **The transaction used as a seal definition coincides with the witness transaction including the present assignment**. As the final `txid` of the transaction depends on all the data of the state transition, including `txptr` it would be impossible to calculate it due to the circular reference implied. In practice the `Genesis Seal` is a void field which has become necessary to handle several situation in which an external UTXO is not available: a notable situation is the generation and update of Lightning Network commitment transactions.  
 
 ##### Owned States
 
@@ -266,7 +335,7 @@ In RGB, this set of data is actually a **set of arbitrary rich data** which:
 * can be organized in `lists` `sets` or `maps`
 
 
-In order to properly encode data into the state in a reproducible way a [Strict Type System](https://www.strict-types.org/) together with [Strict Encoding]() has been adopted in RGB. This means that:
+In order to properly encode data into the state in a reproducible way a [Strict Type System](https://www.strict-types.org/) together with [Strict Encoding](https://github.com/rust-amplify/rust-amplify) has been adopted in RGB. This means that:
 * The encoding of the data is done according to a precise [schema](#terminilogy/glossary.md#schema) which, unlike JSON or YAML, define a precise structure and layout of the data thus allowing also for deterministic ordering of each data element herein.
 * The ordering of the elements inside every collection (i.e. in lists, sets or maps) is deterministic as well.
 * Boundaries (lower and higher) are defined for every variable and for the number of element in a collection (the so called **Confinement**).

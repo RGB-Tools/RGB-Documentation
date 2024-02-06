@@ -292,27 +292,56 @@ They are composed by two main components:
 * the Seal Definition
 * The Owned State
 
-As a peculiar feature of RGB, each one of this two parts can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining high privacy and scalability in both state transition construction and subsequent validation, in a selective way, by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed`` form can be used to validate the same data that were inserted in a previous state transition(s) with their hash digest in a concealed form. 
-In the picture below. all 4 combination of Reveal/Conceal form are shown:
+#### Revealed / Concealed form
+
+As a peculiar feature of RGB, both Seal Definition and Owned State can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining high privacy and scalability in both state transition construction and subsequent validation, in a selective way, by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed`` form can be used to validate the same data that were inserted in a previous state transition(s) with their hash digest representing the concealed form of the construct. 
+In the picture below, all 4 combination of Reveal/Conceal form are shown:
 
 ![Alt text](/img/assignment-reveal-conceal.png)
 
-Some example of the usefulness of this feature will be recalled in the following paragraphs.
+As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed.
 
 ##### Seal Definition
 
-[Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) is itself a structure composed by 4 fields: `txptr` `vout` `blinding` `method`. 
-
-* Starting from the bottom of the list, **method** is a 1-byte field which indicate the seal closing method, which will be used in the related [witness transaction](/terminology/glossary.md#--). It's either [tapret](/csv-w-btc.md#tapret) or [opret](/csv-w-btc.md#tapret).
-* **blinding** is a 8-byte random number, which allows for the effective concealment of the data of the seal once hashed, improving resistance to brute-force attacks. 
-* **vout** is the transaction output of the transaction `txptr` (if present).
+[Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) in its *revealed* form, is itself a structure composed by 4 fields: `txptr` `vout` `blinding` `method`. 
 * **txptr** is a more complex object than a simple Bitcoin Transaction hash. In particular it can have two forms, either:
   * `Graph seal` is the most straightforward case where an existing UTXO (having a specific `txid`) is referred as seal definition.
-  * `Genesis seal` which is a "self-referenced" definition, meaning that the **The transaction used as a seal definition coincides with the witness transaction including the present assignment**. As the final `txid` of the transaction depends on all the data of the state transition, including `txptr` it would be impossible to calculate it due to the circular reference implied. In practice the `Genesis Seal` is a void field which has become necessary to handle several situation in which an external UTXO is not available: a notable situation is the generation and update of Lightning Network commitment transactions.  
+  * `Genesis seal` which is a "self-referenced" definition, meaning that the **The transaction used as a seal definition coincides with the witness transaction including the present assignment**. As the final `txid` of the transaction depends on all the data of the state transition, including `txptr` it would be impossible to calculate it due to the circular reference implied. In practice the `Genesis Seal` is a void field which has become necessary to handle several situation in which an external UTXO is not available: a notable situation is the generation and update of Lightning Network commitment transactions. 
+*  **vout** is the transaction output of the transaction id inserted in `txptr` (if it's `Graph seal`). `txptr` together with `vout` form the standard *outpoint* representation.
+* **blinding** is a 8-byte random number, which allows for the effective concealment of the data of the seal once hashed, improving resistance to brute-force attacks. 
+* **method** is a 1-byte field which indicate the seal closing method, which will be used in the related [witness transaction](/terminology/glossary.md#--). It's either [tapret](/csv-w-btc.md#tapret) or [opret](/csv-w-btc.md#tapret).
+
+The *concealed* form of the Seal Definition is simply the ordered SHA-256 hash of the the 4 field.
+
+  ![](/img/seal-definition-1.png)  
 
 ##### Owned States
 
-This second component of the Assignment is responsible for the definition and storage of the data assigned by the Seal Definition. In RGB an Owned State can be defined with only one among 4 State Type: `Declarative`, `Fungible`, `Structured`, `Attachments`.
+This second component of the Assignment is responsible for the definition and storage of the data assigned by the Seal Definition. 
+Before proceeding with the characteristics of Owned States, it is important to point out that the Conceal/Reveal feature, differently from Global State where it is not present, allows for the definition of two forms of Owned States:
+* **Public**: where the related data must always kept and transferred in revealed form by their owner recursively. For example it can be applied to some image file which must be bounded to ownership, but always publicly shown)   
+* **Private**: where data are kept concealed and revealed only if they part of the history for validation purposes. For example the number of token transferred in a token contract is generally kept in private form.
+
+In RGB, an Owned State can be defined with only one among 4 State Type: `Declarative`, `Fungible`, `Structured`, `Attachments`, each of which come with its concealed and Revealed form:
+* **Declarative** is a State Type with **no data**, representing some form of governance rights which can be executed by a contract party. For example it can be used for voting rights. Concealed and Revealed form of it coincides.
+* **Fungible**. It's the State Type that allows for the transfer of fungible units such those of a token contract. In Revealed form it consists of two fields: an `amount` and a `blinding` factor, while in concealed form it is transformed in a 2-field structure containing a [`Pedersen commitment`](https://link.springer.com/chapter/10.1007/3-540-46766-1_9) and a short cryptographic proof [`Bulletproof`](https://crypto.stanford.edu/bulletproofs/) which demonstrate that inside the same State Transition the sum of `Inputs` referencing a fungible state equates the sum of fungible `Owned States` without revealing the actual amounts. 
+* **Structured** is a state that can host collections of bounded and ordered data of arbitrary content which can be used for complex validation schemes of the contract. It's maximum storage size is bounded to 64 kB at maximum. The Revealed data is simply the byte serialized data *blob* and the concealed form is the SHA-256 hash of that data blob.
+* **Attachments** is uses to attach arbitrary file with a defined purpose, such as media files, audio files, texts, binaries, etc.). The actual file is kept separated by the state type data themself, as in revealed form the Attachment structure contains 3 fields: the SHA-256 `file hash`, the MIME `media type` and a `salt` factor which guarantee additional privacy. In concealed form the State Type is the ordered SHA-256 hash of the 3 fields just described.  
+
+In the following diagram, a summary of the 4 State Types and both their Concealed and Revealed forms is shown:
+
+![](/img/owned-state-concealed-revealed.png)
+
+
+In the table a recap of the characteristics of each State Type is provided:
+
+| Item            | **Declarative** | **Fungible**                      | **Structured**        | **Attachments** |
+|-----------------|-----------------|-----------------------------------|-----------------------|-----------------|
+| Data            | None            | 64-bit signed/unsigned integer    | Any strict data type  | Any file        |
+| Type info       | None            | Signed/unsigned                   | Strict Types          | MIME type       |
+| Confidentiality | Not Required    | Pedersen commitment + Bulletproof | Hashing with blinding | Hashed file id  |
+| Size limits     | N/A             | 256 byte + 64 kB for proof        | Up to 64 kB           | Up to ~500 GB   |
+
 
 
 
@@ -369,7 +398,7 @@ This has been designed in order to:
 
 One of the most important features of RGB in respect to the majority of blockchain-based smart contract systems rests on the **clear separation between the validation task and ownership property** which are defined by the protocol at the most fundamental level.
 
-![alt text](/img/validation-ownership-1.png)
+![](/img/validation-ownership-1.png)
 
 In practice:
 * The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consistency and adherence of state transitions to the smart contract rule. This process belong entirely accomplished by RGB-specific libraries.

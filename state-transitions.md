@@ -184,17 +184,17 @@ Let's now deep-dive in all the components of a contract operation, which are abl
 ```
                        +-------------------------------------------------------------------------------------------------------+
                        |                                                                                                       |
+                       |  +----------------------+               +-----------------+                +-----------------------+  |                      
+                       |  | Fast-forward Version |               | Transition Type |                | ContractId | SchemaId |  |                      
+                       |  +----------------------+               +-----------------+                +-----------------------+  |           
+                       |                                                                                                       |
                        |  +------------------------------------------+   +--------------------------------------------------+  |
-                       |  |            Transition Type               |   | Global State                                     |  |
-                       |  +------------------------------------------+   |                                                  |  |
-                       |                                                 |                                                  |  |
-                       |  +------------------------------------------+   | +---------------------+                          |  |
-                       |  | Metadata                                 |   | | +------+ +--------+ |                          |  |
-                       |  |                                          |   | | | Type | |  Data  | |   ...   ...   ...        |  |
+                       |  | Metadata                                 |   | Global State                                     |  |
+                       |  |                                          |   | +---------------------+                          |  |
                        |  | +-------------------------------------+  |   | | +------+ +--------+ |                          |  |
-                       |  | |          Structured Data            |  |   | +---------------------+                          |  |
-                       |  | +-------------------------------------+  |   |                                                  |  |
-                       |  |                                          |   |                                                  |  |
+                       |  | |          Structured Data            |  |   | | | Type | |  Data  | |   ...   ...   ...        |  |
+                       |  | +-------------------------------------+  |   | | +------+ +--------+ |                          |  |
+                       |  |                                          |   | +---------------------+                          |  |
                        |  +------------------------------------------+   +--------------------------------------------------+  |            +------+
                        |                                                                                                       +------------> OpId |
                        |  +------------------------------------------+   +--------------------------------------------------+  |            +------+
@@ -248,7 +248,9 @@ The **Old State** is referenced through:
 * **Redeems** which are a reference to previously defined [Valencies]()
 
 In addition to this subdivision we also have:
+* **Fast-forward Version** a 2-byte integer indicating the version of the contract used which can be updated according to some issuer choices.  
 * **Transition Type** indicating one out of: **State Transition** / **Genesis** / **State Extension**
+* **ContractId / SchemaId** the 32-byte referencing the `OpId` of the Genesis of the contract. If the contract operation is itself a Genesis, in place of the ContractId a SchemaId, which is a hash fingerprint of a contract [Schema]() is used.  
 * **Metadata** allowing for the declaration of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
 #### OpId
@@ -275,25 +277,28 @@ As an important feature, the Global State is usually made available by the contr
 
 Every Component of a Global State is composed by one ore more elements which embeds:
 
-* A `Type` which embeds a deterministic [semantic definition]()
-* The actual `Data`
+* A `Type` which embeds a deterministic [semantic definition]();
+* The actual Data.
 
-For example A Global State of newly issued token written in Genesis, dependent on the [`Non inflatable Asset Schema`]() and  [Contract Interface]() `RGB 20` , contains generally, as common `Types`:
-* the `ticker`
-* the Full name of the token, `name`
-* the precision of decimal figures
-* the maximum supply of the token
-* the date of issuance
-* a text with some Legal disclaimer
+For example A Global State of newly issued token written in Genesis, dependent on the [`Non inflatable Asset Schema`]() and  [Contract Interface]() `RGB 20` , [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `Types`:
+* the `ticker`;
+* the Full name of the token: `name`;
+* the precision of decimal figures: `precision`;
+* the maximum supply of the token: `issuedSupply`;
+* the date of issuance: `created`;
+* a text with some Legal disclaimer: `terms`
 
 
 ##### Assignments
 
 Assignments are the fundamental constructs that are responsible for the **Seal Definition** operation and the related **Owned State** which such the Seal Definition is bounded to. They are the core parts which allows for the **rightful transfer** of some digital property described in the Owned State, to a New Owner identified by the possession of a specific Bitcoin UTXO. Assignment can be compared to Outputs of Bitcoin Transaction, but embeds eventually more capabilities and potentialities. 
-They are composed by 3 main components:
+
+Each Assignment is composed by the following main components:
 * The `Type` which is the semantic identifier of the digital property being stored in the Assignment (e.g. the `assetOwner` used in token transfers)
 * the `Seal Definition`
 * The `Owned State`
+  
+
 
 ##### Revealed / Concealed form
 
@@ -335,18 +340,23 @@ In the following diagram, a summary of the 4 State Types and both their Conceale
 
 ![](/img/owned-state-concealed-revealed.png)
 
+In the table a summary of the characteristics of each State Type is provided:
 
-In the table a recap of the characteristics of each State Type is provided:
-
-| Item                | **Declarative** | **Fungible**                      | **Structured**        | **Attachments** |
-|---------------------|-----------------|-----------------------------------|-----------------------|-----------------|
-| **Data**            | None            | 64-bit signed/unsigned integer    | Any strict data type  | Any file        |
-| **Type info**       | None            | Signed/unsigned                   | Strict Types          | MIME type       |
-| **Confidentiality** | Not Required    | Pedersen commitment               | Hashing with blinding | Hashed file id  |
-| **Size limits**     | N/A             | 256 byte + 64 kB for proof        | Up to 64 kB           | Up to ~500 GB   |
+| Item                | **Declarative** | **Fungible**                      | **Structured**        | **Attachments**  |
+|---------------------|-----------------|-----------------------------------|-----------------------|------------------|
+| **Data**            | None            | 64-bit signed/unsigned integer    | Any strict data type  | Any file         |
+| **Type info**       | None            | Signed/unsigned                   | Strict Types          | MIME type        |
+| **Confidentiality** | Not Required    | Pedersen commitment               | Hashing with blinding | Hashed file id   |
+| **Size limits**     | N/A             | 256 Byte                          | Up to 64 kByte        | Up to ~500 GByte |
 
 #### Inputs 
 
+In a similar fashion to Bitcoin Transactions, Input represent the "other half" of the Assignment construct. They have the fundamental role of referencing the Assignments of a previous State Transition. Inputs are not present in Genesis and State Extension Operation and are composed by the following fields:
+* `Prev_OpID` containing the Operation ID of the Assignment being referenced;
+* `Type` the semantic identifier related to the contract property being referenced 
+* `Index` the index number of the Assignment being referenced inside the list of Assignment of the `Prev_OpId`. The `Index` is implicitly calculated from the lexicographical ordering hash of the **Concealed Seal** of the assignment referenced.      
+
+The RGB validation procedure, beside checking the correct closure of the Seal, is also responsible to check the consistency between inputs and outputs especially for `Fungible` state where the amount of token of each input of a specific `Type` and `Fungible State Type` must match the number of token in the Assignments of the same state transition.
 
 
 #### Metadata
@@ -389,9 +399,9 @@ As a matter of fact Strict Encoding is defined in both an extremely pure functio
 
 ### Size limitation
 
-The RGB protocol consensus rule apply a **maximum size limit** of 2^16 bite (64kB):
-* To the size of **any data type** (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
-* To the **number of elements of each collection**
+Regarding the **data concurring to state validation**, the RGB protocol consensus rule apply a **maximum size limit** of 2^16 bite (64kB):
+* To the size of **any data type** participating in state validation (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
+* To the **number of elements of each collection** employed in state validation.
 This has been designed in order to:
 * Avoid unlimited growth of the client side-validate data per each state transition.
 * Ensures that this size fits the size of the register of a particular virtual machine [AluVM]() which is capable of complex validation purposes working alongside RGB.

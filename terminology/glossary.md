@@ -13,7 +13,7 @@ Set of client-side data that proof the inclusion of a unique commitment inside a
 
 #### Assignment
 
-The RGB-equivalent of a transaction output modifying some properties of the state of a [contract](#contract).
+The RGB-equivalent of a transaction output modifying, updating or creating some properties of the state of a [contract](#contract). It is formed by a [Seal Definition]() and a [Owned State]()
 
 #### Client-side Validation
 

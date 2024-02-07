@@ -196,7 +196,7 @@ Let's now deep-dive in all the components of a contract operation, which are abl
                        |  | +-------------------------------------+  |   |                                                  |  |
                        |  |                                          |   |                                                  |  |
                        |  +------------------------------------------+   +--------------------------------------------------+  |            +------+
-                       |                                                                                                        +------------> OpId |
+                       |                                                                                                       +------------> OpId |
                        |  +------------------------------------------+   +--------------------------------------------------+  |            +------+
                        |  | Inputs                                   |   | Assignments                                      |  |
                        |  |                                          |   |                                                  |  |
@@ -229,8 +229,8 @@ Let's now deep-dive in all the components of a contract operation, which are abl
                        |  |                                          |   |                                                  |  |    
                        |  |                                          |   |                                                  |  |    
                        |  +------------------------------------------+   +--------------------------------------------------+  |    
-                       |                                                                                                        |    
-                       +--------------------------------------------------------------------------------------------------------+
+                       |                                                                                                       |    
+                       +-------------------------------------------------------------------------------------------------------+
 ```
 
 With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated: 
@@ -327,7 +327,7 @@ Before proceeding with the characteristics of Owned States, it is important to p
 
 In RGB, an Owned State can be defined with only one among 4 State Type: `Declarative`, `Fungible`, `Structured`, `Attachments`, each of which come with its concealed and Revealed form:
 * **Declarative** is a State Type with **no data**, representing some form of governance rights which can be executed by a contract party. For example it can be used for voting rights. Concealed and Revealed form of it coincides.
-* **Fungible**. It's the State Type that allows for the transfer of fungible units such those of a token contract. In Revealed form it consists of two fields: an `amount` and a `blinding` factor, while in concealed form it is transformed in a 2-field structure containing a [`Pedersen commitment`](https://link.springer.com/chapter/10.1007/3-540-46766-1_9) and a short cryptographic proof [`Bulletproof`](https://crypto.stanford.edu/bulletproofs/) which demonstrate that inside the same State Transition the sum of `Inputs` referencing a fungible state equates the sum of fungible `Owned States` without revealing the actual amounts. 
+* **Fungible**. It's the State Type that allows for the transfer of fungible units such those of a token contract. In Revealed form it consists of two fields: an `amount` and a `blinding` factor, while in concealed form it is transformed in a 1-field structure containing a [`Pedersen commitment`](https://link.springer.com/chapter/10.1007/3-540-46766-1_9) which reference the `amount` and the `blinding` factor of the revealed form. In a future upgrade it would be possible to implement ZK cryptographic proofs such as [`Bulletproof`](https://crypto.stanford.edu/bulletproofs/) which will be able to demonstrate that inside the same State Transition the sum of `Inputs` referencing a fungible state equates the sum of fungible `Owned States` without revealing the actual amounts. 
 * **Structured** is a state that can host collections of bounded and ordered data of arbitrary content which can be used for complex validation schemes of the contract. It's maximum storage size is bounded to 64 kB at maximum. The Revealed data is simply the byte serialized data *blob* and the concealed form is the SHA-256 hash of that data blob.
 * **Attachments** is uses to attach arbitrary file with a defined purpose, such as media files, audio files, texts, binaries, etc.). The actual file is kept separated by the state type data themselves, as in revealed form the Attachment structure contains 3 fields: the SHA-256 `file hash`, the MIME `media type` and a `salt` factor which guarantee additional privacy. In concealed form the State Type is the ordered SHA-256 hash of the 3 fields just described.  
 
@@ -338,13 +338,14 @@ In the following diagram, a summary of the 4 State Types and both their Conceale
 
 In the table a recap of the characteristics of each State Type is provided:
 
-| Item            | **Declarative** | **Fungible**                      | **Structured**        | **Attachments** |
-|-----------------|-----------------|-----------------------------------|-----------------------|-----------------|
-| Data            | None            | 64-bit signed/unsigned integer    | Any strict data type  | Any file        |
-| Type info       | None            | Signed/unsigned                   | Strict Types          | MIME type       |
-| Confidentiality | Not Required    | Pedersen commitment + Bulletproof | Hashing with blinding | Hashed file id  |
-| Size limits     | N/A             | 256 byte + 64 kB for proof        | Up to 64 kB           | Up to ~500 GB   |
+| Item                | **Declarative** | **Fungible**                      | **Structured**        | **Attachments** |
+|---------------------|-----------------|-----------------------------------|-----------------------|-----------------|
+| **Data**            | None            | 64-bit signed/unsigned integer    | Any strict data type  | Any file        |
+| **Type info**       | None            | Signed/unsigned                   | Strict Types          | MIME type       |
+| **Confidentiality** | Not Required    | Pedersen commitment               | Hashing with blinding | Hashed file id  |
+| **Size limits**     | N/A             | 256 byte + 64 kB for proof        | Up to 64 kB           | Up to ~500 GB   |
 
+#### Inputs 
 
 
 
@@ -352,7 +353,6 @@ In the table a recap of the characteristics of each State Type is provided:
 
 #### Valencies
 
-#### Inputs 
 
 #### Redeems
 
@@ -412,3 +412,8 @@ This kind of separation prevents the possibility of mix the non-Turing complete 
 Additionally, by relying on Bitcoin transaction structure, RGB can exploit the features of the Lightning Network in a straightforward way.
 
 ### RGB specific libraries
+
+Repository:
+
+* https://github.com/RGB-WG/rgb-core which contains all the engine for contract construction and validation.
+

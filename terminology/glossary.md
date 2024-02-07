@@ -15,11 +15,6 @@ Set of client-side data that proof the inclusion of a unique commitment inside a
 
 The RGB-equivalent of a transaction output modifying some properties of the state of a [contract](#contract).
 
-#### Bundle
-
-A set of RGB [assignments](#assignment) whose state transitions are grouped together at client-side level as they reference the same contract schema (e.g. asset). 
-
-
 #### Client-side Validation
 
 The operation which allows the verification of some data exchanged between parties according to some defined protocol rules. In RGB protocol these data are in form of [consignment](#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they don't need to be registered on a public medium (e.g. the blockchain).
@@ -43,17 +38,17 @@ A set of rights established and executed digitally between certain parties. A co
 
 #### Contract State
 
-The set of up to date, private and public information related to a contract. In RGB the contract state is constituted by:
-* Global State - public information
-* Owned State - set of properties that can be altered only a specific private party (which, in RGB, is in control of the UTXO included in a related seal definition) 
+The set of up to date, private and public information and data related to a contract. In RGB the contract state is constituted by:
+* Global State
+* Owned State
 
 
 #### Contract Participant
 
 An actor which participate in contract operations. Contract parties are classified into the following categories:
 
-* Contract issuer: an actor creating contract genesis
-* Contract party: all actors which has ownership rights over RGB contract state
+* Contract issuer: an actor creating contract genesis.
+* Contract party: all actors which have some ownership rights over RGB contract state.
 * Public party: an actor constructing state extensions. Can exist only in contracts providing valencies and state extensions.
 
 #### Deterministic Bitcoin Commitment - DBC
@@ -68,23 +63,23 @@ A directed graph which do not contains any directed cycle thus allowing topologi
 
 #### Engraving
 
-An optional fingerprint that past owners of a contract can register allowing verification of following users. It is implemented in RGB21 interface
+An optional fingerprint that past owners of a contract can register allowing verification of following users. It is implemented in RGB21 interface.
 
 #### Extra Transaction Proof - ETP
 
-The part of the Anchor which embeds the additional data necessary for the validation of tapret commitment. It is constituted by 
+The part of the Anchor which embeds the additional data necessary for the validation of tapret commitment, such as the internal PubKey and the Script Path Spend.
 
 #### Genesis
 
-The set of data, regulated by a contract [schema](#schema), which represent the starting point of every contract of RGB. It's equivalent of Bitcoin Genesis Block in the Client-side Validation domain. 
+The set of data, regulated by a contract [schema](#schema), which represent the starting state of every contract of RGB. It's the equivalent of Bitcoin Genesis Block in the Client-side level. 
 
 #### Global State
 
-
+A set of public data representing some publicly available information of a contract. Differently from Owned State information they are not assigned to any Bitcoin UTXO, thus owned by anybody.  
 
 #### Interface
 
-The set of human and wallet-readable information of an RGB [contract](#contract)
+The set of instructions that allows to transform contract binary data of contracts and schemata in user and wallet-readable information.
 
 ### Invoice
 
@@ -93,6 +88,15 @@ A Base58 encoded string, which support URL scheme capabilities, embedding the ne
 #### Multi Protocol Commitment - MPC
 
 The Merkle Tree structure used in RGB to include in a single commitment into the Bitcoin Blockchain multiple contract state transitions of different contracts.
+
+#### Owned State
+
+The Data structure which allows for the specifications of state Data inside an Assignment. Those data, through Seal Definition, are assigned to a specific Bitcoin UTXO which represents the new ownership of the state.  
+
+
+#### Ownership
+
+The control and thus the possibility to spend an UTXO to whom some client-side property are assigned.
 
 #### Schema
 
@@ -114,15 +118,23 @@ The set of client-side data over which have undergone [validation](glossary-of-t
 
 #### State Extension
 
+A contract operation which allows for the redeeming of some Valencies. It needs to be closed by a State Transition in order to put in effect the changes to the contract expressed by the Valencies
+
 #### State Transition
+
+The most important contract operation which make possible the transition of an RGB State to a New State, changing state data and/or ownership.
 
 #### Taproot
 
 #### Terminal Consignment - Consignment Endpoint
 
-The final state of a contract which include the last state transition constructed from a payee counterpart invoice.
+The last state of a contract which include the last state transition constructed from a payee counterpart invoice.
+
+#### Transition Bundle
+
+A set of RGB [State Transition](), belonging to the same contract, which are constructed by different parties closing their seal in a single operations. 
 
 
 #### Valency
 
-A public rights having no state but which can be referenced and  applied through a state extension.
+A public rights having no state but which can be referenced and redeemed through a state extension.

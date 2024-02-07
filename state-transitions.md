@@ -14,7 +14,7 @@ This means that the enforcement of the conditions agreed between the parties **d
 
 In addition to that, a question arises. In order to achieve the highest degree of automatization, decentralization and privacy it is possible to forfeit centralized registry storing contract ownership and information? The affirmative answer lie back at the origins.
  
- ![Alt text](img/orenoque-contract.png)
+ ![](img/orenoque-contract.png)
 
 Once upon a time contracts, for examples those of securities, where **bearer instruments**. Indeed, the generalized use of assets ledgers which in fact imply a custody relation with some institution controlling both the ledger and storing the contract on behalf of the client represents a quite recent development of economic history. **The bearer nature of contracts is in fact a centuries-old tradition.** This kind of philosophy is at the core of RGB architecture, as the bearer rights of each rightful party are contained in form of data inside the contract and they can be modified and enforced digitally, following the rule of the contract itself. 
 
@@ -34,7 +34,7 @@ In order to achieve this goals, a RGB contract is composed by 2 main components:
 
 In fact the Business Logic of the contract represent the rules that allows the entitled party (the owner) to change the state of the contract. We will explore later that the **Business Logic** is embedded in a particular structure of the contract called the [Schema]().
 
-![Alt text](img/state-business-logic.png)
+![](img/state-business-logic.png)
 
 At this point, without going into the specific implementation details of RGB, which will be covered later, a first and basic definition of [State]() is required. Simply put:
 
@@ -42,7 +42,7 @@ At this point, without going into the specific implementation details of RGB, wh
 
 Thus a State Transition, in general terms, represents any **update of data** from an **old state** to a **new state** following the **rules inscribed into the contract** constituting its **Business Logic**. 
 
-![Alt text](img/state-transition-1.png)
+![](img/state-transition-1.png)
 
 The chain of state transitions is the ordered path that make contract data evolve from the very **first contract definition**, called the [**Genesis**]() up to the [**Terminal State**]() representing the most updated state at the tip of the [DAG](terminology/glossary.md#directed-acyclic-graph---dag) of state transitions.
 
@@ -57,19 +57,19 @@ The approach followed in this paragraph is the same as the one developed in the 
 
 Alice has a [stash]() of client side validated data, which themselves reference to some Bitcoin UTXO owned by her. This means that in her client-side validate data there is a **seal definition** pointing to one of her UTXOs. 
 
-![Alt text](img/stab1.png)
+![](img/stab1.png)
 
 Bob, in turn, possesses some unspent UTXO as well. This UTXO is completely unrelated to Alice's, meaning that there is no direct spending event making a connection between them. 
 
 <!---
-![Alt text](img/stab2a.png)
+![](img/stab2a.png)
 -->
 
-![Alt text](img/stab2b.png)
+![](img/stab2b.png)
 
 Bob, through some information data, encoded in an **[invoice]()**, instruct Alice to create a **New state** which follows the contract rules and which embed a **new seal definition** which points to the his UTXO in a concealed form. This way Alice is assigning Bob **some ownership** of the new state (e.g. the property of a certain amount of tokens). 
 
-![Alt text](img/stab3.png)
+![](img/stab3.png)
 
 After that, Alice using some [PSBT]() wallet tool, prepares a transaction which spend the UTXO which were pointed by the previous seal definition (the one that has passed the ownership to her). This transaction, which is a **witness (seal closing) transaction**,  embeds in his output a commitment to the new state data which uses [Opret](/csv-w-btc.md#opret) or [Tapret](/csv-w-btc.md#tapret) rules depending on the method chosen. As explained previously, the Opret or Tapret commitment derive from a [MPC](/csv-w-btc.md#mpc-tree-construction) tree which can collect more than one contract's state transition. 
 
@@ -79,12 +79,12 @@ Before broadcasting the transaction prepared in this way she passes to Bob a pac
 After checking the correctness of the consignment Bob can give "green light" (for example by means of GPG signing) to Alice to let her broadcast the transaction. When confirmed, the **witness (seal closure) transaction** represent the conclusion of the state transition from Alice to Bob. 
 
 
-![Alt text](img/stab4.png)
+![](img/stab4.png)
 
 
 It's helpful to see the full details of the state transition both from the RGB client-side components, which will be covered in the next paragraphs, and the *connection points* to the Bitcoin Blockchain which embed the seal definition and the witness seal closure transaction
 
-![Alt text](img/state-transition-2-detail.png)
+![](img/state-transition-2-detail.png)
 
 Just to give some context introduction, from the above diagram we introduce some terminology which will be covered later in detail. 
 
@@ -100,7 +100,7 @@ A single State Transition, at client side levels, contains always 2 elements:
 * the reference to one ore more assignments of previous State Operation, expressed in form of **Inputs**
 * The new assignments of some **Owned states** to other Bitcoin UTXOs belonging to the new State Owner.
 
-![Alt text](/img/state-transition-3-bitcoin-rgb.png)
+![](/img/state-transition-3-bitcoin-rgb.png)
 
 All the data which participate in the State Transition are aggregated and hashed and fits into the Transaction Bundle which, finally, is hashed and committed in the contract leaf of the MPC Tree. Thanks to [DBC](/csv-w-btc.md#deterministic-bitcoin-commitment---dbc) the MPC Tree is committed into a tapret or opret output which, at the same time, closes the seal definition of the spent Bitcoin UTXOs and embedded a new seal definition defined through the new assignment of the the Owned State. The [Anchor](/csv-w-btc.md#anchors) represent the connection point between the commitment inside Bitcoin Blockchain (whose library and structure are colored in orange) and the RGB client-side validate structure (whose library and components are colored in red). 
 
@@ -124,7 +124,7 @@ By referencing each Input `V_in` in an ordered way, the possibility to double-sp
 In order to obtain the `bundle_id` to be inserted in the leaf of the MPC, a Merkle tree of the `op_id` is constructed in a deterministic way  <to complete>
 
 
-![Alt text](/img/bundle-id-mpc.png)
+![](/img/bundle-id-mpc.png)
 
 ### Contract Operations and Active State
 
@@ -138,7 +138,7 @@ The latter two can be defined as **State Generation** operation, and in the foll
 
 In the figure below, all 3 contract operation are shown together with their position in a DAG pertaining to an RGB contract, which is ordered according to the respective anchors in the Bitcoin Blockchain. Genesis is in green, State Transitions are in Red, State Extensions are in blue.
 
-![Alt text](/img/contract-op-dag1.png)
+![](/img/contract-op-dag1.png)
 
 It is important to note that the main difference between ordinary State Transitions and both two State Generation Operations lie in the lack of seal closure part. For this reason, **both Genesis and State Extensions need a State Transition that closes the particular seal definition constructed by them**.
 
@@ -169,7 +169,7 @@ With state extensions, **some *digital rights* defined in the contract can be re
 
 In RGB taxonomy, the digital right been being redeemed in State Extensions is called a [Valency](), and, at the client-side level, it is treated in the same ways as as an [assignment]() being referenced in an RBB input. In this case, such particular "input" part is called a [Redeem](). As Genesis, state extensions do not close any seal. They redeem valencies defined in Genesis or in state transitions  in turn, must be closed by a subsequent state transition. 
 
-![Alt text](/img/state-extension-1.png)
+![](/img/state-extension-1.png)
 
 Following the figure above we can have an example of the working mechanism of state extension in practice:
 * As a first step, some kind of valency (e.g. a issuance right) is defined in the Genesis by the contract issuer. For example, the valency can grant a bounded-amount secondary issuance of a token defined in the contact, only if authorized by a valid signature related to a specific public key embedded in the valency.
@@ -182,55 +182,55 @@ Following the figure above we can have an example of the working mechanism of st
 Let's now deep-dive in all the components of a contract operation, which are able to change the state of the contact and are eventually client-side verified by the rightful recipient in a deterministic way. 
 
 ```
+                       +-------------------------------------------------------------------------------------------------------+
+                       |                                                                                                       |
+                       |  +------------------------------------------+   +--------------------------------------------------+  |
+                       |  |            Transition Type               |   | Global State                                     |  |
+                       |  +------------------------------------------+   |                                                  |  |
+                       |                                                 |                                                  |  |
+                       |  +------------------------------------------+   | +---------------------+                          |  |
+                       |  | Metadata                                 |   | | +------+ +--------+ |                          |  |
+                       |  |                                          |   | | | Type | |  Data  | |   ...   ...   ...        |  |
+                       |  | +-------------------------------------+  |   | | +------+ +--------+ |                          |  |
+                       |  | |          Structured Data            |  |   | +---------------------+                          |  |
+                       |  | +-------------------------------------+  |   |                                                  |  |
+                       |  |                                          |   |                                                  |  |
+                       |  +------------------------------------------+   +--------------------------------------------------+  |            +------+
+                       |                                                                                                        +------------> OpId |
+                       |  +------------------------------------------+   +--------------------------------------------------+  |            +------+
+                       |  | Inputs                                   |   | Assignments                                      |  |
+                       |  |                                          |   |                                                  |  |
+                       |  | +--------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  | | Input #1                             | |   | | Assignment #1                                | |  |
+        +------+       |  | | +---------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+        | OpId +--------------> Previous_OpId | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
+        +------+       |  | | +---------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+                       |  | +--------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  |                                          |   |                                                  |  |
+                       |  | +--------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  | | Input #2                             | |   | | Assignment #2                                | |  |
+        +------+       |  | | +---------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+        | OpId +--------------> Previous_OpId | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
+        +------+       |  | | +---------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
+                       |  | +--------------------------------------+ |   | +----------------------------------------------+ |  |
+                       |  |                                          |   |                                                  |  |
+                       |  |         ...           ...      ...       |   |     ...          ...             ...             |  |
+                       |  |                                          |   |                                                  |  |
+                       |  +------------------------------------------+   +--------------------------------------------------+  |
+                       |                                                                                                       |
+                       |  +------------------------------------------+   +--------------------------------------------------+  |
+                       |  | Redeems of Valencies                     |   | Valencies                                        |  |
+                       |  |                                          |   |                                                  |  |            
+                       |  | +----------------------------+           |   |                                                  |  |   
+        +------+       |  | | +---------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |            
+        | OpId +--------------> Previous_OpId | | Type | | ...   ... |   |  | Type |  | Type |  | Type |  ...   ...   ...   |  |    
+        +------+       |  | | +---------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    
+                       |  | +----------------------------+           |   |                                                  |  |   
+                       |  |                                          |   |                                                  |  |    
+                       |  |                                          |   |                                                  |  |    
+                       |  +------------------------------------------+   +--------------------------------------------------+  |    
+                       |                                                                                                        |    
                        +--------------------------------------------------------------------------------------------------------+
-                       |                                                                                                        |
-                       |  +-------------------------------------------+   +--------------------------------------------------+  |
-                       |  |             Transition Type               |   | Global State                                     |  |
-                       |  +-------------------------------------------+   |                                                  |  |
-                       |                                                  |                                                  |  |
-                       |  +-------------------------------------------+   | +---------------------+                          |  |
-                       |  | Metadata                                  |   | | +------+ +--------+ |                          |  |
-                       |  |                                           |   | | | Type | |  Data  | |   ...   ...   ...        |  |
-                       |  | +--------------------------------------+  |   | | +------+ +--------+ |                          |  |
-                       |  | |           Structured Data            |  |   | +---------------------+                          |  |
-                       |  | +--------------------------------------+  |   |                                                  |  |
-                       |  |                                           |   |                                                  |  |
-                       |  +-------------------------------------------+   +--------------------------------------------------+  |
-                       |                                                                                                        |
-                       |  +-------------------------------------------+   +--------------------------------------------------+  |
-                       |  | Inputs                                    |   | Assignments                                      |  |
-                       |  |                                           |   |                                                  |  |
-                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
-                       |  | | Input #1                              | |   | | Assignment #1                                | |  |
-        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
-        | OpId +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
-        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
-                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
-                       |  |                                           |   |                                                  |  |
-                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
-                       |  | | Input #2                              | |   | | Assignment #2                                | |  |
-        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
-        | OpId +--------------> Previous_OP_ID | | Type | | Index | | |   | | | Type | | Owned State | | Seal Definition +----------------> Bitcoin TXO |
-        +------+       |  | | +----------------+ +------+ +-------+ | |   | | +------+ +-------------+ +-----------------+ | |  |         +-------------+
-                       |  | +---------------------------------------+ |   | +----------------------------------------------+ |  |
-                       |  |                                           |   |                                                  |  |
-                       |  |         ...            ...      ...       |   |     ...          ...             ...             |  |
-                       |  |                                           |   |                                                  |  |
-                       |  +-------------------------------------------+   +--------------------------------------------------+  |
-                       |                                                                                                        |
-                       |  +-------------------------------------------+   +--------------------------------------------------+  |
-                       |  | Redeems of Valencies                      |   | Valencies                                        |  |
-                       |  |                                           |   |                                                  |  |            +------+
-                       |  | +-----------------------------+           |   |                                                  |  |    +-------> OpId |
-        +------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |       +------+
-        | OpId +--------------> Previous_OP_ID | | Type | | ...   ... |   |  | Type |  | Type |  | Type |  ...   ...   ...   |  |    |
-        +------+       |  | | +----------------+ +------+ |           |   |  +------+  +------+  +------+                    |  |    |
-                       |  | +-----------------------------+           |   |                                                  |  |    |
-                       |  |                                           |   |                                                  |  |    |
-                       |  |                                           |   |                                                  |  |    |
-                       |  +-------------------------------------------+   +--------------------------------------------------+  |    |
-                       |                                                                                                        |    |
-                       +--------------------------------------------------------------------------------------------------------+----+
 ```
 
 With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated: 
@@ -251,6 +251,8 @@ In addition to this subdivision we also have:
 * **Transition Type** indicating one out of: **State Transition** / **Genesis** / **State Extension**
 * **Metadata** allowing for the declaration of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
+#### OpId
+
 All this element participate in the calculation of the `OpId` which is, indeed, the ordered SHA-256 hashing of all the constructs ...< to complete>  
 
 #### Contract State
@@ -258,12 +260,12 @@ All this element participate in the calculation of the `OpId` which is, indeed, 
 Before addressing each state component, it's fundamental to clarify through which elements a contract state is expressed in the RGB protocol. Specifically, in RGB, the **State** of a contract is fully expressed by:
 * A single **Global State** 
 * One or more **Owned State(s)** which can belong to either 2 different categories:
-  * Private State
+  * Private States
   * Public States
 
-![Alt text](/img/state-global-owned-1.png)
+![](/img/state-global-owned-1.png)
 
-Global State are embedded in state transition as a single component block while Owned State are defined inside the assignment component together with a seal definition.
+Global State are embedded in state transition as a single component block, while Owned State are defined inside the assignment component together with a Seal Definition.
 
 ##### Global State
 
@@ -277,27 +279,28 @@ Every Component of a Global State is composed by one ore more elements which emb
 * The actual `Data`
 
 For example A Global State of newly issued token written in Genesis, dependent on the [`Non inflatable Asset Schema`]() and  [Contract Interface]() `RGB 20` , contains generally, as common `Types`:
-* the ticker
-* the Full name of the token
+* the `ticker`
+* the Full name of the token, `name`
 * the precision of decimal figures
 * the maximum supply of the token
 * the date of issuance
 * a text with some Legal disclaimer
 
 
-#### Assignments
+##### Assignments
 
 Assignments are the fundamental constructs that are responsible for the **Seal Definition** operation and the related **Owned State** which such the Seal Definition is bounded to. They are the core parts which allows for the **rightful transfer** of some digital property described in the Owned State, to a New Owner identified by the possession of a specific Bitcoin UTXO. Assignment can be compared to Outputs of Bitcoin Transaction, but embeds eventually more capabilities and potentialities. 
-They are composed by two main components:
-* the Seal Definition
-* The Owned State
+They are composed by 3 main components:
+* The `Type` which is the semantic identifier of the digital property being stored in the Assignment (e.g. the `assetOwner` used in token transfers)
+* the `Seal Definition`
+* The `Owned State`
 
-#### Revealed / Concealed form
+##### Revealed / Concealed form
 
 As a peculiar feature of RGB, both Seal Definition and Owned State can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining high privacy and scalability in both state transition construction and subsequent validation, in a selective way, by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed`` form can be used to validate the same data that were inserted in a previous state transition(s) with their hash digest representing the concealed form of the construct. 
 In the picture below, all 4 combination of Reveal/Conceal form are shown:
 
-![Alt text](/img/assignment-reveal-conceal.png)
+![](/img/assignment-reveal-conceal.png)
 
 As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed.
 
@@ -326,7 +329,7 @@ In RGB, an Owned State can be defined with only one among 4 State Type: `Declara
 * **Declarative** is a State Type with **no data**, representing some form of governance rights which can be executed by a contract party. For example it can be used for voting rights. Concealed and Revealed form of it coincides.
 * **Fungible**. It's the State Type that allows for the transfer of fungible units such those of a token contract. In Revealed form it consists of two fields: an `amount` and a `blinding` factor, while in concealed form it is transformed in a 2-field structure containing a [`Pedersen commitment`](https://link.springer.com/chapter/10.1007/3-540-46766-1_9) and a short cryptographic proof [`Bulletproof`](https://crypto.stanford.edu/bulletproofs/) which demonstrate that inside the same State Transition the sum of `Inputs` referencing a fungible state equates the sum of fungible `Owned States` without revealing the actual amounts. 
 * **Structured** is a state that can host collections of bounded and ordered data of arbitrary content which can be used for complex validation schemes of the contract. It's maximum storage size is bounded to 64 kB at maximum. The Revealed data is simply the byte serialized data *blob* and the concealed form is the SHA-256 hash of that data blob.
-* **Attachments** is uses to attach arbitrary file with a defined purpose, such as media files, audio files, texts, binaries, etc.). The actual file is kept separated by the state type data themself, as in revealed form the Attachment structure contains 3 fields: the SHA-256 `file hash`, the MIME `media type` and a `salt` factor which guarantee additional privacy. In concealed form the State Type is the ordered SHA-256 hash of the 3 fields just described.  
+* **Attachments** is uses to attach arbitrary file with a defined purpose, such as media files, audio files, texts, binaries, etc.). The actual file is kept separated by the state type data themselves, as in revealed form the Attachment structure contains 3 fields: the SHA-256 `file hash`, the MIME `media type` and a `salt` factor which guarantee additional privacy. In concealed form the State Type is the ordered SHA-256 hash of the 3 fields just described.  
 
 In the following diagram, a summary of the 4 State Types and both their Concealed and Revealed forms is shown:
 

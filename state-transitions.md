@@ -363,10 +363,11 @@ Metadata construct is a particular field in which contains all the information w
 
 #### Valencies
 
-Valencies are a unique-in-its-kind construct which can be present in all 3 forms of Contract Operations. Basically are a set of digital rights that can be recalled and "put in effect" by a subsequent state transition. 
-
+Valencies are a unique-in-its-kind construct which can be present in all 3 forms of Contract Operations. Basically they are a set of digital rights that can be recalled and "put in effect" by a subsequent state transition. In RGB state transitions, valencies are encoded simply by enumerating each `Valency_type` which is a list of 16-bit field. As `Global_state_type` and `Assignment_state_type` the appropriate meaning and semantic is encoded in defined in the Contract [Schema]() and decode by the appropriate [Interface]().
 
 #### Redeems
+
+Redeems are the analog of State Transition's Inputs...
 
 
 #### Operation and States

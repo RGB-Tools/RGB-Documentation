@@ -11,6 +11,10 @@ Set of client-side data that proof the inclusion of a unique commitment inside a
 * The [MPC](#multi-protocol-commitment---mpc)
 * The [DBC](#deterministic-bitcoin-commitment---dbc)
 
+#### AluVM
+
+Acronym of Algoritmic logic unit Virtual machine is register-based virtual machine for smart contract validation and distributed computing, used but not limited to RGB contract validation. [link](https://www.aluvm.org/)
+
 #### Assignment
 
 The RGB-equivalent of a transaction output modifying, updating or creating some properties of the state of a [contract](#contract). It is formed by a [Seal Definition]() and a [Owned State]()

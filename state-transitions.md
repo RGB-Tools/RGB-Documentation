@@ -233,9 +233,7 @@ Let's now deep-dive in all the components of a contract operation, which are abl
                        +-------------------------------------------------------------------------------------------------------+
 ```
 
-With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated: 
-
-The component of the **New state**, which we will be exploring one by one in a dedicated paragraph, are:
+With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the  **New State** and some components related to the **Old State** being updated. The components of the **New state**, which we will be exploring one by one in a dedicated paragraph, are:
 
 * **Assignments** in which are defined:
   * Seals
@@ -250,12 +248,12 @@ The **Old State** is referenced through:
 In addition to this subdivision we also have:
 * **Fast-forward Version** a 2-byte integer indicating the version of the contract used which can be updated according to some issuer choices.  
 * **Transition Type** indicating one out of: **State Transition** / **Genesis** / **State Extension**
-* **ContractId / SchemaId** the 32-byte referencing the `OpId` of the Genesis of the contract. If the contract operation is itself a Genesis, in place of the ContractId a SchemaId, which is a hash fingerprint of a contract [Schema]() is used.  
+* **ContractId / SchemaId** the 32-byte referencing the `OpId` of the Genesis of the contract. If the contract operation is itself a Genesis, in place of the ContractId a SchemaId, which is a hash fingerprint of the used contract [Schema]().  
 * **Metadata** allowing for the declaration of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
 #### OpId
 
-All this element participate in the calculation of the `OpId` which is, indeed, the ordered SHA-256 hashing of all the constructs ...< to complete>  
+Each Contract Operation is identified by a 32-byte hash called `OpId`, which is, indeed, the ordered SHA-256 hashing of the following elements: <to complete>  
 
 #### Contract State
 
@@ -307,7 +305,7 @@ In the picture below, all 4 combination of Reveal/Conceal form are shown:
 
 ![](/img/assignment-reveal-conceal.png)
 
-As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed.
+As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed. As a final remark of this paragraph, per RGB consensus rules **the `OpId` of the state transition is always calculated from the concealed data** 
 
 ##### Seal Definition
 
@@ -361,12 +359,28 @@ The RGB validation procedure, beside checking the correct closure of the Seal, i
 
 #### Metadata
 
+Metadata construct is a particular field in which contains all the information which are not useful to be stored as a part of the contract state history. It has a size limit of 64 KiB, and can be used, for example, to host temporary data of complex contract validation procedure by the [AluVm]() engine. 
+
 #### Valencies
+
+Valencies are a unique-in-its-kind construct which can be present in all 3 forms of Contract Operations. Basically are a set of digital rights that can be recalled and "put in effect" by a subsequent state transition. 
 
 
 #### Redeems
 
+
+#### Operation and States
+
+
+
+
 ## Features of RGB State
+
+#### 
+
+
+
+
 
 ### Strict Type System
 

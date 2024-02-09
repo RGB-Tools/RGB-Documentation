@@ -363,12 +363,14 @@ Metadata construct is a particular field in which contains all the information w
 
 #### Valencies
 
-Valencies are a unique-in-its-kind construct which can be present in all 3 forms of Contract Operations. Basically they are a set of digital rights that can be recalled and "put in effect" by a subsequent state transition. In RGB state transitions, valencies are encoded simply by enumerating each `Valency_type` which is a list of 16-bit field. As `Global_state_type` and `Assignment_state_type` the appropriate meaning and semantic is encoded in defined in the Contract [Schema]() and decode by the appropriate [Interface]().
+Valencies are a unique-in-its-kind construct which can be present in all 3 forms of Contract Operations. Basically they are a set of digital rights that can be recalled and "put in effect" by a subsequent state transition. In RGB state transitions, valencies are encoded simply by enumerating each `Valency_Type` which is a list of 16-bit field. As `Global_state_type` and `Assignment_state_type` the appropriate meaning and semantic is encoded in defined in the Contract [Schema]() and decode by the appropriate [Interface]().
 
 #### Redeems
 
-Redeems are the analog of State Transition's Inputs...
-
+Redeems are akin to State Transition's Inputs for Valencies. They are only included in State Extension Operations which are responsible for "activating" the digital right embedded in the valency itself, for example one executing a *coinswap* or a *distributed issuance*. Redeems are constituted by 2 field entries:
+* the `Prev_OpId` 32-byte field referring to the hash of the O  in which the Valency being redeemed is included;
+* the `Valency_Type` 16-bit field which is recalled from the Previous Operation where the valency is defined.  
+Each Valency_Type` can be redeemed only once inside the State Extension.
 
 #### Operation and States
 

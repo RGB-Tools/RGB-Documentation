@@ -143,7 +143,7 @@ In the figure below, all 3 contract operation are shown together with their posi
 It is important to note that the main difference between ordinary State Transitions and both two State Generation Operations lie in the lack of seal closure part. For this reason, **both Genesis and State Extensions need a State Transition that closes the particular seal definition constructed by them**.
 
 
-Another evident yet fundamental aspect to take into account is that the **Active State** is the last state at the tip of the [DAG]() of contract operation that reference themselves, in the order committed to the Bitcoin Blockchain, from the Genesis.
+Another evident, yet fundamental, aspect to take into account is that the **Active State** is the last state at the tip of the [DAG]() of contract operation that reference themselves, in the order committed to the Bitcoin Blockchain, from the Genesis.
 
 #### Genesis 
 
@@ -267,6 +267,31 @@ Before addressing each state component, it's fundamental to clarify through whic
 
 Global State are embedded in state transition as a single component block, while Owned State are defined inside the assignment component together with a Seal Definition.
 
+An important feature of RGB which **affects both Global and Owned States, is the ways in which State are modified**. Basically, State exhibit 2 different behaviors:
+
+* **Mutable** behavior, where **each state transition discards previous state** and assigns a new one;
+* **Accumulating** behaviour, where each state transition adds to previous state a new state.
+
+The choice of the behavior that the State can follow is encoded in the Schema of the Contract and cannot be changed after the Genesis. In the following table a summary of the rules regarding the permitted modification to the Global/Owned States by each Contract Operation is provided:
+
+|                      | Genesis | State Extension | State Transition |
+|----------------------|:-------:|:---------------:|:----------------:|
+| Adds Global State    |    +    |        *        |         +        |
+| Mutates Global State |   n/a   |        *        |         +        |
+| Adds Owned State     |    +    |        *        |         +        |
+| Mutates Owned State  |   n/a   |        No       |         +        |
+| Adds Valencies       |    +    |        +        |         +        |
+
+
+
+As a final consideration for this paragraph, in the table below we provide the summary of the main properties which the farious kind of State exihibit in the RGB protocol.   
+
+|                |               Metadata              |                     Global state                     |                                                Owned state                                               |
+|----------------|:-----------------------------------:|:----------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|
+| Scope          |    Defined per contract operation   |             Defined per contract globally            |                                 Defined per single-use-seal (Assignment)                                 |
+| Who can update |            Not updatable            |                  Operation creators                  |                    Controlled by right owners  (parties able to close single-use-seal)                   |
+| Time scope     | Defined just for a single operation | State is defined after/as a result  of the operation | State is defined before the operation  (when the seal definition is embedded  in the previous operation) |
+
 ##### Global State
 
 The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** as it defines some general characteristic of the contract which must be publicly visible. A Global State is always a public state, and can be written in Genesis by the contract issuer and later changed in state transition or in state extensions by a rightful party defined in the genesis itself.
@@ -275,7 +300,7 @@ As an important feature, the Global State is usually made available by the contr
 
 Every Component of a Global State is composed by one ore more elements which embeds:
 
-* A `Type` which embeds a deterministic [semantic definition]();
+* A `Global_state_Type` which embeds a deterministic [semantic definition]();
 * The actual Data.
 
 For example A Global State of newly issued token written in Genesis, dependent on the [`Non inflatable Asset Schema`]() and  [Contract Interface]() `RGB 20` , [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `Types`:
@@ -291,17 +316,17 @@ For example A Global State of newly issued token written in Genesis, dependent o
 
 Assignments are the fundamental constructs that are responsible for the **Seal Definition** operation and the related **Owned State** which such the Seal Definition is bounded to. They are the core parts which allows for the **rightful transfer** of some digital property described in the Owned State, to a New Owner identified by the possession of a specific Bitcoin UTXO. Assignment can be compared to Outputs of Bitcoin Transaction, but embeds eventually more capabilities and potentialities. 
 
-Each Assignment is composed by the following main components:
-* The `Type` which is the semantic identifier of the digital property being stored in the Assignment (e.g. the `assetOwner` used in token transfers)
-* the `Seal Definition`
-* The `Owned State`
+Each Assignment is composed by the following components:
+* The `Assignment_yype` which is the semantic identifier of the digital property being stored in the Assignment (e.g. the `assetOwner` used in token transfers);
+* the `Seal Definition` which is sub-construct containing the reference to the UTXO; 
+* The `Owned State` which specify in which ways the properties associated to the type are modified.
   
 
 
 ##### Revealed / Concealed form
 
 As a peculiar feature of RGB, both Seal Definition and Owned State can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining high privacy and scalability in both state transition construction and subsequent validation, in a selective way, by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed`` form can be used to validate the same data that were inserted in a previous state transition(s) with their hash digest representing the concealed form of the construct. 
-In the picture below, all 4 combination of Reveal/Conceal form are shown:
+In the diagram below, all 4 combination of Reveal/Conceal form are shown:
 
 ![](/img/assignment-reveal-conceal.png)
 
@@ -321,12 +346,12 @@ The *concealed* form of the Seal Definition is simply the ordered SHA-256 hash o
 
   ![](/img/seal-definition-1.png)  
 
-##### Owned States
+##### Owned State
 
 This second component of the Assignment is responsible for the definition and storage of the data assigned by the Seal Definition. 
 Before proceeding with the characteristics of Owned States, it is important to point out that the Conceal/Reveal feature, differently from Global State where it is not present, allows for the definition of two forms of Owned States:
-* **Public**: where the related data must always kept and transferred in revealed form by their owner recursively. For example it can be applied to some image file which must be bounded to ownership, but always publicly shown)   
-* **Private**: where data are kept concealed and revealed only if they part of the history for validation purposes. For example the number of token transferred in a token contract is generally kept in private form.
+* **Public**: where the related data must always kept and transferred in revealed form by their owner recursively. For example it can be applied to some image file which must be bounded to ownership, but always publicly shown. It can be described by the sentence: **"someone owns, everybody knows"**.  
+* **Private**: where data are kept concealed and revealed only if they part of the history for validation purposes. For example the number of token transferred in a token contract is generally kept in private form. It can be summarized by the sentence: **"someone owns, nobody knows"**.
 
 In RGB, an Owned State can be defined with only one among 4 State Type: `Declarative`, `Fungible`, `Structured`, `Attachments`, each of which come with its concealed and Revealed form:
 * **Declarative** is a State Type with **no data**, representing some form of governance rights which can be executed by a contract party. For example it can be used for voting rights. Concealed and Revealed form of it coincides.
@@ -356,6 +381,8 @@ In a similar fashion to Bitcoin Transactions, Input represent the "other half" o
 
 The RGB validation procedure, beside checking the correct closure of the Seal, is also responsible to check the consistency between inputs and outputs especially for `Fungible` state where the amount of token of each input of a specific `Type` and `Fungible State Type` must match the number of token in the Assignments of the same state transition.
 
+As a straightforward consequence, Genesis doesn't have Inputs as well as all State Transitions which don't change some Owned States of any kind. For example a State Transition which change only the Global State, doesn't have inputs.
+
 
 #### Metadata
 
@@ -368,10 +395,6 @@ Valencies are a unique-in-its-kind construct which can be present in all 3 forms
 #### Redeems
 
 Redeems are the analog of State Transition's Inputs...
-
-
-#### Operation and States
-
 
 
 

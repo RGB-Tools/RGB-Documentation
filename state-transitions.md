@@ -48,9 +48,9 @@ The chain of Contract Operation in RGB is the ordered path that make contract da
 
 The order relation among the DAG in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain which, in turn, provides, timestamping capabilities and **source of ordering**.
 
-### Implementation of Contract Operation
+## Implementation of Contract Operation
 
-### Mechanics of RGB Operation
+### Mechanics of a RGB State Transition
 
 The approach followed in this paragraph is the same as the one developed in the [TxO2 Client-side Validation](/csv-w-btc.md#txo2-client-side-validation) using our beloved cryptographic characters Alice and Bob. This time the explanation contains an important difference: this time Bob is not simply validating the client-side validated data that Alice shows him. He is effectively asking Alice to add some additional data which **will give Bob some degree of ownership** over the contract expressed as a hidden reference to one of his bitcoin UTxO. Let's see how the process works in practice for a **State Transition** (one among Contract Operations):
 
@@ -173,7 +173,7 @@ Following the figure above we can have an example of the working mechanism of st
 * The seal definition specified in the state extension is closed through a State Transition constructed by the UTXO owner, which the seal definition pointed at. So the owner of the state is able to spend the newly issued tokens to himself or to other parties.
 
 
-### Components of a Contract Operation
+## Components of a Contract Operation
 
 Let's now deep-dive in all the components of a contract operation, which are able to change the state of the contact and are eventually client-side verified by the rightful recipient in a deterministic way. 
 
@@ -247,13 +247,13 @@ In addition to this subdivision we also have:
 * **ContractId / SchemaId** the 32-byte referencing the `OpId` of the Genesis of the contract. If the contract operation is itself a Genesis, in place of the `ContractId` a `SchemaId``, which is a hash fingerprint of the used contract [Schema]().  
 * **Metadata** allowing for the declaration of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
-#### OpId
+### OpId
 
 Each Contract Operation is identified by a 32-byte hash called `OpId`, which is, indeed, the ordered SHA-256 hashing of the element contained in the State Transition. Each Contract Operation (State Transition, Genesis and State Extensions) has its own custom [commitment methodology](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#operation-id-and-contract-id). 
 
 As an important additional feature, the `ContractId` of a smart contract is calculated by using the `OpId` of its Genesis and applying to it a `reverse byte order operation` plus a `Base58` encoding.  
 
-#### Contract State
+### Contract State
 
 Before addressing each state component, it's fundamental to clarify through which elements a contract state is expressed in the RGB protocol. Specifically, in RGB, the **State** of a contract is fully expressed by:
 * A single **Global State** 
@@ -288,7 +288,7 @@ As a final consideration for this paragraph, in the table below we provide the s
 | Who can update |              Not updatable              |                    Operation creators                    |                      Controlled by right owners  (parties able to close single-use-seal)                     |
 | Time scope     |   Defined just for a single operation   |   State is defined after/as a result  of the operation   |   State is defined before the operation  (when the seal definition is embedded  in the previous operation)   |
 
-##### Global State
+#### Global State
 
 The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** as it defines some general characteristic of the contract which must be publicly visible. A Global State is always a public state, and can be written in Genesis by the contract issuer and later changed in state transition or in state extensions by a rightful party defined in the Genesis itself.
 
@@ -308,7 +308,7 @@ For example A Global State of newly issued token written in Genesis, dependent o
 * a text with some Legal disclaimer: `terms`
 
 
-##### Assignments
+### Assignments of an Owned State
 
 Assignments are the fundamental constructs that are responsible for the **Seal Definition** operation and the related **Owned State** which such the Seal Definition is bounded to. They are the core parts which allows for the **rightful transfer** of some digital property described in the Owned State, to a New Owner identified by the possession of a specific Bitcoin UTXO. Assignment can be compared to Outputs of Bitcoin Transaction, but embeds eventually more capabilities and potentialities. 
 
@@ -318,7 +318,7 @@ Each Assignment is composed by the following components:
 * The `Owned State` which specify in which ways the properties associated to the type are modified.
   
 
-##### Revealed / Concealed form
+#### Revealed / Concealed form
 
 As a peculiar feature of RGB, both Seal Definition and Owned State can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining high privacy and scalability in both state transition construction and subsequent validation, in a selective way, by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed`` form can be used to validate the same data that were inserted in a previous state transition(s) with their hash digest representing the concealed form of the construct. 
 In the diagram below, all 4 combination of Reveal/Conceal form are shown:
@@ -327,7 +327,7 @@ In the diagram below, all 4 combination of Reveal/Conceal form are shown:
 
 As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed. As a final remark of this paragraph, per RGB consensus rules **the `OpId` of the state transition is always calculated from the concealed data** 
 
-##### Seal Definition
+#### Seal Definition
 
 [Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) in its *revealed* form, is itself a structure composed by 4 fields: `txptr` `vout` `blinding` `method`. 
 * **txptr** is a more complex object than a simple Bitcoin Transaction hash. In particular it can have two forms, either:
@@ -341,7 +341,7 @@ The *concealed* form of the Seal Definition is simply the ordered SHA-256 hash o
 
   ![](/img/seal-definition-1.png)  
 
-##### Owned State
+#### Owned State
 
 This second component of the Assignment is responsible for the definition and storage of the data assigned by the Seal Definition. 
 Before proceeding with the characteristics of Owned States, it is important to point out that the Conceal/Reveal feature, differently from Global State where it is not present, allows for the definition of two forms of Owned States:
@@ -367,7 +367,7 @@ In the table a summary of the characteristics of each State Type is provided:
 | **Confidentiality** | Not Required    | Pedersen commitment               | Hashing with blinding | Hashed file id   |
 | **Size limits**     | N/A             | 256 Byte                          | Up to 64 kByte        | Up to ~500 GByte |
 
-#### Inputs 
+### Inputs 
 
 In a similar fashion to Bitcoin Transactions, Input represent the "other half" of the Assignment construct. They have the fundamental role of referencing the Assignments of a previous State Transition. Inputs are not present in Genesis and State Extension Operation and are composed by the following fields:
 * `Prev_OpID` containing the Operation ID of the Assignment being referenced;
@@ -379,15 +379,15 @@ The RGB validation procedure, beside checking the correct closure of the Seal, i
 As a straightforward consequence, Genesis doesn't have Inputs as well as all State Transitions which don't change some Owned States of any kind. For example a State Transition which change only the Global State, doesn't have inputs.
 
 
-#### Metadata
+### Metadata
 
 Metadata construct is a particular field in which contains all the information which are not useful to be stored as a part of the contract state history. It has a size limit of 64 KiB, and can be used, for example, to host temporary data of complex contract validation procedure by the [AluVm]() engine. 
 
-#### Valencies
+### Valencies
 
 Valencies are a unique-in-its-kind construct which can be present in all 3 forms of Contract Operations. Basically they are a set of digital rights that can be recalled and "put in effect" by a subsequent state transition. In RGB state transitions, valencies are encoded simply by enumerating each `Valency_Type` which is a list of 16-bit field. As `Global_state_type` and `Assignment_state_type` the appropriate meaning and semantic is encoded in defined in the Contract [Schema]() and decode by the appropriate [Interface]().
 
-#### Redeems
+### Redeems
 
 Redeems are akin to State Transition's Inputs for Valencies. They are only included in State Extension Operations which are responsible for "activating" the digital right embedded in the valency itself, for example one executing a *coinswap* or a *distributed issuance*. Redeems are constituted by 2 field entries:
 * the `Prev_OpId` 32-byte field referring to the hash of the O  in which the Valency being redeemed is included;
@@ -395,7 +395,7 @@ Redeems are akin to State Transition's Inputs for Valencies. They are only inclu
 Each Valency_Type can be redeemed only once inside the same State Extension.
 
 
-## Features of RGB State
+## Features of a RGB State
 
 
 ### Strict Type System
@@ -451,7 +451,7 @@ This kind of separation prevents the possibility of mix the non-Turing complete 
 
 Additionally, by relying on Bitcoin transaction structure, RGB can exploit the features of the Lightning Network in a straightforward way.
 
-### RGB specific libraries
+## RGB specific libraries
 
 Repository:
 

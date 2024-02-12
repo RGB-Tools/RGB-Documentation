@@ -16,6 +16,10 @@ This guide targets the broader technical audience willing to understand in depth
    * Deterministic Bitcoin Commitments - DBC
    * Multi Protocol Commitments - MPC
    * Anchors
-* [RGB Contracts and States](contracts-states.md)
-* [RGB State Transitions and Business Logic]()
+* [State Transitions](state-transitions.md)
+   * Introduction to Smart Contracts and their states
+   * State Transition and Contract Operations
+   * Components of a Contract Operation
+   * Features of RGB State
+* [Contract Schema and Interfaces](schema-interface.md)  
 * [Glossary](terminology/glossary.md)

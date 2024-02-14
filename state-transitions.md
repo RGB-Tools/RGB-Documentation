@@ -106,23 +106,23 @@ The `BundleId` to be inserted in the leaf of the [MPC](), is [obtained](https://
 
 `SHA-256(SHA-256(urn:lnp-bp:rgb:bundle#2024-02-03) || SHA-256(urn:lnp-bp:rgb:bundle#2024-02-03) || InputMap)`
 
-An `InputMap` is a construct built in the following way:
+An `InputMap` associated to the i-th `input_i` in the set `i = {0,1,..,N}` which is referenced to the j-th `OpId` in the set `j = {0,1,..,K}` is a construct built in the following way:
 
 ```
 InputMap = 
 
-         N                  0          OpId_i          1          OpId_i    ...      N         OpId_i    
-|____________________| |_________||____________| |_________||____________|       |________||____________|
- 16-bit Little Endian   32-bit LE   32-byte hash                                         
-                       |_______________________| |_______________________|  ...  |______________________|
-                            MapElement1                 MapElement2                   MapElementN 
+         N               input_0    OpId(input_0)    input_1    OpId(input_1)   ...    input_N   OpId(input_N)    
+|____________________| |_________||______________| |_________||______________|       |________||______________|
+ 16-bit Little Endian   32-bit LE  32-byte hash                                         
+                       |_________________________| |_________________________|  ...  |________________________|
+                            MapElement1                   MapElement2                       MapElementN 
 ```
 where:
 
-* `N` in the number of Inputs of the **witness transaction** referencing an `OPId_i` in the set `{0,1,...,i}`
-* `OpId_i` is the Operation Identifier of the i-th State Transition included in the Transaction Bundle associated with n-th input of the witness transaction. Each State Transition can have more than one input so that `i <= N`  
+* `N` in the total number of inputs of the **witness transaction** referencing an `OPId(input_i)` in the set `{0,1,...,i}`
+* `OpId(input_j)` is the Operation Identifier of the j-th State Transition included in the Transaction Bundle associated with i-th input of the witness transaction. Each State Transition can have more than one input so that `K <= N`.  
 
-By referencing each Input for the  in an ordered way, the possibility to double-spend the same seal definition in two different state transitions is prevented in an effective way.
+By referencing each Input only once in an ordered way, the possibility to double-spend the same seal definition in two different state transitions is prevented in an effective way.
 
 ### Contract Operations and Active State
 
@@ -246,7 +246,7 @@ In addition, we also have a set of operation-specific fields:
 * **ContractId** the 32-byte number referencing the `OpId` of the Genesis of the contract. Naturally, it is present in State Transitions and Extensions, but not in Genesis. 
 * **SchemaId** In Genesis, in place of the `ContractId` a `SchemaId`, which is a 32-byte hash fingerprint of the contract [Schema](), is included.
 * **Testnet** is a boolean variable indicating the use of Bitcoin Testnet or Mainnet. It is present only in Genesis operation.
-* **Altlayers1** is a variable indicating Blockchain Layer is being used as a Commitment medium for the client-side validated data in alternative to Bitcoin. It is present only in Genesis Operation.
+* **Altlayers1** is a variable indicating Blockchain Layer is being used as a Commitment medium for the client-side validated data in alternative to Bitcoin (e.g. [Liquid Sidechain](https://blockstream.com/liquid/)). It is present only in Genesis Operation.
 * **Metadata** allowing for the declaration of temporary variables useful for complex contract validation but which doesn't need to be registered as state properties.
 
 Finally, through a custom hashing methodology, all the Contract Operation fields are summarized in an `OpId` commitment which goes into the Transition Bundle. We will cover each of those construct in a separate subsection. The complete memory layout of each component of a contract operation is reported [here](https://github.com/RGB-WG/rgb-core/blob/vesper/stl/Transition.vesper).
@@ -278,23 +278,23 @@ In any case in which the **Contract State is nor Mutated nor Accumulated, the re
 
 The choice of the Business Logic (how state can evolve) is encoded in the Schema of the Contract and cannot be changed after the Genesis, unless with some extensions specifically encoded herein. In the following table a summary of the rules regarding the permitted modification to the Global/Owned States by each Contract Operation is provided:
 
-|                      | **Genesis** | **State Extension** | **State Transition** |
-|----------------------|:-----------:|:-------------------:|:--------------------:|
-| Adds Global State    |      +      |          *          |           +          |
-| Mutates Global State |     n/a     |          *          |           +          |
-| Adds Owned State     |      +      |          *          |           +          |
-| Mutates Owned State  |     n/a     |          No         |           +          |
-| Adds Valencies       |      +      |          +          |           +          |
+|                          | **Genesis** | **State Extension** | **State Transition** |
+|--------------------------|:-----------:|:-------------------:|:--------------------:|
+| **Adds Global State**    |      +      |          *          |           +          |
+| **Mutates Global State** |     n/a     |          *          |           +          |
+| **Adds Owned State**     |      +      |          *          |           +          |
+| **Mutates Owned State**  |     n/a     |          No         |           +          |
+| **Adds Valencies**       |      +      |          +          |           +          |
 
 *+ = if allowed by Contract Schema  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * = if Confirmed by a State Transition*  
 
 As a final consideration for this section, in the table below we provide the summary of the main properties regarding the scope which the various kind of state element exhibit in the RGB protocol.   
 
-|                |               **Metadata**              |                     **Global state**                     |                                                **Owned state**                                               |
-|----------------|:---------------------------------------:|:--------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
-| Scope          |      Defined per contract operation     |               Defined per contract globally              |                                   Defined per single-use-seal (Assignment)                                   |
-| Who can update |              Not updatable              |                    Operation creators                    |                      Controlled by right owners  (parties able to close single-use-seal)                     |
-| Time scope     |   Defined just for a single operation   |   State is defined after/as a result  of the operation   |   State is defined before the operation  (when the seal definition is embedded  in the previous operation)   |
+|                    |               **Metadata**              |                     **Global state**                     |                                                **Owned state**                                               |
+|--------------------|:---------------------------------------:|:--------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
+| **Scope**          |      Defined per contract operation     |               Defined per contract globally              |                                   Defined per single-use-seal (Assignment)                                   |
+| **Who can update** |              Not updatable              |                    Operation creators                    |                      Controlled by right owners  (parties able to close single-use-seal)                     |
+| **Time scope**     |   Defined just for a single operation   |   State is defined after/as a result  of the operation   |   State is defined before the operation  (when the seal definition is embedded  in the previous operation)   |
 
 #### Global State
 
@@ -366,8 +366,48 @@ In RGB, an Owned State can be defined with only one among 4 **StateTypes**: `Dec
 `SHA-256(SHA-256(urn:lnp-bp:rgb:state-attach#2024-02-12) || SHA-256(urn:rgb:state-attach#2024-02-12) || file_hash || media_type || salt)` 
 
 In the following diagram, a summary of the 4 State Types and both their Concealed and Revealed forms is shown:
-
+<!---
 ![](/img/owned-state-concealed-revealed.png)
+--->
+
+```
+  State                      Concealed form                              Revealed form
+
++---------------------------------------------------------------------------------------------------------
+
+                     +--------------------------------------------------------------------------------+
+                     |                                                                                |
+  Declarative        |                              < void >                                          |
+                     |                                                                                |
+                     +--------------------------------------------------------------------------------+
+
++---------------------------------------------------------------------------------------------------------
+
+                     +--------------------------+             +---------------------------------------+
+                     | +----------------------+ |             |         +--------+ +---------+        |
+  Fungible           | | Pedersen Commitement | | <========== |         | Amount | | Blinding|        |
+                     | +----------------------+ |             |         +--------+ +---------+        |
+                     +--------------------------+             +---------------------------------------+
+
++---------------------------------------------------------------------------------------------------------
+
+                     +--------------------------+             +---------------------------------------+
+                     | +----------------------+ |             |         +--------------------+        |
+  Structured         | |     Tagged Hash      | | <========== |         |     Data Blob      |        |
+                     | +----------------------+ |             |         +--------------------+        |
+                     +--------------------------+             +---------------------------------------+
+
++---------------------------------------------------------------------------------------------------------
+
+                     +--------------------------+             +---------------------------------------+
+                     | +----------------------+ |             | +-----------+ +------------+ +------+ |
+  Attachments        | |     Tagged Hash      | | <========== | | File Hash | | Media Type | | Salt | |
+                     | +----------------------+ |             | +-----------+ +------------+ +------+ |
+                     +--------------------------+             +---------------------------------------+
+
+```
+
+
 
 In the table a summary of the characteristics of each StateType is provided:
 
@@ -400,18 +440,17 @@ Valencies are a unique-in-its-kind construct which can be present in all 3 forms
 
 ### Redeems
 
-Redeems are akin to State Transition's Inputs for Valencies. They are only included in State Extension which are responsible for "activating" the digital right embedded in the Valency itself, for example the execution of a *coinswap* or a *distributed issuance*. Redeems are constituted by 2 field entries:
+Redeems are akin to State Transition's Inputs for Valencies. They are only included in State Extension which are responsible for "activating" the digital right embedded in the Valency itself. An example of Reedeem could be the execution of a *coinswap* or a *distributed issuance*. Redeems are constituted by 2 field entries:
 * the `PrevOpId` 32-byte field referring to the hash of the O  in which the Valency being redeemed is included;
-* the `ValencyType` 16-bit field which is recalled from the previous operation where the valency is defined.  
+* the `ValencyType` 16-bit field which is recalled from the previous operation where the Valency is defined.  
 Each ValencyType can be redeemed only once inside the same State Extension.
-
 
 ## Features of a RGB State
 
 
 ### Strict Type System
 
-The state represent a set of conditions which are expressed in form of data and which are embedded in the contract itself.
+As described in previous sections, The state represent a set of condition which undergo validation both against contract business logic and both with regards to commitment ordered history.
 
 In RGB, this set of data is actually a **set of arbitrary rich data** which:
 * are **strongly typed**, which means that **each variable possesses a clear type definition (e.g. u8) and both lower and upped bounds**.
@@ -440,7 +479,7 @@ As a matter of fact Strict Encoding is defined in both an extremely pure functio
 
 ### Size limitation
 
-Regarding the **data concurring to state validation**, the RGB protocol consensus rule apply a **maximum size limit** of 2^16 bite (64kB):
+Regarding the **data concurring to state validation**, the RGB protocol consensus rule apply a **maximum size limit** of 2^16 bytes (64kiB):
 * To the size of **any data type** participating in state validation (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
 * To the **number of elements of each collection** employed in state validation.
 This has been designed in order to:
@@ -460,11 +499,19 @@ In practice:
 
 This kind of separation prevents the possibility of mix the non-Turing complete capabilities of smart contract with the public access of contract states which is embedded in nearly all blockchains with advanced programming capabilities. On the opposite, **the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks** where yet unknown vulnerabilities of smart contracts have been exploited by publicly accessing the contract state encoded in the blockchain.
 
-Additionally, by relying on Bitcoin transaction structure, RGB can exploit the features of the Lightning Network in a straightforward way.
+Additionally, by relying on Bitcoin transaction structure, RGB can exploit the **features of the Lightning Network** in a straightforward way.
 
 
-### RGB Versioning System
+### RGB Consensus Changes
 
+As an another important characteristics, RGB possesses, in addition to Semantic Versioning of data, a Consensus Update System, that keep track of consensus changes in Contracts and Contracts Operations. Basically there are two basic way to update consensus rule embedded in the protocol: 
+* A **fast-forward** update where *some previously invalid rule becomes valid*. Despite the similarities, this kind of update is **not comparable to a ~~blockchain hardfork~~**. The chronological history of this kind of changes it's mapped in contract through the [Ffv field](#components-of-a-contract-operation) of Contract Operation. In particular it is characterized by the following properties:
+  * Existing owners are not affected.
+  * New beneficiaries must upgrade their wallets.
+* A **pushback** update where *some previously valid state becomes invalid* .Despite the similarities, this kind of update is **not comparable to a ~~blockchain softfork~~**, and in addition:
+  * Existing owners may loose assets if they update the wallet.
+  * In fact a new protocol, not the same  version of RGB anymore.
+  * Can happen only through issuers re-issing assets on a new protocol - and users using two wallets (for both the old and the new protocol).
 
 
 

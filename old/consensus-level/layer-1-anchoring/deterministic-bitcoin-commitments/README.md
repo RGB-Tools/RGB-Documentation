@@ -1,2 +1,0 @@
-# Deterministic bitcoin commitments
-

@@ -17,8 +17,15 @@ We will discuss various kind of **Distributed Consensus Systems** which have som
 * **State Channels**. Is a system constructed between 2 (or more) parties and which depend hierarchically on the blockchain layer. The final state is represented by the last transaction out of sequence of ordered invalidating transactions, signed and agreed by the parties *off-chain*. The final state can be enforced by each parties by publishing that last valid transaction on the layer 1. The most known application of payment channels, a simplified form of state channels, is the **Lightning Network**.
 * **Client Side Validated Data - Stash**. Is a system that can be implemented both on top of blockchain and state channels and it is based on a certain *circumscribed* amount of data whose validity, computation tasks and update is entrusted to a *limited number* nodes. Unlike layer 1, the data to be validated by each client node represent a **defined subset of the entirety of all state transitions of the network, and NOT every transition happened within it**. This validated subset of data in possession of a client node is what is called **Stash**. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last transition and which relate to the exchange and to the validation of some digital properties among the counterparties involved. Seen as a whole, the validation mechanism of the shard which produce the stash is called **Client-side Validation** and underpin all **RGB** operations.
  
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/ac60cc0d-0d3f-4dbd-a7c5-2cef5ac1b765)  
+
+ <img src="/img/distributed-data.png">
+
+<!---
+![](/img/distributed-data-aln.png) <br />
+-->
+
 *The 3 set of Distributed System - Blockchain (layer1) is self-sustaining while the other 2 rely on layer 1 for operating - layer 3 can operate on top of both blockchain and state channels*
+
 
 In order to precisely frame the applications of each Distributed Consensus System and their undelying data structure it's important to understand the limitations that affect each one of these technology. This condition is expressed in form of a **Trilemma** which is connected to an important theoretical result of Distributed Computing, known as **[CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem)**. which states that:
 
@@ -27,8 +34,9 @@ In order to precisely frame the applications of each Distributed Consensus Syste
 > * Availability - Every request to the system receives a response.
 > * Partition Tolerance - The system continues to operate correctly despite a network partition, e.g. failures or delays between nodes.
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/022ad2c0-f07d-4754-a3e6-a150bd64abdf)  
-*Application of CAP Theorem to Distributed Consensus System - Each Distributed Consensus System can fit 2 and only 2 of the 3 properties*
+
+![](/img/cap-theorem.png) <br />
+*Application of CAP Theorem to Distributed Consensus System - Each Distributed Consensus System can fit 2 - and only 2 - out of the 3 properties*
 
 Seen from a more consensus-focused point of view, the properties of the theorem can be reformulated in the following way: 
 
@@ -36,7 +44,7 @@ Seen from a more consensus-focused point of view, the properties of the theorem 
 * Availability > Decentralization
 * Partition Tolerance > Scalability and Confidentiality
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/7692116c-f13b-4a06-bb39-d649a0dce10c)  
+![](/img/trilemma1.png) <br />
 *A more in-depth view of the inherent degree of application of the Trilemma to Distributed Consensus System*  
 
 In synthesis:

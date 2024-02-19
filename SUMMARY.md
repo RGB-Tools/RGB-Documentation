@@ -4,18 +4,16 @@
 
 ## Distributed Computing Concepts
 
-* [Distributed Computing](distributed-computing-concepts/distributed-computing/README.md)
-  * [Paradigms of Distributed Computing](distributed-computing-concepts/distributed-computing/paradigms-of-distributed-computing.md)
-  * [Client-side Validation](distributed-computing-concepts/distributed-computing/client-side-validation.md)
-  * [Single-use Seals and Proof of Pubblication](distributed-computing-concepts/distributed-computing/single-use-seals.md)
+* [Paradigms of Distributed Computing](distributed-computing-concepts/paradigms-of-distributed-computing.md)
+* [Client-side Validation](distributed-computing-concepts/client-side-validation.md)
+* [Single-use Seals and Proof of Pubblication](distributed-computing-concepts/single-use-seals.md)
 
-## Layer 1 Seals and Commitments
+## Commitment layer
 
-* [Layer 1 Anchoring](csv-w-btc.md)
-  * [Single-use Seals in Bitcoin Transactions](layer-1-seals-and-commitments/csv-w-btc/single-use-seals-in-bitcoin-transactions.md)
-  * [Deterministic Bitcoin Commitments - DBC](layer-1-seals-and-commitments/csv-w-btc/deterministic-bitcoin-commitments-dbc.md)
-  * [Multi Protocol Commitments - MPC](layer-1-seals-and-commitments/csv-w-btc/multi-protocol-commitments-mpc.md)
-  * [Anchors](layer-1-seals-and-commitments/csv-w-btc/anchors.md)
+* [Commitment Schemes within Bitcoin -  RGB](commitment-layer/csv-w-btc.md)
+* [Deterministic Bitcoin Commitments - DBC](commitment-layer/deterministic-bitcoin-commitments-dbc.md)
+* [Multi Protocol Commitments - MPC](commitment-layer/multi-protocol-commitments-mpc.md)
+* [Anchors](commitment-layer/anchors.md)
 
 ## RGB State and Transitions
 

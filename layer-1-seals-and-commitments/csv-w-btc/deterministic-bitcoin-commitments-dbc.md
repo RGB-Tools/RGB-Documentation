@@ -1,2 +1,0 @@
-# Deterministic Bitcoin Commitments - DBC
-

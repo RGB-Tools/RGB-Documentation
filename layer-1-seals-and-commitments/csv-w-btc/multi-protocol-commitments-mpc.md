@@ -1,2 +1,0 @@
-# Multi Protocol Commitments - MPC
-

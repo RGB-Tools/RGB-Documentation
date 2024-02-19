@@ -13,7 +13,7 @@ The main drawback of Layer 1 validation process is that **each node has to valid
 * **Scalability**: the size limit of the blocks vs. the demand of blockspace per unit time shared by all willing participants limits the transaction throughput (i.e. \~4 MB on \~10 minutes on average on bitcoin)
 * **Privacy**: details of each transaction are broadcasted and stored in public form (in particular: the amounts transacted and the receiving addresses, although pseudonyms).
 
-<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption><p><strong>In Public Blockchains everyone needs to validate all the information leading to privacy and scalability issues.</strong></p></figcaption></figure>
+<figure><img src="../../img/blockchain-1.png" alt=""><figcaption><p><strong>In Public Blockchains everyone needs to validate all the information leading to privacy and scalability issues.</strong></p></figcaption></figure>
 
 However, from the point of view of the recipient of a transaction, the only aspects that matter are:
 

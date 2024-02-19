@@ -1,13 +1,13 @@
 # Table of contents
 
-* [Readme](README.md)
+* [Introduction and Index](README.md)
 
 ## Distributed Computing Concepts
 
-* [Technical Introduction and Base Concepts](intro-tech.md)
-  * [Paradigm of Distributed Computing](distributed-computing-concepts/intro-tech/paradigm-of-distributed-computing.md)
-  * [Client-side Validation](distributed-computing-concepts/intro-tech/client-side-validation.md)
-  * [Single-use Seals](distributed-computing-concepts/intro-tech/single-use-seals.md)
+* [Introduction](distributed-computing-concepts/README.md)
+  * [Paradigms of Distributed Computing](distributed-computing-concepts/paradigms-of-distributed-computing.md)
+  * [Client-side Validation](distributed-computing-concepts/client-side-validation.md)
+  * [Single-use Seals](distributed-computing-concepts/single-use-seals.md)
 
 ## Layer 1 Seals and Commitments
 

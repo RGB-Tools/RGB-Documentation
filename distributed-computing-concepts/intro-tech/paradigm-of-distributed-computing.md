@@ -1,2 +1,0 @@
-# Paradigm of Distributed Computing
-

@@ -1,13 +1,13 @@
 # Table of contents
 
-* [Introduction and Index](README.md)
+* [RGB Documentation](README.md)
 
 ## Distributed Computing Concepts
 
-* [Distributed Computing introduction]
-  * [Paradigms of Distributed Computing](distributed-computing-concepts/paradigms-of-distributed-computing.md)
-  * [Client-side Validation](distributed-computing-concepts/client-side-validation.md)
-  * [Single-use Seals](distributed-computing-concepts/single-use-seals.md)
+* [Distributed Computing](distributed-computing-concepts/distributed-computing/README.md)
+  * [Paradigms of Distributed Computing](distributed-computing-concepts/distributed-computing/paradigms-of-distributed-computing.md)
+  * [Client-side Validation](distributed-computing-concepts/distributed-computing/client-side-validation.md)
+  * [Single-use Seals and Proof of Pubblication](distributed-computing-concepts/distributed-computing/single-use-seals.md)
 
 ## Layer 1 Seals and Commitments
 
@@ -36,6 +36,3 @@
 ***
 
 * [testpage1](testpage1.md)
-
-
-[def]: distributed-computing-concepts/README.md

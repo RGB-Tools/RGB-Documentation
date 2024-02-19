@@ -9,7 +9,7 @@ In practice, the preceding points are addressed through an **ordered merkelizati
 
 ![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/db6c410c-9ce1-4575-b0b4-e7c09f38d502)
 
-#### MPC Tree root
+## MPC Tree root
 
 The root of the MPC tree,, which goes either into [opret](multi-protocol-commitments-mpc.md#opret) or into [tapret](multi-protocol-commitments-mpc.md#tapret) commitment is the `tH_MPC_ROOT(x)` constructed in BIP-341 fashion as follows:
 

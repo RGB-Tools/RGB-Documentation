@@ -1,32 +1,4 @@
-# Deterministic Bitcoin Commitments - DBC
-
-For RGB commitment operations, the main requirement for a Bitcoin commitment scheme to be valid is that:
-
-> The witness closing transaction must provably contain a single commitment.
-
-With these requirements, it is not possible to construct an "alternate history" related to client-side data commitment in the same transaction. Thus, the message around which the single-use seal is closed is unique. To meet the requirement, regardless of the number of outputs in a transaction, _one and only one output_ is valid for each commitment scheme (opret and tapret):
-
-> Uniqueness of RGB commitment: the only valid outputs that can contain an RGB message commitment are:
->
-> 1. The first output OP\_RETURN (if present) for the `opret` commitment scheme.
-> 2. The first taproot output (if present) for the `tapret` commitment scheme.
-
-It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two separate outputs. Of course, these commitments will commit to different client-side validated data which, as we shall see later, explicitly indicate the commitment method used to refer to themselves.
-
-#### Opret
-
-This is the simplest and most straightforward scheme. The commitment is inserted into the first output OP\_RETURN of the witness transaction in the following way:
-
-```
-34-byte_Opret_Commitment =
-OP_RETURN OP_PUSHBYTE_32 <tH_MPC_ROOT>
-|________| |___________| |____________|
-  1-byte       1-byte       32 bytes                      
-```
-
-`tH_MPC_ROOT` is a 32-byte Tagged Multi Protocol Commitment (MPC) Merkle\_Root hash, so that the total commitment size in the _ScriptPubKey_ is 34 bytes.
-
-#### Tapret
+# Tapret
 
 The Tapret scheme is a more complex form of deterministic commitment and is an improvement in terms of chain footprint and privacy of contract operations. The main idea of this application is to hide the commitment within the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki).
 
@@ -42,7 +14,7 @@ OP_RESERVED ...  ... .. OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <tH_MPC_ROOT>  <
         TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes               MPC commitment + NONCE = 33 bytes
 ```
 
-Thus the 64-byte `tapret` commitment is an `Opret` commitment preceded by 29 bytes of the OP\_RESERVED operator and to which is added a 1-byte `Nonce` whose usefulness will be addressed [later](deterministic-bitcoin-commitments-dbc.md#nonce-optimization).
+Thus the 64-byte `tapret` commitment is an `opret` commitment preceded by 29 bytes of the `OP_RESERVED` operator and to which is added a 1-byte `Nonce` whose usefulness will be addressed [later](tapret.md#nonce-optimization).
 
 In order to preserve highest degree of implementation flexibility, privacy and scalability, **the Tapret scheme is designed to integrate many different cases that occur according to the user's bitcoin spending needs**, specifically we distinguish the following Tapret scenarios:
 
@@ -51,7 +23,7 @@ In order to preserve highest degree of implementation flexibility, privacy and s
 
 We will analyze each of these scenarios below.
 
-**Tapret Incorporation without Script Path Spend**
+## **Tapret Incorporation without Script Path Spend**
 
 To show this first scenario, the standard of a taproot exit key `Q` consisting only of an internal key `P` and **no Spending script path** is shown below
 
@@ -94,7 +66,7 @@ To include tapret commitment in such a transaction, we modify the transaction to
 
 The proof of inclusion and uniqueness in the Taproot Script tree is only the internal key `P`.
 
-**Tapret incorporation in pre-existing Script Path Spend**
+## **Tapret incorporation in pre-existing Script Path Spend**
 
 To move on to the construction of this more complex case, we show below the structure of a taproot output Key `Q`, which in this example consists of a Spend Key Path with internal key `P` and a 3-script tree in the Spend Script Path.
 
@@ -240,6 +212,6 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
                                                       +-----------------------+           +------------+
 ```
 
-**Nonce optimization**
+## **Nonce optimization**
 
 As an additional optimization method, the `<Nonce>` representing the last byte of the `64_byte_Tapret_Commitment` allows the user constructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`, thus placing it in the right-hand side of the tree and definitely avoiding revealing the constituents of the script branch (in this example `tHaB` and `tHC`).

@@ -11,7 +11,9 @@
 ## Commitment layer
 
 * [Commitment Schemes within Bitcoin -  RGB](commitment-layer/csv-w-btc.md)
-* [Deterministic Bitcoin Commitments - DBC](commitment-layer/deterministic-bitcoin-commitments-dbc.md)
+* [Deterministic Bitcoin Commitments - DBC](commitment-layer/deterministic-bitcoin-commitments-dbc/README.md)
+  * [Opret](commitment-layer/deterministic-bitcoin-commitments-dbc/opret.md)
+  * [Tapret](commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md)
 * [Multi Protocol Commitments - MPC](commitment-layer/multi-protocol-commitments-mpc.md)
 * [Anchors](commitment-layer/anchors.md)
 

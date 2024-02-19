@@ -4,7 +4,7 @@
 
 ## Distributed Computing Concepts
 
-* [Introduction](distributed-computing-concepts/README.md)
+* [Distributed Computing introduction]
   * [Paradigms of Distributed Computing](distributed-computing-concepts/paradigms-of-distributed-computing.md)
   * [Client-side Validation](distributed-computing-concepts/client-side-validation.md)
   * [Single-use Seals](distributed-computing-concepts/single-use-seals.md)
@@ -36,3 +36,6 @@
 ***
 
 * [testpage1](testpage1.md)
+
+
+[def]: distributed-computing-concepts/README.md

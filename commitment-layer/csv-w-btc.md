@@ -32,30 +32,32 @@ As shown in the table, several **commitment schemes** can be used for each **sea
   * **Opret** - The committed message is placed as an unspendable output after the opcode `OP_RETURN`.
   * **Tapret (taptweak)** - This scheme represents a form of tweak in which the message is committed to a string tagged `OP_RETURN` placed in a leaf of the `Script path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) which then modifies the value of the PubKey.
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/d0bc6d55-0918-48c1-b97d-73071f98874b)
+<figure><img src="../img/bitcoin-seals.png" alt=""><figcaption><p><strong> The different seal closing methods in Bitcoin transaction.</strong></p></figcaption></figure>
+
 
 ### TxO2 Client-side Validation
 
 In the next few paragraphs we will focus on client-side validation combined with the definition of a single-use seal and a **TxO2** scheme closure operation, showing them step by step below and using the two usual cryptographic characters: Alice, struggling with a seal operation, and Bob as an observer.
 
-1. First of all, Alice has some UTxOs **that refer to data validated by the client and known only to her**.
+1. First of all, Alice has some UTxOs **that refer to some data client-side validated and known only by her**.
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/ad0684d1-294c-49e7-b80a-3ae6c5156a38)
+<figure><img src="txo2-1.png" alt=""><figcaption><p><strong> A seal definition is applied to a specific Bitcoin UTXO</strong></p></figcaption></figure>
 
 2. Alice informs Bob that the spending of some UTxOs represents a sign that something has happened.
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/c232438e-8571-492e-828d-d2c5e31760b8)
+<figure><img src="txo2-2.png" alt=""><figcaption><p><strong> The UTXO is associated to some meaning agreed between Alice and Bob</strong></p></figcaption></figure>
 
-3. Once Alice spends her UTxO, only Bob knows that this expenditure has additional meaning, even though everyone (i.e., the Bitcoin blockchain audience) can see this event.
+3. Once Alice spends her UTXO, only Bob knows that this expenditure has some additional meaning and consequences, even though everyone (i.e., the Bitcoin Blockchain audience) can see this event.
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f770fd32-e903-49b0-a3ea-d604fd189770)
+<figure><img src="txo2-3.png" alt=""><figcaption><p><strong> The spending event trigger some meaningful consequences for the parties involved</strong></p></figcaption></figure>
 
-1. In fact, the UTxO spent by Alice through the **witness closure transaction** contains a commitment to the validated client-side data. By passing the original data to Bob, she is able to prove to Bob that this data is properly referenced by the commitment made by Alice in the spending transaction. The verification operation is performed by Bob independently, using the appropriate methods that are part of the client-side validation protocol (e.g., RGB protocol).
+4. In fact, the UTXO spent by Alice through the **witness transaction** contains a commitment to a further change in the validated client-side data. By passing the original data to Bob, she is able to prove to Bob that these data are properly referenced by the commitment made by Alice in the witness transaction. The verification operation is performed by Bob independently, using the appropriate methods that are part of the client-side validation protocol (e.g. the RGB protocol). Additionally, as we shall see later, **the message may contain an additional seal definition thus extending the ordered sequence of messages through a chain of seal definitions - seal closures.** 
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/f6440aae-202a-4569-bea7-f46664c00e92)
+<figure><img src="txo2-4.png" alt=""><figcaption><p><strong> Alice can prove to Bob deterministically the uniqueness of the message committed. In addition the message may contain another seal definition extending the chain of commitments.</strong></p></figcaption></figure>
 
 The key point of using the single-use seal in combination with client-side validation is the uniqueness of the spending event and the data committed (i.e., the message) in it, which cannot be changed in the future. The whole operation can be summarized in the following terms.
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/dd575319-8eb8-48c2-837a-b6b7bf4faa81)
+<figure><img src="txo2-5.png" alt=""><figcaption><p><strong>The UTXO being spent contains the seal definition. A precise kind of transaction output contains the message.</strong></p></figcaption></figure>
+
 
 The next important step is to illustrate precisely how the two commitment schemes, **opret** and **tapret**, work and which are the features they must meet, particularly with regard to commitment determinism.

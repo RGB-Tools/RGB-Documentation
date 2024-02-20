@@ -3,7 +3,7 @@
 Single-Use seals are cryptographic primitives [proposed](https://petertodd.org/2016/commitments-and-single-use-seals) by Peter Todd in \~2016. They are a kind of **cryptographic commitment** that resembles the application of a physical seal to a container. They can be used to prove a sequence of events to a party, thereby limiting the risk that this sequence of events may be altered after it has been established. This implies that such commitment schemes are a more sophisticated form of both `simple commitments` (i.e. digest/hash) and `timestamping`.\
 
 
-<figure><img src="../../img/physical-single-use-seals.png" alt=""><figcaption><p><strong>Physical single-use seals: once closed their protected content cannot be altered</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/physical-single-use-seals.png" alt=""><figcaption><p><strong>Physical single-use seals: once closed their protected content cannot be altered</strong></p></figcaption></figure>
 
 In order to work properly, Single-Use-Seals require a **Proof-of-Publication Medium**: it may be a medium with global consensus (such as blockchain) but not necessarily decentralized which has the ability to be difficult to forge or replicate once issued and made public, such as a newspaper.
 
@@ -44,7 +44,7 @@ In Seal definition, Alice promise to Bob (either in private or in public) to cre
 
 When Alice publishes the **message** following all the rules stated in the **seal definition**, in addition, she produces also a **witness**, which is the proof that the seal has indeed been closed.
 
-<figure><img src="../../img/closed-single-use-seal.png" alt=""><figcaption><p><strong>By closing a message with a single-use seal, such message cannot be altered. In it's digital form inscribed in Layer 1, the seal cannot be opened any more</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/closed-single-use-seal.png" alt=""><figcaption><p><strong>By closing a message with a single-use seal, such message cannot be altered. In it's digital form inscribed in Layer 1, the seal cannot be opened any more</strong></p></figcaption></figure>
 
 ### **Seal Verification**
 

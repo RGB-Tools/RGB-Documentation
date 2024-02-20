@@ -1,4 +1,4 @@
-# Commitment Schemes within Bitcoin -  RGB
+# Commitment Schemes within Bitcoin and RGB
 
 In this chapter we will explore the application of Client-Side-Validation and Single-Use-Seal to Bitcoin blockchain, introducing the main architectural features behind **RGB protocol**. As mentioned in the [previous chapter](../distributed-computing-concepts/paradigms-of-distributed-computing.md), these cryptographic operations can be applied in general to different blockchains and also to different publication media. However, the outstanding properties of Bitcoin consensus algorithm, particularly those related to decentralization, censorship resistance and permissionlessness, make it the ideal technology stack for the development of advanced programmability features, such as those required by digital bearer rights and smart contracts.
 
@@ -32,8 +32,7 @@ As shown in the table, several **commitment schemes** can be used for each **sea
   * **Opret** - The committed message is placed as an unspendable output after the opcode `OP_RETURN`.
   * **Tapret (taptweak)** - This scheme represents a form of tweak in which the message is committed to a string tagged `OP_RETURN` placed in a leaf of the `Script path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) which then modifies the value of the PubKey.
 
-<figure><img src="../img/bitcoin-seals.png" alt=""><figcaption><p><strong> The different seal closing methods in Bitcoin transaction.</strong></p></figcaption></figure>
-
+<figure><img src="../.gitbook/assets/bitcoin-seals.png" alt=""><figcaption><p><strong>The different seal closing methods in Bitcoin transaction.</strong></p></figcaption></figure>
 
 ### TxO2 Client-side Validation
 
@@ -41,23 +40,22 @@ In the next few paragraphs we will focus on client-side validation combined with
 
 1. First of all, Alice has some UTxOs **that refer to some data client-side validated and known only by her**.
 
-<figure><img src="txo2-1.png" alt=""><figcaption><p><strong> A seal definition is applied to a specific Bitcoin UTXO</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-1.png" alt=""><figcaption><p><strong>A seal definition is applied to a specific Bitcoin UTXO</strong></p></figcaption></figure>
 
 2. Alice informs Bob that the spending of some UTxOs represents a sign that something has happened.
 
-<figure><img src="txo2-2.png" alt=""><figcaption><p><strong> The UTXO is associated to some meaning agreed between Alice and Bob</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-2.png" alt=""><figcaption><p><strong>The UTXO is associated to some meaning agreed between Alice and Bob</strong></p></figcaption></figure>
 
 3. Once Alice spends her UTXO, only Bob knows that this expenditure has some additional meaning and consequences, even though everyone (i.e., the Bitcoin Blockchain audience) can see this event.
 
-<figure><img src="txo2-3.png" alt=""><figcaption><p><strong> The spending event trigger some meaningful consequences for the parties involved</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-3.png" alt=""><figcaption><p><strong>The spending event trigger some meaningful consequences for the parties involved</strong></p></figcaption></figure>
 
-4. In fact, the UTXO spent by Alice through the **witness transaction** contains a commitment to a further change in the validated client-side data. By passing the original data to Bob, she is able to prove to Bob that these data are properly referenced by the commitment made by Alice in the witness transaction. The verification operation is performed by Bob independently, using the appropriate methods that are part of the client-side validation protocol (e.g. the RGB protocol). Additionally, as we shall see later, **the message may contain an additional seal definition thus extending the ordered sequence of messages through a chain of seal definitions - seal closures.** 
+4. In fact, the UTXO spent by Alice through the **witness transaction** contains a commitment to a further change in the validated client-side data. By passing the original data to Bob, she is able to prove to Bob that these data are properly referenced by the commitment made by Alice in the witness transaction. The verification operation is performed by Bob independently, using the appropriate methods that are part of the client-side validation protocol (e.g. the RGB protocol). Additionally, as we shall see later, **the message may contain an additional seal definition thus extending the ordered sequence of messages through a chain of seal definitions - seal closures.**
 
-<figure><img src="txo2-4.png" alt=""><figcaption><p><strong> Alice can prove to Bob deterministically the uniqueness of the message committed. In addition the message may contain another seal definition extending the chain of commitments.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-4.png" alt=""><figcaption><p><strong>Alice can prove to Bob deterministically the uniqueness of the message committed. In addition the message may contain another seal definition extending the chain of commitments.</strong></p></figcaption></figure>
 
 The key point of using the single-use seal in combination with client-side validation is the uniqueness of the spending event and the data committed (i.e., the message) in it, which cannot be changed in the future. The whole operation can be summarized in the following terms.
 
-<figure><img src="txo2-5.png" alt=""><figcaption><p><strong>The UTXO being spent contains the seal definition. A precise kind of transaction output contains the message.</strong></p></figcaption></figure>
-
+<figure><img src="../.gitbook/assets/txo2-5.png" alt=""><figcaption><p><strong>The UTXO being spent contains the seal definition. A precise kind of transaction output contains the message.</strong></p></figcaption></figure>
 
 The next important step is to illustrate precisely how the two commitment schemes, **opret** and **tapret**, work and which are the features they must meet, particularly with regard to commitment determinism.

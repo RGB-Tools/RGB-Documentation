@@ -29,7 +29,7 @@ We will discuss various kind of **Distributed Consensus Systems** which have som
 * **State Channels**. Is a system constructed between 2 (or more) parties and which depend hierarchically on the blockchain layer. The final state is represented by the last transaction out of sequence of ordered invalidating transactions, signed and agreed by the parties _off-chain_. The final state can be enforced by each parties by publishing that last valid transaction on the layer 1. The most known application of payment channels, a simplified form of state channels, is the **Lightning Network**.
 * **Client Side Validated Data - Stash**. Is a system that can be implemented both on top of blockchain and state channels and it is based on a certain _circumscribed_ amount of data whose validity, computation tasks and update is entrusted to a _limited number_ nodes. Unlike layer 1, the data to be validated by each client node represent a **defined subset of the entirety of all state transitions of the network, and NOT every transition happened within it**. This validated subset of data in possession of a client node is what is called **Stash**. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last transition and which relate to the exchange and to the validation of some digital properties among the counterparties involved. Seen as a whole, the validation mechanism of the shard which produce the stash is called **Client-side Validation** and underpin all **RGB** operations.&#x20;
 
-<figure><img src="../img/distributed-data-inc.png" alt=""><figcaption><p><strong>The 3 set of Distributed System - Blockchain (Layer 1) is self-sustaining while the other 2 rely on Layer 1 for operating. In turn, Stashes can operate on top of both Blockchain and State Channels.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/distributed-data-inc.png" alt=""><figcaption><p><strong>The 3 set of Distributed System - Blockchain (Layer 1) is self-sustaining while the other 2 rely on Layer 1 for operating. In turn, Stashes can operate on top of both Blockchain and State Channels.</strong></p></figcaption></figure>
 
 In order to precisely frame the applications of each Distributed Consensus System and their underlying data structure it's important to understand the limitations that affect each one of these technology. This condition is expressed in form of a **Trilemma** which is connected to an important theoretical result of Distributed Computing, known as [**CAP Theorem**](https://en.wikipedia.org/wiki/CAP\_theorem). which states that:
 
@@ -39,7 +39,7 @@ In order to precisely frame the applications of each Distributed Consensus Syste
 > * Availability - Every request to the system receives a response.
 > * Partition Tolerance - The system continues to operate correctly despite a network partition, e.g. failures or delays between nodes.
 
-<figure><img src="../img/cap-theorem-full.png" alt=""><figcaption><p><strong>Application of CAP Theorem to Distributed Consensus System - Each Distributed Consensus System can fit 2 - and only 2 - out of the 3 properties</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/cap-theorem-full.png" alt=""><figcaption><p><strong>Application of CAP Theorem to Distributed Consensus System - Each Distributed Consensus System can fit 2 - and only 2 - out of the 3 properties</strong></p></figcaption></figure>
 
 Seen from a more consensus-focused point of view, the properties of the theorem can be reformulated in the following way:
 
@@ -47,7 +47,7 @@ Seen from a more consensus-focused point of view, the properties of the theorem 
 * Availability > Decentralization
 * Partition Tolerance > Scalability and Confidentiality
 
-<figure><img src="../img/trilemma1.png" alt=""><figcaption><p><strong>A more in-depth view of the inherent degree of application of the Trilemma to Distributed Consensus System</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/trilemma1.png" alt=""><figcaption><p><strong>A more in-depth view of the inherent degree of application of the Trilemma to Distributed Consensus System</strong></p></figcaption></figure>
 
 In synthesis:
 
@@ -62,7 +62,7 @@ An important feature to take into account is the different way through which Sta
 
 Naturally, if the client-side validated data are embedded in the state channels, the state update will be ultimately based on an asynchronous process.
 
-<figure><img src="../img/triangle-bifi.png" alt=""><figcaption><p><strong>Blockchain is the base layer over which multiple-interacting layers can be constructed</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/triangle-bifi.png" alt=""><figcaption><p><strong>Blockchain is the base layer over which multiple-interacting layers can be constructed</strong></p></figcaption></figure>
 
 In addition to the three layers just described, a fourth layer of Bitcoin Finance (#BiFi) which leverages both state channels and blockchain can complete the whole ecosystem. The general picture and the deep interconnections of all the layers, with the blockchain layer at the base, allows to achieve all the properties of the CAP theorem in a composite way.
 

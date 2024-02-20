@@ -10,20 +10,19 @@
 
 ## Commitment layer
 
-* [Commitment Schemes within Bitcoin -  RGB](commitment-layer/csv-w-btc.md)
+* [Commitment Schemes within Bitcoin and RGB](commitment-layer/commitment-schemes.md)
 * [Deterministic Bitcoin Commitments - DBC](commitment-layer/deterministic-bitcoin-commitments-dbc/README.md)
   * [Opret](commitment-layer/deterministic-bitcoin-commitments-dbc/opret.md)
   * [Tapret](commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md)
 * [Multi Protocol Commitments - MPC](commitment-layer/multi-protocol-commitments-mpc.md)
 * [Anchors](commitment-layer/anchors.md)
 
-## RGB State and Transitions
+## RGB State and Operations
 
-* [State Transitions](state-transitions.md)
-  * [Introduction to Smart Contracts and their states](rgb-state-and-transitions/state-transitions/introduction-to-smart-contracts-and-their-states.md)
-  * [State Transition and Contract Operations](rgb-state-and-transitions/state-transitions/state-transition-and-contract-operations.md)
-  * [Components of a Contract Operation](rgb-state-and-transitions/state-transitions/components-of-a-contract-operation.md)
-  * [Features of RGB State](rgb-state-and-transitions/state-transitions/features-of-rgb-state.md)
+* [Introduction to Smart Contracts and their States](rgb-state-and-operations/intro-smart-contract-states.md)
+* [Contract Operations](rgb-state-and-operations/state-transitions.md)
+* [Components of a Contract Operation](rgb-state-and-operations/components-of-a-contract-operation.md)
+* [Features of RGB State](rgb-state-and-operations/features-of-rgb-state.md)
 
 ## RGB Contract Definition
 

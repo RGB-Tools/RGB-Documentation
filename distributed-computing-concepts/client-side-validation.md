@@ -36,11 +36,13 @@ For this reason, the **logic of validation can be reversed** in the following te
 * Scalability: since the commitment of the verified state, which must be stored by all, has a small footprint (order of tens of bytes).
 * Privacy: using a one-way cryptographic hash function (such as SHA-256), the original data (the pre-image) that produced the commitment cannot be reconstructed and, moreover, is kept private by the parties.
 
-<figure><img src="../.gitbook/assets/csv-shard-1.png" alt=""><figcaption><p><strong>Several shards can be aggregated in a single Layer 1 transaction allowing for g</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/csv-shard-1.png" alt=""><figcaption><p><strong>Several shards can be aggregated in a single Layer 1 transaction. The Anchor structure establish a link between the client-side data of the contract and the single-use seal.</strong> </p></figcaption></figure>
 
-The commitment structure used in Client-Side Validation (as in the RGB protocol, which we will cover in detail later) allows for important additional scalability features:
+The commitment structure used in Client-Side Validation (as in the RGB protocol, which we will cover in detail [later](../commitment-layer/commitment-schemes.md)) allows for important additional scalability features:
 
 * aggregate state transitions of different properties (e.g., two different contracts related to 2 different digital assets).
 * bundle more than one state transition of the same asset in the same commitment.
+
+[Anchor](../commitment-layer/anchors.md) structures provide the deterministic link between the [single-use seal](single-use-seals.md) and the client-side data that represent the message to which the [single-use seal is closed around](single-use-seals.md#seal-closing). &#x20;
 
 In order to guarantee the efficacy of the commitment scheme and precise chronological ordering derived from the blockchain layer, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.

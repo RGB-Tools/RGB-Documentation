@@ -2,7 +2,7 @@
 
 Multi Protocol commitments address the following important requirements:
 
-1. How the tagged value which is committed is constructed according to `Opret` or `Tapret` schemes.
+1. How the tagged  `mpc::Commitment` hash,  committed in Bitcoin Blockchain according to `Opret` or `Tapret` schemes, is constructed.
 2. How state changes associated with more than one contract can be stored in a single commitment.
 
 In practice, the preceding points are addressed through an **ordered merkelization** of the multiple contracts/state transitions associated with the UTXO that are expended by the **witness closing transaction** where such multiple transitions are eventually committed by means of [DBC](deterministic-bitcoin-commitments-dbc/).
@@ -27,7 +27,7 @@ In essence, the construction a suitable tree of width `w` that hosts each contra
 
 To avoid too large MPC trees and the occurrence of collisions being a random process, an additional optimization was introduced. The modulus operation was modified according to the following formula: `pos_i = c_i + cofactor mod w` where `cofactor` is a random number of 16 bytes that can be chosen as a "nonce" to obtain distinct values of `pos_i` with `w` fixed. The tree construction process starts from the smallest tree such that `w > C`, then tries a certain number of `cofactor` attempts, if none of them can produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
 
-**Contract Leaves (Inhabited)**
+### **Contract Leaves (Inhabited)**
 
 Once `C` distinct positions `pos_i` with `i = 0,...,C-1` are found, the corresponding leaves are populated in the following way:
 
@@ -36,10 +36,10 @@ Once `C` distinct positions `pos_i` with `i = 0,...,C-1` are found, the correspo
 Where:
 
 * `0x10` is the integer identifier of contract leaves;
-* `c_i` is the 32-byte contract\_id which is the hash of the [genesis](csv-w-btc.md) of the contract itself;
+* `c_i` is the 32-byte contract\_id which is the hash of the [genesis](commitment-schemes.md) of the contract itself;
 * `BUNDLE_i` is the 32-byte hash that is calculated from the data of the bundle of state transition.
 
-**Entropy leaves (Uninhabited)**
+### **Entropy leaves (Uninhabited)**
 
 For the remaining `w - C` uninhabited leaves, a dummy value must be committed. In order to do that, each leaf in position `j != pos_i` is populated in the following way:
 
@@ -86,7 +86,7 @@ The following diagram shows the construction of an example MPC tree where:
 +----------------------+  +----------------------+  +-------------------------+  +---------------------+  +-------------------------+  +----------------------+  +----------------------+  +-------------------------+
 ```
 
-#### MPC Tree Verification
+### MPC Tree Verification
 
 From a verifier's perspective, in order to prove the presence of client-side validate related to some contract `c_i` collected in BUNDLE\_i, **only a **_**Merkle Proof**_** pointing at it inside the tree is needed**. Because of this, different verifiers of different contracts do not have the full view of the Merkle Tree as the builder does, and this guarantee, together with the dummy entropy, leaves a high degree of privacy. Using the example tree in the diagram above, a verifier of, say, the contract `c_3` will receive the following _Merkle Proof_ from the tree builder:
 

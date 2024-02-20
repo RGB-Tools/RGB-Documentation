@@ -2,20 +2,22 @@
 
 Multi Protocol commitments address the following important requirements:
 
-1. How the tagged value which is committed is constructed according to `opret` or `tapret` schemes.
+1. How the tagged value which is committed is constructed according to `Opret` or `Tapret` schemes.
 2. How state changes associated with more than one contract can be stored in a single commitment.
 
-In practice, the preceding points are addressed through an **ordered merkelization** of the multiple contracts/state transitions associated with the UTxO that are expended by the **witness closing transaction** where such multiple transitions are eventually committed by means of DBC.
+In practice, the preceding points are addressed through an **ordered merkelization** of the multiple contracts/state transitions associated with the UTXO that are expended by the **witness closing transaction** where such multiple transitions are eventually committed by means of [DBC](deterministic-bitcoin-commitments-dbc/).
 
-![image](https://github.com/parsevalbtc/RGB-Documentation/assets/74722637/db6c410c-9ce1-4575-b0b4-e7c09f38d502)
+<figure><img src="../.gitbook/assets/mpc-tree-1.png" alt=""><figcaption><p>E<strong>ach RGB contract has a unique position in the MPC Tree determined by a modular division applied to its ContractId according to the width</strong></p></figcaption></figure>
 
-## MPC Tree root
+## MPC Tagged Hash
 
-The root of the MPC tree,, which goes either into [opret](multi-protocol-commitments-mpc.md#opret) or into [tapret](multi-protocol-commitments-mpc.md#tapret) commitment is the `tH_MPC_ROOT(x)` constructed in BIP-341 fashion as follows:
+The commitment of the MPC tree - which goes either into Opret or into Tapret commitments - is the `mpc::Commitment` constructed in BIP-341 fashion as follows:
 
-`tH_MPC_ROOT(x) = SHA-256(SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || SHA-256(urn:lnpbp:lnpbp0004:tree:v01#23A) || x)`
+`mpc::Commitment = SHA-256(SHA-256(urn:ubideco:mpc:commitment#2024-01-31) || SHA-256(urn:ubideco:mpc:commitment#2024-01-31) || x)`
 
-#### MPC Tree Construction
+`x` is the root of the MPC tree whose construction is explained in the following paragraphs.
+
+## MPC Tree Construction
 
 In order to construct the MPC tree we must **deterministically provide a position of the leaf belonging to each contract**, thus:
 

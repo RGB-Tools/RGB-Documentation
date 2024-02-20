@@ -1,7 +1,3 @@
----
-layout: landing
----
-
 # RGB Documentation
 
 RGB is a protocol developed in order to enforce digital rights in form of contracts and assets in a scalable and private manner leveraging Bitcoin consensus rules and operations.

@@ -1,20 +1,20 @@
 # Tapret
 
-The Tapret scheme is a more complex form of deterministic commitment and is an improvement in terms of chain footprint and privacy of contract operations. The main idea of this application is to hide the commitment within the `Script path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki).
+The `Tapret` scheme is a more complex form of deterministic commitment and is an improvement in terms of chain footprint and privacy of contract operations. The main idea of this application is to hide the commitment within the `Script Path` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki).
 
 First, before showing how the commitment is actually embedded in a taproot transaction, we will show the exact **form of the commitment which is a 64-byte** string [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) as follows:
 
 ```
 64-byte_Tapret_Commitment =
 
-OP_RESERVED ...  ... .. OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <tH_MPC_ROOT>  <Nonce>
-|__________________________________| |________| |_____________| |____________| |______|
- OP_RESERVED x 29 times = 29 bytes     1 byte       1 byte         32 bytes    1 byte
-|_____________________________________________________________| |_____________________|
+OP_RESERVED ...  ... .. OP_RESERVED  OP_RETURN  OP_PUSHBYTE_33  <mpc::Commitment>  <Nonce>
+|__________________________________| |________| |_____________| |_______________| |______|
+ OP_RESERVED x 29 times = 29 bytes     1 byte       1 byte         32 bytes        1 byte
+|_____________________________________________________________| |________________________|
         TAPRET_SCRIPT_COMMITMENT_PREFIX = 31 bytes               MPC commitment + NONCE = 33 bytes
 ```
 
-Thus the 64-byte `tapret` commitment is an `opret` commitment preceded by 29 bytes of the `OP_RESERVED` operator and to which is added a 1-byte `Nonce` whose usefulness will be addressed [later](tapret.md#nonce-optimization).
+Thus the 64-byte `Tapret` commitment is an `Opret` commitment preceded by 29 bytes of the `OP_RESERVED` operator and to which is added a 1-byte `Nonce` whose usefulness will be addressed [later](tapret.md#nonce-optimization).
 
 In order to preserve highest degree of implementation flexibility, privacy and scalability, **the Tapret scheme is designed to integrate many different cases that occur according to the user's bitcoin spending needs**, specifically we distinguish the following Tapret scenarios:
 

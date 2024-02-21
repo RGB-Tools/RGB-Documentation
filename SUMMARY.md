@@ -28,9 +28,9 @@
 
 * [Contract Schema and Interfaces](schema-interface.md)
 
-## Terminology
+## Annexes
 
-* [Glossary](terminology/glossary.md)
+* [Glossary](annexes/glossary.md)
 
 ***
 

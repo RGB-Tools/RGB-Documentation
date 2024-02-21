@@ -47,6 +47,6 @@ Thus a Contract Operation, in general terms, represents any **first creation / u
 
 ![](../.gitbook/assets/state-transition-1.png)
 
-The chain of Contract Operation in RGB is the ordered path that make contract data evolve from the very **first contract definition**, called the [**Genesis**](state-transitions.md) up to the [**Terminal States**](state-transitions.md) representing the most updated state at the tip of the [DAG](../terminology/glossary.md#directed-acyclic-graph---dag) of Contract Operations.
+The chain of Contract Operation in RGB is the ordered path that make contract data evolve from the very **first contract definition**, called the [**Genesis**](state-transitions.md) up to the [**Terminal States**](state-transitions.md) representing the most updated state at the tip of the [DAG](../annexes/glossary.md#directed-acyclic-graph---dag) of Contract Operations.
 
 The order relation among the DAG in maintained thanks to the commitments that anchors the client-side validated data to the Bitcoin Blockchain which, in turn, provides, timestamping capabilities and **source of ordering**.

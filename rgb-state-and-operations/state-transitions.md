@@ -62,9 +62,9 @@ InputMap =
 
          N               input_0    OpId(input_0)    input_1    OpId(input_1)   ...    input_N   OpId(input_N)    
 |____________________| |_________||______________| |_________||______________|       |________||______________|
- 16-bit Little Endian   32-bit LE  32-byte hash                                         
+ 16-bit Little Endian   32-bit LE   32-byte hash                                         
                        |_________________________| |_________________________|  ...  |________________________|
-                            MapElement1                   MapElement2                       MapElementN 
+                               MapElement1                MapElement2                       MapElementN 
 ```
 
 where:

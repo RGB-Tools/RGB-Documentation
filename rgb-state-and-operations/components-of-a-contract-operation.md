@@ -2,6 +2,7 @@
 
 Let's now deep-dive in all the components of a contract operation, which are able to change the state of the contact and are eventually client-side verified by the rightful recipient in a deterministic way.
 
+{% code fullWidth="true" %}
 ```
                +---------------------------------------------------------------------------------------------------------------------+
                |  Contract Operation                                                                                                 |
@@ -53,6 +54,7 @@ Let's now deep-dive in all the components of a contract operation, which are abl
                |                                                                                                                     |    
                +---------------------------------------------------------------------------------------------------------------------+
 ```
+{% endcode %}
 
 With the help of the comprehensive diagram above it's important to point out that any contract operation is composed by some components related to the **New State** and some components related to the **Old State** being updated. The components of the **New state** are:
 
@@ -96,8 +98,6 @@ Before addressing each state component, it's fundamental to clarify through whic
 
 ![](../.gitbook/assets/state-global-owned-1.png)
 
-###
-
 Global State are embedded in state transition as a single component block, while Owned States are defined inside the [Assignment](state-transitions.md) components together with a Seal Definition.
 
 An important feature of RGB which **affects both Global and Owned States, is the ways in which State are modified**. Basically, State exhibit 2 different behaviors:
@@ -117,7 +117,7 @@ The choice of the Business Logic (how state can evolve) is encoded in the Schema
 | **Mutates Owned State**  |     n/a     |          No         |           +          |
 | **Adds Valencies**       |      +      |          +          |           +          |
 
-_+ = if allowed by Contract Schema       \* = if Confirmed by a State Transition_
+_+ = if allowed by Contract Schema       \* = if Confirmed by a State Transiti_
 
 As a final consideration for this section, in the table below we provide the summary of the main properties regarding the scope which the various kind of state element exhibit in the RGB protocol.
 
@@ -176,7 +176,7 @@ The first main component of the Assignment construct is the [Seal Definition](ht
   * `Genesis seal` which is a "self-referenced" definition, meaning that the **The transaction used as a seal definition coincides with the witness transaction which include the present Assignment**. As the final `txid` of the transaction depends on all the data of the state transition, including `txptr` it would be impossible to calculate it due to the circular reference implied. In practice the `Genesis Seal` is a void field which has become necessary to handle several situation in which an external UTXO is not available: a notable example is the generation and update of Lightning Network's commitment transactions.
 * **vout** is the transaction output of the transaction id inserted in `txptr` (if it's `Graph seal`). `txptr` together with `vout` form the standard _outpoint_ representation.
 * **blinding** is a 8-byte random number, which allows for the effective concealment of the data of the seal once hashed, improving resistance to brute-force attacks.
-* **method** is a 1-byte field which indicate the seal closing method, which will be used in the related [witness transaction](../terminology/glossary.md#--). It's either [tapret](../commitment-layer/commitment-schemes.md#tapret) or [opret](../commitment-layer/commitment-schemes.md#tapret).
+* **method** is a 1-byte field which indicate the seal closing method, which will be used in the related [witness transaction](../annexes/glossary.md#--). It's either [tapret](../commitment-layer/commitment-schemes.md#tapret) or [opret](../commitment-layer/commitment-schemes.md#tapret).
 
 The _concealed_ form of the Seal Definition is simply the ordered SHA-256 [tagged hash](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#specific-rgb-consensus-commitments) of the the 4 field:
 

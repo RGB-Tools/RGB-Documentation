@@ -1,62 +1,37 @@
 # Table of contents
 
-* [Introduction](README.md)
+* [RGB Documentation](README.md)
 
-## Design
+## Distributed Computing Concepts
 
-* [Motivation](design/motivation.md)
-* [Background](design/background.md)
-* [Design goals](design/goals.md)
-* [Design overview](design/overview.md)
+* [Paradigms of Distributed Computing](distributed-computing-concepts/paradigms-of-distributed-computing.md)
+* [Client-side Validation](distributed-computing-concepts/client-side-validation.md)
+* [Single-use Seals and Proof of Pubblication](distributed-computing-concepts/single-use-seals.md)
 
-## Consensus level
+## Commitment layer
 
-* [Overview](consensus-level/overview.md)
-* [Schema](consensus-level/schema/README.md)
-  * [Data types](consensus-level/schema/data-types.md)
-  * [State](consensus-level/schema/state.md)
-  * [Operations](consensus-level/schema/operations.md)
-  * [Scripting](consensus-level/schema/scripting.md)
-  * [Schema hierarchy](consensus-level/schema/schema-hierarchy.md)
-* [Contract state](consensus-level/contract-state.md)
-* [Contract operations](consensus-level/contract-operations/README.md)
-  * [State transition](consensus-level/contract-operations/state-transition.md)
-  * [State generation](consensus-level/contract-operations/state-generation/README.md)
-    * [Genesis](consensus-level/contract-operations/state-generation/genesis.md)
-    * [State extension](consensus-level/contract-operations/state-generation/state-extension.md)
-* [Layer 1 anchoring](consensus-level/layer-1-anchoring/README.md)
-  * [Deterministic bitcoin commitments](consensus-level/layer-1-anchoring/deterministic-bitcoin-commitments/README.md)
-    * [Opret](consensus-level/layer-1-anchoring/deterministic-bitcoin-commitments/opret.md)
-    * [Tapret](consensus-level/layer-1-anchoring/deterministic-bitcoin-commitments/tapret.md)
-  * [Single-use-seals](consensus-level/layer-1-anchoring/single-use-seals.md)
-  * [Multi-protocol commitments](consensus-level/layer-1-anchoring/multi-protocol-commitments.md)
-  * [State transition bundles](consensus-level/layer-1-anchoring/state-transition-bundles.md)
-* [System libraries](consensus-level/system-libraries.md)
+* [Commitment Schemes within Bitcoin and RGB](commitment-layer/commitment-schemes.md)
+* [Deterministic Bitcoin Commitments - DBC](commitment-layer/deterministic-bitcoin-commitments-dbc/README.md)
+  * [Opret](commitment-layer/deterministic-bitcoin-commitments-dbc/opret.md)
+  * [Tapret](commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md)
+* [Multi Protocol Commitments - MPC](commitment-layer/multi-protocol-commitments-mpc.md)
+* [Anchors](commitment-layer/anchors.md)
 
-## Application level
+## RGB State and Operations
 
-* [Interfaces](application-level/interfaces.md)
-* [Identifiers](application-level/identifiers.md)
-* [Invoices](application-level/invoices.md)
-* [Working with PSBTs](application-level/working-with-psbts.md)
-* [RGB containers](application-level/rgb-containers/README.md)
-  * [Consignments](application-level/rgb-containers/consignments.md)
-  * [Disclosures](application-level/rgb-containers/disclosures.md)
-  * [Data attachments](application-level/rgb-containers/data-attachments.md)
+* [Introduction to Smart Contracts and their States](rgb-state-and-operations/intro-smart-contract-states.md)
+* [Contract Operations](rgb-state-and-operations/state-transitions.md)
+* [Components of a Contract Operation](rgb-state-and-operations/components-of-a-contract-operation.md)
+* [Features of RGB State](rgb-state-and-operations/features-of-rgb-state.md)
 
-## Developing for RGB <a href="#devs" id="devs"></a>
+## RGB Contract Definition
 
-* [Overview](devs/overview.md)
-* [Schema development](devs/schema-development.md)
-* [Breaking things](devs/breaking-things.md)
-
-## Annex
-
-* [Governance](annex/governance.md)
-* [History & acknowledgements](annex/history-and-acknowledgements.md)
+* [Contract Schema and Interfaces](schema-interface.md)
 
 ## Terminology
 
 * [Glossary](terminology/glossary.md)
 
 ***
+
+* [testpage1](testpage1.md)

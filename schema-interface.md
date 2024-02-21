@@ -1,6 +1,6 @@
 # Introduction to schema and interfaces
 
-An RGB _Schema_ is the reification of a standard/blueprint for the construction of an RGB smart contract. It can be viewed as the analogue of a class for an OOP language or the RGB analogue of an ERC standard for Ethereum contracts. So, a Schema defines a standard for RGB assets, for example: fungible assets, collectibles, digital identities etc...
+An RGB _Schema_ is the reification of a standard/blueprint for the construction of an RGB smart contract, that is, it defines how an RGB contract works. It can be viewed as the analogue of a class for an OOP language or the RGB analogue of an ERC standard for Ethereum contracts. So, a Schema defines a standard for RGB assets, for example: fungible assets, collectibles, digital identities etc...
 
 The issuer of a token on RGB uses a Schema to define the issuing contract so that it is supported by wallets and exchanges. So, when wallets and exchanges collect information regarding some asset on RGB (data and contract) they need to validate it against the Schema used by the issuer of that asset. Only if the Schema validation is successful, i.e., does not fail, then the contract state transition requested by the user can be made.
 
@@ -17,10 +17,9 @@ In RGB the Schema is always defined by the issuer in the genesis state. In it, t
   - possible combinations of the above via state transitions.
 - State validation functions (executed by AluVM), i.e., functions that have type-signatures of the type `validate :: state -> bool`, for each data type and operation.
 
-Thus, a Schema functionally answers the following questions:
-
+This is very different from blockchain-based contracts, for example smart contracts on Ethereum, because in that case the contract is a code that implements the rules for changing the state and implements the state. In contrast, in RGB the contract is purely declarative. A Schema is a functional declarative document that can be written in YAML or JSON. It can also be written in Rust, but the code is then compiled to return only the fields of the data structure and that is how it appears to the user. This is done by defining types for metadata, proper state, global state, valences, and possible combinations of all these types within the different types of state transitions, as well as state genesis and extension. When a very expressive language is needed, being a declarative language, the rules of contract evolution are defined and this covers the vast majority of use cases. However, if you want to have additional validation for which you need something much more expressive, you can use scripts. These can be defined to perform validation for each type of state, depending on the type of state. So, you provide a library, where you provide validation entry points for a certain dataset, a certain type of state transition, a certain state extension, some genesis data, and so on, as necessary. The result of the script execution must be success or failure. The script is able to access the state transition data, the state of the contract as a whole, and in the future access to Bitcoin blockchain (or other sidechains) data and global state will also be added. Thus, a Schema functionally answers the following questions:
 - What kinds of owned states and assignments exist?
-- What kinds of valences (publicly-executable rights) exist?
+- What kinds of publicly-executable rights (valences) exist?
 - What global state does the contract have?
 - How is the genesis contract structured?
 - What state transitions and extensions are possible?
@@ -28,9 +27,7 @@ Thus, a Schema functionally answers the following questions:
 - How is state data allowed to change with state transitions?
 - What sequences of transitions are allowed?
 
-The schema differentiates contract developers from issuers, who know nothing about coding and programming.
-
-A schema allows the creation of "template contracts" while avoiding common mistakes for issuers.
+Schema clearly differentiates contract developers from issuers, who know nothing about coding and programming. This is important because it allows the creation of "template contracts" while avoiding common mistakes for issuers.
 
 An RGB contract template defines:
 - what types of states can exist;
@@ -42,6 +39,72 @@ In summary:
 ```
 RGB Schema <- State data Types + Operation types + Graph evolution rules + Used strict type libs + AluVM validation code
 ```
+
+## Example of the structure of a Schema
+
+Let's see what the Schema looks like in case we want to define it via some Rust code. Let's take as an example the [Schema in the RGB repository for fungible non-inflationary assets](https://github.com/RGB-WG/rgb-schemata/blob/master/src/nia.rs) that are something analogous to Ethereum's ERC20 standard.
+
+We see that the `nia_schema()` function has an output of type `SubSchema`, because with a Schema you can have one level of inheritance. So you can have a generic Schema that does many useful things, but you don't want all of them. You want to have something simpler and you can limit the things it can do and create a sub-Schema as a subset of the more generic Schema, providing additional guarantees. So it is a very specific form of inheritance.
+
+```Rust
+fn nia_schema() -> SubSchema {
+    //...
+
+    Schema {
+        ffv: zero!(),
+        subset_of: None,
+        type_system: types.type_system(),
+        global_types: tiny_bmap! {
+            GS_NOMINAL => GlobalStateSchema::once(types.get("RGBContract.DivisibleAssetSpec")),
+            GS_DATA => GlobalStateSchema::once(types.get("RGBContract.ContractData")),
+            GS_TIMESTAMP => GlobalStateSchema::once(types.get("RGBContract.Timestamp")),
+            GS_ISSUED_SUPPLY => GlobalStateSchema::once(types.get("RGBContract.Amount")),
+        },
+        owned_types: tiny_bmap! {
+            OS_ASSET => StateSchema::Fungible(FungibleType::Unsigned64Bit),
+        },
+        valency_types: none!(),
+        genesis: GenesisSchema {
+            metadata: Ty::<SemId>::UNIT.id(None),
+            globals: tiny_bmap! {
+                GS_NOMINAL => Occurrences::Once,
+                GS_DATA => Occurrences::Once,
+                GS_TIMESTAMP => Occurrences::Once,
+                GS_ISSUED_SUPPLY => Occurrences::Once,
+            },
+            assignments: tiny_bmap! {
+                OS_ASSET => Occurrences::OnceOrMore,
+            },
+            valencies: none!(),
+        },
+        extensions: none!(),
+        transitions: tiny_bmap! {
+            TS_TRANSFER => TransitionSchema {
+                metadata: Ty::<SemId>::UNIT.id(None),
+                globals: none!(),
+                inputs: tiny_bmap! {
+                    OS_ASSET => Occurrences::OnceOrMore
+                },
+                assignments: tiny_bmap! {
+                    OS_ASSET => Occurrences::OnceOrMore
+                },
+                valencies: none!(),
+            }
+        },
+        script: Script::AluVM(AluScript {
+            libs: confined_bmap! { alu_id => alu_lib },
+            entry_points: confined_bmap! {
+                EntryPoint::ValidateGenesis => LibSite::with(FN_GENESIS_OFFSET, alu_id),
+                EntryPoint::ValidateTransition(TS_TRANSFER) => LibSite::with(FN_TRANSFER_OFFSET, alu_id),
+            },
+        }),
+    }
+}
+```
+After defining the generic Schema, if any, to which the Schema you are defining belongs, you define the data type system you are using, `type_system`. This comes from the standard types provided by strict types, `StandardTypes`, extended with `Rgb20`, which is the RGB equivalent of the ERC20 standard, i.e. the standard data type for fungible assets. This data type includes such things as the quantity of tokens, the date and time of issue, the asset specification, i.e., the Rust structure containing the name and precision of the asset. Everything is compiled from the strict types. Whereas in Ethereum, to create a contract that does not allow the ticker to have more than eight characters, we have to write code, for example with Solidity, take the string that contains the ticker, measure the number of characters and consume gas in the process, consuming computing power, in RGB we do not write code. We provide the definition of the restrictions and the type system level. Then we specify that the contract can have a global type which is the token name. And this token name, for its type, is restricted. It has to be longer than one character, but no longer than eight, and each one has to be an ASCII character, and we do this without any scripting, but just using the type system. So we can say that RGB implements functional smart contracts. So we define the global data type `global_types` within which we can define, for example, the nominal. So we can have a nominal value as part of the state and we can have it only once, that is, once it is updated, the last one is discarded. So it is mutable, not accumulable. And it comes from the data type specific structure, which is asset specific. It is a type specification, which has all these fields. So when we rename the assets, we define all these fields. Among other global types we can have: timestamp, total number, supply information and so on. Then we can have a type of `owned_types` which in the example must be a 64-bit unsigned fungible quantity, `FungibleType::Unsigned64Bit`. In the example there is no valency type, `valency_types` is `none`. So this is a very simple scheme, which does not allow us to create secondary emissions, and we can declare it at the scheme level, instead of writing the code in the contract. We can therefore define genesis, transition, and extensions. Genesis can contain metadata, but in this case it does not contain it because we used the unit type, which is always empty data. Also, we notice that in this case there is only one type of state transition, which is transfer. And this transfer, again, has no metadata. It does not define any new global data type. It can only have one type of input, which is a previously owned asset. It can refer to multiple previously owned assets. It can also create new assignments of the type of resource owned, even one or more. And that's it. There is a small validation script with the flood that has only one entry point, validate its own state. This script verifies that the sum of the inputs of the Pedersen commitments is equal to the sum of the outputs of the Pedersen commitments.
+The power of RGB is that you don't actually have to write the contract this way, because you can write the same thing using YAML or JSON, using the serializer/deserializer to serialize it into the schema object.
+
+## Smart Contract Operations and compiled Schema structure
 
 Recall from the previous chapter that the operations of a smart contract can be divided into state generation and state transition events under a single contract grouped together by a specific finality proof (anchor). More specifically we have:
 - State generation:
@@ -57,7 +120,7 @@ Within a contract the state is structured into:
 	- state data (optional).
 - ***assignments***: public rights (from the schema) without state. Anchor points for _state extensions_.
 
-We can summarize the above in tabular form:
+The following table shows how the status can be updated by different types of operations:
 
 |                    | Genesis | State Extension | State Transition |
 |        ----        |   :--:  |      :--:       |       :--:       |
@@ -67,9 +130,15 @@ We can summarize the above in tabular form:
 | Input              |    No   |       No        |        +         |
 | Redeemed Valences  |    No   |       +         |        No        |
 
+Below is the general structure of the schema when it is compiled. We can see that it contains a reference to the main schema. It contains the sections about the structure of the schema. It contains the status types: global, assignment and valence. Contains the section on contract operations. Defines different types of transitions and extensions. Genesis type. Each defines rules for updating states. Finally, the strict type system and validation scripts for specific state types and state transitions.
+
+<p align="center">
+  <img src="img/compiled_schema_structure.png" width="750" height="500">
+</p>
+
 ## Schema workflow
 
-In the previous section it was stated that by virtue of its characteristic of being a blueprint for contracts on RGB a Schema will be written by someone and will be used later by someone else not necessarily capable of programming. The workflow for writing a Schema is as follows:
+In a previous section it was stated that by virtue of its characteristic of being a blueprint for contracts on RGB a Schema will be written by someone and will be used later by someone else not necessarily capable of programming. The workflow for writing a Schema is as follows:
 1. Selection of existing standard Schema on RGB, libraries for strict encoding types and built-in verification procedures or AluVM libraries.
 2. Writing the type system in Strict (type language for defining data types and their serialization).
 3. Write the necessary validation logic using either Rust in RGB Core, or AluVM with assembly language or ParselTongue (under development).
@@ -77,3 +146,4 @@ In the previous section it was stated that by virtue of its characteristic of be
 5. Compile the Schema and other libraries created from scratch in binary format, which will provide binaries and symbol files for RGB (used in debugging and package distribution for wallet/exchange developers), strict encoding, and AluVM.
 6. Prepare a manifest file that will contain developer information, necessary certificates, and information to create a package containing all the required Schema information and libraries that can be distributed to the wallet, exchange developers, and smart contract issuers (via Bifrost or other means).
 7. Run the RGB packaging tool to sign all libraries and place them in the package, upload them to the Storm network and other centralized package managers.
+

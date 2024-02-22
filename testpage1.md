@@ -6,6 +6,7 @@ Before Text ...
 
 After text
 
+{% code fullWidth="true" %}
 ```mermaid
 flowchart BT
     subgraph Merklization
@@ -23,6 +24,7 @@ flowchart BT
     MerkleHash === Root
     Leaf -- commit_id ----> MerkleHash
 ```
+{% endcode %}
 
 
 

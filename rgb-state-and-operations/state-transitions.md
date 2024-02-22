@@ -84,7 +84,7 @@ The fundamental topic of State Transitions, just covered in the previous section
 
 The latter two can be defined as **State Generation** operation, and in the following paragraphs we will explore their properties.
 
-In the figure below, all 3 contract operation are shown together with their position in a DAG pertaining to an RGB contract, which is ordered according to the respective Anchors in the Bitcoin Blockchain. Genesis is in green , State Transitions are in red , State Extensions are in blue .
+In the figure below, all 3 contract operation are shown together with their position in a DAG pertaining to an RGB contract, which is ordered according to the respective Anchors in the Bitcoin Blockchain. Genesis is in <mark style="color:green;">green</mark> , State Transitions are in <mark style="color:red;">red</mark> , State Extensions are in <mark style="color:blue;">blue</mark> .
 
 ![](../.gitbook/assets/contract-op-dag1.png)
 

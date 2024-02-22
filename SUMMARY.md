@@ -1,6 +1,6 @@
 # Table of contents
 
-* [RGB Documentation](README.md)
+* [RGB Protocol Documentation](README.md)
 
 ## Distributed Computing Concepts
 

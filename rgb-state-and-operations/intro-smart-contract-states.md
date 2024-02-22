@@ -13,7 +13,7 @@ This means that the enforcement of the conditions agreed between the parties **d
 
 In addition to that, a question arises. In order to achieve the highest degree of automation, decentralization and privacy it is possible to forfeit centralized registry storing contract ownership and information? The affirmative answer lie back at the origins.
 
-![](../.gitbook/assets/orenoque-contract.png)
+![RGB allows for the digital version of bearer instruments.](../.gitbook/assets/orenoque-contract.png)
 
 Once upon a time contracts, for examples those of securities, were **bearer instruments**. Indeed, the generalized use of assets ledgers which in fact imply a custody relation with some institution controlling both the transaction ledger and/or the storage means of the contract - on behalf of the client - represents a quite recent development of economic history. **The bearer nature of contracts is in fact a centuries-old tradition.** This kind of philosophy is at the core of RGB architecture, as the bearer rights of each rightful party are contained in form of data inside the contract and they can be modified and enforced digitally, following the rules of the contract itself.
 

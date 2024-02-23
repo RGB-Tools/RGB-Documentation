@@ -140,11 +140,13 @@ The following table shows how the status can be updated by different types of op
 
 Below is the general structure of the schema when it is compiled. We can see that it contains a reference to the main schema. It contains the sections about the structure of the schema. It contains the status types: global, assignment and valence. Contains the section on contract operations. Defines different types of transitions and extensions. Genesis type. Each defines rules for updating states. Finally, the strict type system and validation scripts for specific state types and state transitions.
 
-<div align="center">
+<figure style="text-align: center;">
 
-<img src="img/compiled_schema_structure.png" alt="" height="500" width="750">
+  <img src=".gitbook/assets/compiled_schema_structure.png" alt="Compiled Schema Structure" style="max-width: 80%; height: auto;">
 
-</div>
+  <figcaption style="text-align: center;"></figcaption>
+
+</figure>
 
 ## Schema workflow
 

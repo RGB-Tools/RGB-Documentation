@@ -1,5 +1,7 @@
 # testpage1
 
+
+
 Before Text ...
 
 <figure><img src=".gitbook/assets/csv-shard-1.png" alt=""><figcaption><p>RGB contract shard</p></figcaption></figure>
@@ -26,5 +28,4 @@ flowchart BT
 ```
 {% endcode %}
 
-
-
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>

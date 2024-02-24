@@ -53,7 +53,7 @@ However, RGB embeds in its design the support for _Multi-payer operations_ such 
 
 The `BundleId` to be inserted in the leaf of the [MPC](state-transitions.md), is [obtained](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#bundle-id) by a tagged hash of the strict serialization of the `InputMap` field of the bundle in the following way:
 
-`SHA-256(SHA-256(urn:lnp-bp:rgb:bundle#2024-02-03) || SHA-256(urn:lnp-bp:rgb:bundle#2024-02-03) || InputMap)`
+`BundleId = SHA-256(SHA-256(urn:lnp-bp:rgb:bundle#2024-02-03) || SHA-256(urn:lnp-bp:rgb:bundle#2024-02-03) || InputMap)`
 
 An `InputMap` associated to the i-th `input_i` in the set `i = {0,1,..,N}` which is referenced to the j-th `OpId` in the set `j = {0,1,..,K}` is a construct built in the following way:
 

@@ -7,7 +7,7 @@ Multi Protocol commitments address the following important requirements:
 
 In practice, the preceding points are addressed through an **ordered merkelization** of the multiple contracts/state transitions associated with the UTXO that are expended by the **witness transaction** where such multiple transitions are eventually committed by means of [DBC](deterministic-bitcoin-commitments-dbc/).
 
-<figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption><p><strong>Each RGB contract has a unique position in the MPC Tree determined by a modular division applied to its ContractId according to the width of the tree. In this case the tree has width  8.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/mpc-tree-2.png" alt=""><figcaption><p><strong>Each RGB contract has a unique position in the MPC Tree determined by a modular division applied to its ContractId according to the width of the tree. In this case the tree has width  8.</strong></p></figcaption></figure>
 
 ## MPC Tagged Hash
 
@@ -23,7 +23,7 @@ In order to construct the MPC tree we must **deterministically provide a positio
 
 > By setting `C` the number of contracts having a `ContractId``(i) = c_i` to be included in the MPC, we can construct a tree with `w` leaves with `w > C` (corresponding to a depth `d` such that `2^d = w`), such that each contract identifier `c_i` representing a different contract is placed in unique position `pos(c_i) = c_i mod w`
 
-In essence, the construction of a suitable tree of width `w` that hosts each contract `c_i` in a unique position represents a kind of mining process. The greater the number of contract `C`, the greater should be the number of leaves `w`. Assuming a random distribution of `pos_i`, as per [Birthday Paradox](https://en.wikipedia.org/wiki/Birthday\_problem), we have \~50% probability of a collision occurring in a tree with `w ~ C^2`.
+In essence, the construction of a suitable tree of width `w` that hosts each contract `c_i` in a unique position represents a kind of mining process. The greater the number of contract `C`, the greater should be the number of leaves `w`. Assuming a random distribution of `pos(c_i)`, as per [Birthday Paradox](https://en.wikipedia.org/wiki/Birthday\_problem), we have \~50% probability of a collision occurring in a tree with `w ~ C^2`.
 
 In order to avoid too large MPC trees and knowing that the occurrence of collisions is a random process, an additional optimization was introduced. The modulus operation was modified according to the following formula: `pos(c_i) = c_i + cofactor mod w` where `cofactor` is a random number of 16 bytes that can be chosen as a "nonce" to obtain distinct values of `pos(c_i)` with `w` fixed. The tree construction process starts from the smallest tree such that `w > C`, then tries a certain number of `cofactor` attempts, if none of them can produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
 

@@ -163,8 +163,6 @@ As a peculiar feature of RGB, both Seal Definition and Owned State can be expres
 
 ![](../.gitbook/assets/assignment-reveal-conceal.png)
 
-###
-
 As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed. As a final remark of this paragraph, per RGB consensus rules **the `OpId` of the state transition is always** [**calculated**](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#commitencode-trait) **from the concealed data**
 
 #### Seal Definition

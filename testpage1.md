@@ -6,9 +6,7 @@ Before Text ...
 
 <figure><img src=".gitbook/assets/csv-shard-1.png" alt=""><figcaption><p>RGB contract shard</p></figcaption></figure>
 
-After text
 
-{% code fullWidth="true" %}
 ```mermaid
 flowchart BT
     subgraph Merklization
@@ -26,6 +24,5 @@ flowchart BT
     MerkleHash === Root
     Leaf -- commit_id ----> MerkleHash
 ```
-{% endcode %}
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+

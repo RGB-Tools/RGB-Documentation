@@ -2,7 +2,7 @@
 
 ## Strict Type System
 
-As described in previous sections, The state represent a set of condition which undergo validation both against contract business logic and both with regards to commitment ordered history.
+As described in previous sections, The [state](../annexes/glossary.md#contract-state) represent a set of condition which undergo validation both against contract [business logic](../annexes/glossary.md#business-logic) and both with regards to commitment ordered history.
 
 In RGB, this set of data is actually a **set of arbitrary rich data** which:
 
@@ -32,8 +32,8 @@ Regarding the **data concurring to state validation**, the RGB protocol consensu
 
 * To the size of **any data type** participating in state validation (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
 * To the **number of elements of each collection** employed in state validation. This has been designed in order to:
-* Avoid unlimited growth of the client side-validate data per each state transition.
-* Ensures that this size fits the size of the register of a particular virtual machine [AluVM](state-transitions.md) which is capable of complex validation purposes working alongside RGB.
+  * Avoid unlimited growth of the client side-validate data per each state transition.
+  * Ensures that this size fits the size of the register of a particular virtual machine [AluVM](state-transitions.md) which is capable of complex validation purposes working alongside RGB.
 
 ## The Validation != Ownership Paradigm in RGB
 
@@ -43,24 +43,31 @@ One of the most important features of RGB in respect to the majority of blockcha
 
 In practice:
 
-* The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consistency and adherence of state transitions to the smart contract rule. This process belong entirely accomplished by RGB-specific libraries.
+* The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consistency and adherence of state transitions to the smart contract rule. This process is entirely accomplished by [RGB-specific](../annexes/rgb-library-map.md) libraries.
 * The **Ownership** property, which, through the seal definition pointing to a Bitcoin UTXO, **defines who can change the state**. The security level of this property, depends entirely upon the security model of Bitcoin itself.
 
-This kind of separation prevents the possibility of mix the non-Turing complete capabilities of smart contract with the public access of contract states which is embedded in nearly all blockchains with advanced programming capabilities. On the opposite, **the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks** where yet unknown vulnerabilities of smart contracts have been exploited by publicly accessing the contract state encoded in the blockchain.
+This kind of separation **prevents the possibility of mix the non-Turing complete capabilities of smart contract with the public access of contract states** which is embedded in nearly all blockchains with advanced programming capabilities. On the opposite, **the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks** where yet unknown vulnerabilities of smart contracts have been exploited by publicly accessing the contract state encoded in the blockchain.
 
 Additionally, by relying on Bitcoin transaction structure, RGB can exploit the **features of the Lightning Network** in a straightforward way.
 
 ## RGB Consensus Changes
 
-As an another important characteristics, RGB possesses, in addition to Semantic Versioning of data, a Consensus Update System, that keep track of consensus changes in Contracts and Contracts Operations. Basically there are two basic way to update consensus rule embedded in the protocol:
+As an another important characteristic, RGB possesses, in addition to Semantic Versioning of data, a **Consensus Update System**, that keep track of consensus changes in Contracts and Contracts Operations. Basically there are two basic way to update consensus rule embedded in the protocol:
 
-* A **fast-forward** update where _some previously invalid rule becomes valid_. Despite the similarities, this kind of update is **not comparable to a **~~**blockchain hardfork**~~. The chronological history of this kind of changes it's mapped in contract through the [Ffv field](features-of-rgb-state.md#components-of-a-contract-operation) of Contract Operation. In particular it is characterized by the following properties:
-  * Existing owners are not affected.
-  * New beneficiaries must upgrade their wallets.
-* A **pushback** update where _some previously valid state becomes invalid_ .Despite the similarities, this kind of update is **not comparable to a **~~**blockchain softfork**~~, and in addition:
-  * Existing owners may loose assets if they update the wallet.
-  * In fact a new protocol, not the same version of RGB anymore.
-  * Can happen only through issuers re-issing assets on a new protocol - and users using two wallets (for both the old and the new protocol).
+### **Fast-forward**&#x20;
+
+A **fast-forward** update takes place when _some previously invalid rule becomes valid_. Despite the similarities, this kind of update is **NOT comparable to a blockchain hardfork**. The chronological history of this kind of changes it's mapped in contract through the [Ffv field](features-of-rgb-state.md#components-of-a-contract-operation) of Contract Operation. In particular it is characterized by the following properties:
+
+* Existing owners are not affected.
+* New beneficiaries must upgrade their wallets.
+
+### Push-back
+
+A **push-back** update takes place when _some previously valid state becomes invalid_. Despite the similarities, this kind of update is **NOT comparable to a blockchain softfork**, and in addition:
+
+* Existing owners may loose assets if they update the wallet.
+* In fact a new protocol, not the same version of RGB anymore.
+* Can happen only through issuers re-issing assets on a new protocol - and users using two wallets (for both the old and the new protocol).
 
 ## RGB Contract Operation Libraries
 

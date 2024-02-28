@@ -4,7 +4,7 @@ description: Terminology used in RGB sorted in alphabetical order
 
 # Glossary
 
-#### Anchor
+### Anchor
 
 Set of client-side data that proof the inclusion of a unique commitment inside a transaction. In RGB protocol it is constituted by:
 
@@ -13,49 +13,49 @@ Set of client-side data that proof the inclusion of a unique commitment inside a
 * The [DBC](glossary.md#deterministic-bitcoin-commitment---dbc)
 * The [ETP](glossary.md#extra-transaction-proof---etp) in case of [Tapret](../commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md) commitment scheme.
 
-#### AluVM
+### AluVM
 
 Acronym of Algoritmic logic unit Virtual machine is register-based virtual machine for smart contract validation and distributed computing, used but not limited to RGB contract validation.
 
 &#x20;[Link](https://www.aluvm.org/)
 
-#### Assignment
+### Assignment
 
 The RGB-equivalent of a transaction output modifying, updating or creating some properties of the state of a [contract](glossary.md#contract). It is formed by:
 
-* A[Seal Definition](glossary.md#seal-definition)
+* A [Seal Definition](glossary.md#seal-definition)
 * An [Owned State](../rgb-state-and-operations/components-of-a-contract-operation.md#owned-states)
 
 [Link](../rgb-state-and-operations/components-of-a-contract-operation.md#assignments-of-an-owned-state)
 
-#### Business Logic
+### Business Logic
 
 The set of operation and rules contained in a contract [Schema](glossary.md#schema) which allows for the rightful update of the [contract state](glossary.md#contract-state).
 
-#### Client-side Validation
+### Client-side Validation
 
 The operation which allows the verification of some data exchanged between parties according to some defined protocol rules. In RGB protocol these data are in form of [consignment](glossary.md#consignment); the above data can be exchanged privately between the parties involved as, unlike Bitcoin protocol, they don't need to be registered on a public medium (e.g. the blockchain).
 
-#### Commitment
+### Commitment
 
 Formal timestamped fingerprint expressed as the registration of an hash referring to some structured data over some defined medium expressing time indication and chronological ordering (e.g. the blockchain).
 
-#### Consignment
+### Consignment
 
 The data transferred between parties that are subject to [client-side validation](glossary.md#client-side-validation). There are 2 main types of consignment:
 
 * Contract Consignment: provided by the contract issuer including the main information about the contract
 * Transfer Consignment: provided by the payer user party and containing all the state transition history up to the [terminal consignment](glossary.md#terminal-consignment---consignment-endpoint).
 
-#### Container
+### Container
 
 The RGB format through which [stash](glossary.md#stash) data are packed and exchanged between users.
 
-#### Contract
+### Contract
 
 A set of [rights](glossary.md#contract-rights) established and executed digitally between certain parties through RGB protocol. A contract possesses an [active state](../rgb-state-and-operations/state-transitions.md#state-generation-and-active-state) and [business logic](glossary.md#business-logic), expressed in terms of ownership rights and executive rights. The contract state, rights and conditions of valid operations are defined using RGB [schema](glossary.md#schema). Only state and operations which allowed by the schema declarations and validation scripts are allowed to happen within the contract scope.
 
-#### Contract Operation
+### Contract Operation
 
 An update to the [contract state](glossary.md#contract-state) performed according to the rules defined in the contract [schema](glossary.md#schema).
 
@@ -65,7 +65,7 @@ Contract operations include:
 * [Genesis](glossary.md#genesis)
 * [State Extension](glossary.md#state-extension)
 
-#### Contract Participant
+### Contract Participant
 
 An actor which participate in contract operations. Contract parties are classified into the following categories:
 
@@ -73,41 +73,43 @@ An actor which participate in contract operations. Contract parties are classifi
 * Contract party: all actors which have some [ownership](glossary.md#ownership) rights over RGB [contract state](glossary.md#contract-state) which have been provided trough an [Assignment](glossary.md#assignment).
 * Public party: an actor which is able to construct [State Extensions](glossary.md#state-extension). Can exist only in contracts providing [Valencies](glossary.md#valency) to be redeemed by State Extension.&#x20;
 
-#### Contract Rights
+### Contract Rights
 
 RGB contract parties have a different rights as a part of the contract conditions defined through RGB [Schema](glossary.md#schema). The rights under RGB contract can be classified into the following categories:
 
 * Ownership rights: the rights associated to the [ownership](glossary.md#ownership) of some UTXO referenced by a [Seal Definition](glossary.md#seal-definition).
 * Executive rights: the ability to construct the [contract state](glossary.md#contract-state) in a final form, i.e. to construct a valid [state transition](glossary.md#state-transition) satisfying [schema](glossary.md#schema) validation rules.
-* Public rights: a right under some schema to use a contract [Valency](glossary.md#valency) and construct a valid [State Extension](glossary.md#state-extension).
+* Public rights: a right under some Schema to use a contract [Valency](glossary.md#valency) and construct a valid [State Extension](glossary.md#state-extension).
 
-#### Contract State
+### Contract State
 
 The set of up to date, private and public information manifesting the condition of a contract at a certain point in history. In RGB the contract state is constituted by:
 
 * [Global State](../rgb-state-and-operations/components-of-a-contract-operation.md#global-state)
 * [Owned State(s)](../rgb-state-and-operations/components-of-a-contract-operation.md#owned-states)
 
-#### Deterministic Bitcoin Commitment - DBC
+### Deterministic Bitcoin Commitment - DBC
 
 The set of rules which allows for the registration of a provably single [commitment](glossary.md#commitment) in a Bitcoin transaction. Specifically, RGB protocol embeds 2 forms of DBC:
 
 * [Opret](../commitment-layer/deterministic-bitcoin-commitments-dbc/opret.md)
 * [Tapret](../commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md)
 
-#### Directed Acyclic Graph - DAG
+### Directed Acyclic Graph - DAG
 
-A directed graph which do not contains any directed cycle thus allowing topological ordering - [wiki link](https://en.wikipedia.org/wiki/Directed\_acyclic\_graph)
+A directed graph which do not contains any directed cycle thus allowing topological ordering. A Blockchain or an RGB Contract [Shard](glossary.md#shard) are examples of DAG.&#x20;
 
-#### Engraving
+&#x20;[Wiki link](https://en.wikipedia.org/wiki/Directed\_acyclic\_graph)
+
+### Engraving
 
 An optional fingerprint that past owners of a contract can register allowing verification of following users. It is implemented in RGB21 [interface](glossary.md#interface).
 
-#### Extra Transaction Proof - ETP
+### Extra Transaction Proof - ETP
 
 The part of the [Anchor](../commitment-layer/anchors.md) which embeds the additional data necessary for the validation of [tapret](../commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md) commitment contained in a [taproot](glossary.md#taproot) transaction, such as the internal PubKey and the Script Path Spend.
 
-#### Genesis
+### Genesis
 
 The set of data, regulated by a contract [schema](glossary.md#schema), which represent the starting state of every contract of RGB. It's the equivalent of Bitcoin Genesis Block at the client-side level.
 
@@ -117,7 +119,7 @@ The set of data, regulated by a contract [schema](glossary.md#schema), which rep
 
 The set of instructions that allows to transform contract binary data of contracts [schema](glossary.md#schema) and [states](glossary.md#contract-state) in user and wallet-readable information.
 
-### Invoice
+#### Invoice
 
 A Base58 encoded string, which support URL scheme capabilities, embedding the necessary data in order to allow a payer counterpart to construct a [State Transition](glossary.md#state-transition).
 
@@ -130,6 +132,10 @@ The Merkle Tree structure used in RGB to include in a single commitment into the
 #### Ownership
 
 The control and thus the possibility to spend an [UTXO](glossary.md#utxo) to which some client-side property are [assigned](glossary.md#assignment).
+
+#### Redeem
+
+A construct present in [State Extension](glossary.md#state-extension) which reference a previously-declared [Valency](glossary.md#valency).
 
 #### Schema
 

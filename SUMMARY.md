@@ -31,6 +31,8 @@
 ## Annexes
 
 * [Glossary](annexes/glossary.md)
+* [Contract Transfers](annexes/contract-transfers.md)
+* [RGB Library Map](annexes/rgb-library-map.md)
 
 ***
 

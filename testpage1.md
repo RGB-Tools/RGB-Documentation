@@ -8,6 +8,7 @@ Before Text ...
 
 
 ```mermaid
+%%{init: {'theme':'dark'}}%%
 flowchart BT
     subgraph Merklization
         direction LR

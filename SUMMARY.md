@@ -1,6 +1,6 @@
 # Table of contents
 
-* [RGB Documentation](README.md)
+* [RGB Protocol Documentation](README.md)
 
 ## Distributed Computing Concepts
 
@@ -28,9 +28,9 @@
 
 * [Contract Schema and Interfaces](schema-interface.md)
 
-## Terminology
+## Annexes
 
-* [Glossary](terminology/glossary.md)
+* [Glossary](annexes/glossary.md)
 
 ***
 

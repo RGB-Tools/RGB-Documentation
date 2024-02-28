@@ -86,7 +86,7 @@ The latter two can be defined as **State Generation** operation, and in the foll
 
 In the figure below, all 3 contract operation are shown together with their position in a DAG pertaining to an RGB contract, which is ordered according to the respective Anchors in the Bitcoin Blockchain.: Genesis is in <mark style="color:green;">green</mark> , State Transitions are in <mark style="color:red;">red</mark> , State Extensions are in <mark style="color:blue;">blue</mark> .
 
-![A DAG related to a RGB contract. and the different contract operations. In orange the blocks of Bitcoin Blockchain in which the commitment  are stored and bound to client-side data through anchors.](../.gitbook/assets/contract-op-dag1.png)
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption><p><strong>A DAG related to a RGB contract. and the different contract operations. In orange the blocks of Bitcoin Blockchain in which the commitment  are stored and bound to client-side data through anchors.</strong></p></figcaption></figure>
 
 It is important to note that the main difference between ordinary State Transitions and both two State Generation Operations lie in the lack of seal closure part. For this reason, **both Genesis and State Extensions need a State Transition that closes the particular seal definition constructed by them**.
 
@@ -94,8 +94,8 @@ Another evident, yet fundamental, aspect to take into account is that the **Acti
 
 ### Genesis
 
-Genesis represent the **starting state of every RGB contract**, it is constructed by a [contract issuer](state-transitions.md) and every state transition or state extensions must be eventually connected to it through the DAG of contract operations.\
-In Genesis, according to the rules defined in a contract template called [Schema](state-transitions.md), are defined the various property related to the contract states which will be constructed upon the Genesis state, both of [owned](state-transitions.md) type and of [global](state-transitions.md) type.
+Genesis represents the **starting block of data of every RGB contract.** It is constructed by a [contract issuer](../annexes/glossary.md#contract-participant) and every state transition or state extensions must be eventually connected to it through the DAG of contract operations.\
+In Genesis, according to the rules defined in the [Schema](state-transitions.md), are defined the various property related to the contract states which will be constructed upon the Genesis state, both of [owned](state-transitions.md) type and of [global](state-transitions.md) type.
 
 To give an example, in the case of a contract defining the creation of a token, in Genesis are inscribed:
 
@@ -113,14 +113,14 @@ This kind of smart contract operation represents quite a **new feature** in the 
 * _Token swap_.
 * _Re-issuance events_ which can involve bitcoin / other assets _burning_ to some specific address(es).
 
-In RGB taxonomy, the digital right been being redeemed in State Extensions is called a [Valency](state-transitions.md), and, at the client-side level, it is treated in the same ways as as an [assignment](state-transitions.md) being referenced in an RBB input. In this case, such particular "input" part is called a [Redeem](state-transitions.md). As Genesis, state extensions do not close any seal. They redeem valencies defined in Genesis or in state transitions in turn, must be closed by a subsequent state transition.
+In RGB taxonomy, the digital right been being redeemed in State Extensions is called a [Valency](../annexes/glossary.md#valency), and, at the client-side level, it is treated in the same ways as as an assignment being referenced in an RGB input. In this case, such particular "input" part is called a [Redeem](components-of-a-contract-operation.md#redeems). As Genesis, **State Extensions do not close any seal,** on the contrary, **they define a new seal**. They redeem Valencies defined in Genesis or in state transitions, and, in turn, they  must be closed by a subsequent State Transition.
 
-![](../.gitbook/assets/state-extension-1.png)
+<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption><p><strong>State Extensions working mechanism. In this example the State Extension redeem some Valencies from the Genesis, and define a new single-use seal which will be later closed by a subsequent State Transition.</strong></p></figcaption></figure>
 
 Following the figure above we can have an example of the working mechanism of state extension in practice:
 
-* As a first step, some kind of valency (e.g. a issuance right) is defined in the Genesis by the contract issuer. For example, the valency can grant a bounded-amount secondary issuance of a token defined in the contact, only if authorized by a valid signature related to a specific public key embedded in the valency.
-* A rightful party construct a state extension referencing this valency in the redeem part of the operation. At the same time, some owned right together with some seal definition pointing at an UTXO is constructed as assignments in the same state extension. Following the example, the state extension include a signature of the public key defined in the valency and assign the new amount of token issued to a Bitcoin UTXO as a seal definition.
+* As a first step, some kind of valency (e.g. a issuance right) is defined in the Genesis by the contract issuer. For example, the valency can grant a secondary issuance of a token defined in the contact, only if authorized by a valid signature related to a specific public key embedded in the valency.
+* A rightful party construct a state extension referencing this valency in the redeem part of the operation. At the same time, some owned right together with some seal definition pointing at an UTXO is constructed as an assignment in the same state extension. Following the example, the state extension shall include a signature of the public key defined in the valency and assign the new amount of token issued to a Bitcoin UTXO as a seal definition.
 * The seal definition specified in the state extension is closed through a State Transition constructed by the UTXO owner, which the seal definition pointed at. So the owner of the state is able to spend the newly issued tokens to himself or to other parties.
 
 ***

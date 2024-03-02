@@ -24,9 +24,16 @@
 * [Components of a Contract Operation](rgb-state-and-operations/components-of-a-contract-operation.md)
 * [Features of RGB State](rgb-state-and-operations/features-of-rgb-state.md)
 
-## RGB Contract Definition
+## RGB Contract Implementation
 
-* [Contract Schema and Interfaces](schema-interface.md)
+* [Contract Implementation in RGB](rgb-contract-implementation/schema-interface.md)
+* [Schema](rgb-contract-implementation/schema/README.md)
+  * [Schema example](rgb-contract-implementation/schema/schema-example.md)
+* [Interface](rgb-contract-implementation/interface/README.md)
+  * [Interfaces by LNP/BP Association](rgb-contract-implementation/interface/interfaces-by-lnp-bp-association.md)
+  * [RG20 Interface example](rgb-contract-implementation/interface/rg20-interface-example.md)
+* [Interface Implementation](rgb-contract-implementation/interface-implementation.md)
+* [Contract Writing Workflow](rgb-contract-implementation/contract-writing-workflow.md)
 
 ## Annexes
 

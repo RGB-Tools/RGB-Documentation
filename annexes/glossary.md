@@ -115,89 +115,93 @@ The set of data, regulated by a contract [schema](glossary.md#schema), which rep
 
 [Link](../rgb-state-and-operations/state-transitions.md#genesis)
 
-#### Interface
+### Interface
 
 The set of instructions that allows to transform contract binary data of contracts [schema](glossary.md#schema) and [states](glossary.md#contract-state) in user and wallet-readable information.
 
-#### Invoice
+### Interface Implementation
 
-A Base58 encoded string, which support URL scheme capabilities, embedding the necessary data in order to allow a payer counterpart to construct a [State Transition](glossary.md#state-transition).
+The set of code declarations which bind an [Interface](glossary.md#interface) to a [Schema](glossary.md#schema) and making possible the semantic translation operated by the Interface itself.
 
-#### Multi Protocol Commitment - MPC
+### Invoice
+
+A [Base85](https://en.wikipedia.org/wiki/Ascii85) encoded string, which support URL scheme capabilities, embedding the necessary data in order to allow a payer counterpart to construct a [State Transition](glossary.md#state-transition).
+
+### Multi Protocol Commitment - MPC
 
 The Merkle Tree structure used in RGB to include in a single commitment into the Bitcoin Blockchain multiple [Transition Bundles](glossary.md#transition-bundle) of different contracts.
 
 [Link](commitment-layer/multi-protocol-commitments-mpc.md)
 
-#### Ownership
+### Ownership
 
 The control and thus the possibility to spend an [UTXO](glossary.md#utxo) to which some client-side property are [assigned](glossary.md#assignment).
 
-#### Redeem
+### Redeem
 
 A construct present in [State Extension](glossary.md#state-extension) which reference a previously-declared [Valency](glossary.md#valency).
 
-#### Schema
+### Schema
 
 The set of declarations, rules and [business logic](glossary.md#business-logic) according to which an RGB contract works.
 
-#### Seal Definition
+### Seal Definition
 
 The reference part of an [Assignment](glossary.md#assignment) which bind the commitment to an UTXO belonging to the new [owner](glossary.md#ownership).&#x20;
 
 [Link](../rgb-state-and-operations/components-of-a-contract-operation.md#seal-definition)
 
-#### Shard
+### Shard
 
 A branch of the [DAG](glossary.md#directed-acyclic-graph---dag) chain of the RGB [State Transitions](glossary.md#state-transition).
 
-#### Single-Use Seal
+### Single-Use Seal
 
 A promise to [commit](glossary.md#commitment) to a yet unknown message in the future, once and only once, such that commitment fact will be provably known to all members of a certain audience.
 
 &#x20;[Link](../distributed-computing-concepts/single-use-seals.md)
 
-#### Stash
+### Stash
 
 The set of client-side data related to [contract](glossary.md#contract)  which have undergone [validation](glossary.md#client-side-validation) and are stored by the users.
 
-#### State Extension
+### State Extension
 
 A contract operation which allows for the redeeming of some [Valencies](glossary.md#valency). It needs to be closed by a [State Transition](glossary.md#state-transition) in order to put in effect the changes to the contract expressed by the Valencies.
 
 &#x20;[Link](../rgb-state-and-operations/state-transitions.md#state-extensions)
 
-#### State Transition
+### State Transition
 
 The most important [contract operation](glossary.md#contract-operation) which make possible the transition of an RGB State to a New State, changing state data and/or ownership.
 
 [Link](../rgb-state-and-operations/state-transitions.md#state-transitions-and-their-mechanics)
 
-#### Taproot
+### Taproot
 
 The Segwit v1 transaction format detailed in [BIP341](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) and [BIP342](https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki).
 
-#### Terminal Consignment - Consignment Endpoint
+### Terminal Consignment - Consignment Endpoint
 
 The last state of a contract which include the last [State Transition](glossary.md#state-transition) constructed from a payee counterpart invoice.
 
-#### Transition Bundle
+### Transition Bundle
 
 A set of RGB [State Transition](glossary.md#state-transition), belonging to the same contract, which are constructed by different parties closing their seal in a single operations.
 
 &#x20;[Link](../rgb-state-and-operations/state-transitions.md#transition-bundle)
 
-#### UTXO
+### UTXO
 
 A Bitcoin Unspent Transaction Output. It is defined by a transaction hash and and index which, collectively, constitute an [outpoint](https://en.bitcoin.it/wiki/Protocol\_documentation#tx).
 
-#### Valency
+### Valency
 
 A public rights having no state but which can be referenced and redeemed through a state extension.
 
 [Link](../rgb-state-and-operations/components-of-a-contract-operation.md#valencies)
 
-#### Witness Transaction
+### Witness Transaction
 
 The transaction which provide the [Seal](glossary.md#single-use-seal) closing operation around a message which contain RGB commitment to a [State Transition](glossary.md#state-transition).
 

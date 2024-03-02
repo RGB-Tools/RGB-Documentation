@@ -8,7 +8,7 @@ With these requirements, it is not possible to construct an "alternate history" 
 
 > Uniqueness of RGB commitment: the only valid outputs that can contain an RGB message commitment are:
 >
-> 1. The first output OP\_RETURN (if present) for the `opret` commitment scheme.
-> 2. The first taproot output (if present) for the `tapret` commitment scheme.
+> 1. The first output OP\_RETURN (if present) for the `Opret` commitment scheme.
+> 2. The first taproot output (if present) for the `Tapret` commitment scheme.
 
-It is worth noting that a transaction can contain both a single `opret` and a single `tapret` commitment in two separate outputs. Of course, these commitments will commit to different client-side validated data which, as we shall see later, explicitly indicate the commitment method used to refer to themselves.
+It is worth noting that a transaction can contain both a single `Opret` and a single `Tapret` commitment in two separate outputs. Of course, these commitments will commit to different client-side validated data which, as we shall see later, explicitly indicate the commitment method used to refer to themselves.

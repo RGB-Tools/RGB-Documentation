@@ -28,11 +28,10 @@
 
 * [Contract Implementation in RGB](rgb-contract-implementation/schema-interface.md)
 * [Schema](rgb-contract-implementation/schema/README.md)
-  * [Schema example](rgb-contract-implementation/schema/schema-example.md)
-* [Interface](rgb-contract-implementation/interface/README.md)
-  * [Interfaces by LNP/BP Association](rgb-contract-implementation/interface/interfaces-by-lnp-bp-association.md)
-  * [RG20 Interface example](rgb-contract-implementation/interface/rg20-interface-example.md)
-* [Interface Implementation](rgb-contract-implementation/interface-implementation.md)
+  * [Schema Code Example](rgb-contract-implementation/schema/schema-code-example.md)
+* [Interface and Interface Implementations](rgb-contract-implementation/interface-and-interface-implementations/README.md)
+  * [Interfaces by LNP/BP Association](rgb-contract-implementation/interface-and-interface-implementations/interfaces-by-lnp-bp-association.md)
+  * [RG20 Interface example](rgb-contract-implementation/interface-and-interface-implementations/rg20-interface-example.md)
 * [Contract Writing Workflow](rgb-contract-implementation/contract-writing-workflow.md)
 
 ## Annexes

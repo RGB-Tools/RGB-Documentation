@@ -69,9 +69,9 @@ Contract operations include:
 
 An actor which participate in contract operations. Contract parties are classified into the following categories:
 
-* Contract issuer: an actor creating contract [Genesis](glossary.md#genesis).
-* Contract party: all actors which have some [ownership](glossary.md#ownership) rights over RGB [contract state](glossary.md#contract-state) which have been provided trough an [Assignment](glossary.md#assignment).
-* Public party: an actor which is able to construct [State Extensions](glossary.md#state-extension). Can exist only in contracts providing [Valencies](glossary.md#valency) to be redeemed by State Extension.&#x20;
+* **Contract issuer**: an actor creating contract [Genesis](glossary.md#genesis).
+* **Contract party**: all actors which have some [ownership](glossary.md#ownership) rights over RGB [contract state](glossary.md#contract-state) which have been provided trough an [Assignment](glossary.md#assignment).
+* **Public party**: an actor which is able to construct [State Extensions](glossary.md#state-extension). Can exist only in contracts providing [Valencies](glossary.md#valency) to be redeemed by State Extension.&#x20;
 
 ### Contract Rights
 

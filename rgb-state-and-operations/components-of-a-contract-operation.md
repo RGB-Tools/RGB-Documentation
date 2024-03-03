@@ -167,7 +167,7 @@ Each Assignment is composed by the following components:
 
 As a peculiar feature of RGB, both Seal Definition and Owned State can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining - in a selective way - high privacy and scalability in both state transition construction and subsequent validation by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed` form can be used to validate the same data that were inserted in previous [State Transitions](../annexes/glossary.md#state-transition) with their hash digest representing the `concealed` form of the construct. In the diagram below, all 4 combination of Reveal/Conceal form are shown:
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption><p><strong>All combination of Revealed/Concealed form applied to Seal Definition and Owned State.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption><p><strong>All combination of Revealed/Concealed form applied to Seal Definition and Owned State.</strong></p></figcaption></figure>
 
 As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed. As a final remark of this paragraph, per RGB consensus rules **the `OpId` of the state transition is always** [**calculated**](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#commitencode-trait) **from the concealed data.**
 
@@ -186,7 +186,7 @@ The `concealed` form of the Seal Definition is simply the ordered SHA-256 [tagge
 
 `SHA-256(SHA-256(urn:lnp-bp:seals:secret#2024-02-03) || SHA-256(urn:lnp-bp:seals:secret#2024-02-03) || txptr || vout || blinding || method)`
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption><p><strong>Components of the Seal Definition.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption><p><strong>Components of the Seal Definition.</strong></p></figcaption></figure>
 
 #### Owned States
 

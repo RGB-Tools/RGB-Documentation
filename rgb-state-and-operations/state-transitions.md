@@ -86,7 +86,7 @@ The latter two can be defined as **State Generation** operation, and in the foll
 
 In the figure below, all 3 contract operation are shown together with their position in a DAG pertaining to an RGB contract, which is ordered according to the respective Anchors in the Bitcoin Blockchain.: Genesis is in <mark style="color:green;">green</mark> , State Transitions are in <mark style="color:red;">red</mark> , State Extensions are in <mark style="color:blue;">blue</mark> .
 
-<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption><p><strong>A DAG related to a RGB contract. and the different contract operations. In orange the blocks of Bitcoin Blockchain in which the commitment  are stored and bound to client-side data through anchors.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption><p><strong>A DAG related to a RGB contract. and the different contract operations. In orange the blocks of Bitcoin Blockchain in which the commitment  are stored and bound to client-side data through anchors.</strong></p></figcaption></figure>
 
 It is important to note that the main difference between ordinary State Transitions and both two State Generation Operations lie in the lack of seal closure part. For this reason, **both Genesis and State Extensions need a State Transition that closes the particular seal definition constructed by them**.
 
@@ -115,7 +115,7 @@ This kind of smart contract operation represents quite a **new feature** in the 
 
 In RGB taxonomy, the digital right been being redeemed in State Extensions is called a [Valency](../annexes/glossary.md#valency), and, at the client-side level, it is treated in the same ways as as an assignment being referenced in an RGB input. In this case, such particular "input" part is called a [Redeem](components-of-a-contract-operation.md#redeems). As Genesis, **State Extensions do not close any seal,** on the contrary, **they define a new seal**. They redeem Valencies defined in Genesis or in state transitions, and, in turn, they  must be closed by a subsequent State Transition.
 
-<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption><p><strong>State Extensions working mechanism. In this example the State Extension redeem some Valencies from the Genesis, and define a new single-use seal which will be later closed by a subsequent State Transition.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1).png" alt=""><figcaption><p><strong>State Extensions working mechanism. In this example the State Extension redeem some Valencies from the Genesis, and define a new single-use seal which will be later closed by a subsequent State Transition.</strong></p></figcaption></figure>
 
 Following the figure above we can have an example of the working mechanism of state extension in practice:
 

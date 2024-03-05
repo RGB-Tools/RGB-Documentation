@@ -117,7 +117,9 @@ The set of data, regulated by a contract [schema](glossary.md#schema), which rep
 
 ### Interface
 
-The set of instructions that allows to transform contract binary data of contracts [schema](glossary.md#schema) and [states](glossary.md#contract-state) in user and wallet-readable information.
+The set of code instructions that allows to transform the compiled binary data of contracts [Schema](glossary.md#schema) and [Contract Operation](glossary.md#contract-operation) on [States](glossary.md#contract-state) in user and wallet-readable information.
+
+[Link](../rgb-contract-implementation/interface-and-interface-implementations/)
 
 ### Interface Implementation
 
@@ -143,7 +145,9 @@ A construct present in [State Extension](glossary.md#state-extension) which refe
 
 ### Schema
 
-The set of declarations, rules and [business logic](glossary.md#business-logic) according to which an RGB contract works.
+A declarative piece of code which contains the set of variables, rules and [business logic](glossary.md#business-logic) according to which an RGB contract works.
+
+[Link](../rgb-contract-implementation/schema/)
 
 ### Seal Definition
 
@@ -179,7 +183,7 @@ The most important [contract operation](glossary.md#contract-operation) which ma
 
 ### Taproot
 
-The Segwit v1 transaction format detailed in [BIP341](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) and [BIP342](https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki).
+The Bitcoin's Segwit v1 transaction format detailed in [BIP341](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) and [BIP342](https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki).
 
 ### Terminal Consignment - Consignment Endpoint
 

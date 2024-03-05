@@ -1,6 +1,6 @@
-# Contract Writing Workflow
+# Contract Issuance Workflow
 
-## Schema workflow
+##
 
 In a previous section it was stated that by virtue of its characteristic of being a blueprint for contracts on RGB a Schema will be written by someone and will be used later by someone else not necessarily capable of programming. The workflow for writing a Schema is as follows:
 

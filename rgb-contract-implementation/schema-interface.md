@@ -4,8 +4,9 @@ We have come now to this final  section in which we will be **describing how an 
 
 * [Schema](schema/)&#x20;
 * [Interface](interface-and-interface-implementations/)&#x20;
+* In addition to these components a third one called [Interface Implementation](../annexes/glossary.md#interface-implementation) is responsible to bridge  the latter two together. &#x20;
 
-In addition to these components a third one called [Interface Implementation](../annexes/glossary.md#interface-implementation) is responsible to bridge  the latter two together.&#x20;
+At this regard, it is important to point out that **each one of this component can be freely** and independently developed by different developers, provided that they respect the RGB consensus regarding the validation of client-side data and strict types formats. This represent a notable feature of RGB ecosystem which allows an even higher degree of competition among different components of the contract itself.
 
 In the image below a general scheme of all the components together with a summary explanation is reported.
 

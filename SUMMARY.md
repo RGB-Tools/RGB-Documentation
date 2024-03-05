@@ -30,9 +30,10 @@
 * [Schema](rgb-contract-implementation/schema/README.md)
   * [Non Inflatable Asset Schema Code Example](rgb-contract-implementation/schema/non-inflatable-asset-schema-code-example.md)
 * [Interface and Interface Implementations](rgb-contract-implementation/interface-and-interface-implementations/README.md)
-  * [Interfaces by LNP/BP Association](rgb-contract-implementation/interface-and-interface-implementations/interfaces-by-lnp-bp-association.md)
-  * [RG20 Interface example](rgb-contract-implementation/interface-and-interface-implementations/rg20-interface-example.md)
-* [Contract Writing Workflow](rgb-contract-implementation/contract-writing-workflow.md)
+  * [Standard Interfaces by LNP/BP Association](rgb-contract-implementation/interface-and-interface-implementations/standard-interfaces-by-lnp-bp-association.md)
+  * [RGB20 Interface example](rgb-contract-implementation/interface-and-interface-implementations/rgb20-interface-example.md)
+* [Interface Implementation](rgb-contract-implementation/interface-implementation.md)
+* [Contract Issuance Workflow](rgb-contract-implementation/contract-issuance-workflow.md)
 
 ## Annexes
 

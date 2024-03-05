@@ -141,17 +141,17 @@ As an important feature, the Global State is usually made available by the contr
 
 Every Component of a Global State is composed by a 2-field structure which include:
 
-* A `GlobalType` which embeds a deterministic reference to the global propriety expressed in the Schema.
+* A `GlobalType` which embeds a deterministic reference to the global propriety expressed in the [Schema](../rgb-contract-implementation/schema/).
 * The actual Data expressing the property.
 
-For example, a Global State of newly issued token written in Genesis, dependent on the [`Non inflatable Asset Schema`](state-transitions.md) and [Contract Interface](state-transitions.md) `RGB 20`, [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `GlobalTypes`:
+For example, a Global State of newly issued token written in Genesis, dependent on the [Non inflatable Asset Schema](../rgb-contract-implementation/schema/non-inflatable-asset-schema-code-example.md) and [Contract Interface](../rgb-contract-implementation/interface-and-interface-implementations/) `RGB 20`, [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `GlobalTypes`:
 
 * the `ticker`.
 * the Full name of the token: `name`.
 * the precision of decimal figures: `precision`.
 * the maximum supply of the token: `issuedSupply`.
 * the date of issuance: `created`.
-* a text with some Legal disclaimer: `terms`.
+* a text with some Legal disclaimer: data.
 
 ### Assignments
 
@@ -167,7 +167,7 @@ Each Assignment is composed by the following components:
 
 As a peculiar feature of RGB, both Seal Definition and Owned State can be expressed in a `Revealed` or `Concealed` form. This is particularly useful for maintaining - in a selective way - high privacy and scalability in both state transition construction and subsequent validation by the different parties that may be involved in the contract. Indeed, the constructs in `Revealed` form can be used to validate the same data that were inserted in previous [State Transitions](../annexes/glossary.md#state-transition) with their hash digest representing the `concealed` form of the construct. In the diagram below, all 4 combination of Reveal/Conceal form are shown:
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption><p><strong>All combination of Revealed/Concealed form applied to Seal Definition and Owned State.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption><p><strong>All combination of Revealed/Concealed form applied to Seal Definition and Owned State.</strong></p></figcaption></figure>
 
 As the concealment methodology of each constructs can vary, we will discuss the respective forms for each construct when needed. As a final remark of this paragraph, per RGB consensus rules **the `OpId` of the state transition is always** [**calculated**](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#commitencode-trait) **from the concealed data.**
 

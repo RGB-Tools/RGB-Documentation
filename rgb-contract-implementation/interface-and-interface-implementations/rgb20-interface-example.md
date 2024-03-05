@@ -1,8 +1,6 @@
-# RG20 Interface example
+# RGB20 Interface example
 
-## Example code of an RGB20 interface with related implementation
-
-Let's take a closer look at what the Rust code of an interface looks like by taking the example of [standard RGB20](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
+In the  Rust code of an interface looks like by taking the example of [standard RGB20](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
 
 {% code fullWidth="true" %}
 ```rust

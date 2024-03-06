@@ -24,13 +24,21 @@
 * [Components of a Contract Operation](rgb-state-and-operations/components-of-a-contract-operation.md)
 * [Features of RGB State](rgb-state-and-operations/features-of-rgb-state.md)
 
-## RGB Contract Definition
+## RGB Contract Implementation
 
-* [Contract Schema and Interfaces](schema-interface.md)
+* [Contract Implementation in RGB](rgb-contract-implementation/schema-interface.md)
+* [Schema](rgb-contract-implementation/schema/README.md)
+  * [Non Inflatable Asset Schema Code Example](rgb-contract-implementation/schema/non-inflatable-asset-schema-code-example.md)
+* [Interface and Interface Implementations](rgb-contract-implementation/interface-and-interface-implementations/README.md)
+  * [Interfaces by LNP/BP Association](rgb-contract-implementation/interface-and-interface-implementations/interfaces-by-lnp-bp-association.md)
+  * [RG20 Interface example](rgb-contract-implementation/interface-and-interface-implementations/rg20-interface-example.md)
+* [Contract Writing Workflow](rgb-contract-implementation/contract-writing-workflow.md)
 
 ## Annexes
 
 * [Glossary](annexes/glossary.md)
+* [Contract Transfers](annexes/contract-transfers.md)
+* [RGB Library Map](annexes/rgb-library-map.md)
 
 ***
 

@@ -1,21 +1,32 @@
 # Anchors
 
-Anchors are the client-side validated structure that summarizes all the data needed to validate contract commitments, which were described earlier in this section. They are structured as follows:
+Anchors are the client-side validated structures that summarizes all the data needed to validate contract commitments, which were described in the previous section. They are composed by the following ordered fields:
 
-`Txid` `MPC Proof` `DBC Proof`
+* `Txid`&#x20;
+* `MPC Proof`&#x20;
+* `Extra Transaction Proof ETP`
 
 Where:
 
-* `Txid` is the 32-byte Bitcoin Transaction Id which contains the data-related `opret` `tapret` commitment. Note that `TxId` could theoretically be reconstructed from the off-chain data of state transitions pointing to each on-chain closing transaction, however for simplicity they are included in the anchor.
-* The `MPC Proof` of the contract `c_i` consists of `pos_i` `cofactor` `Merkle Proof` which were described previously.
-* `DBC Proof`:
-  * If an `opret` commitment is used, no additional proof is provided, since, as described above, the verifier inspects the first `OP_RETURN` output finding the correct `tH_MPC_ROOT`.
-  * If a `tapret` commitment is used, a so called **Extra Transaction Proof - ETP** must be provided, which consists of:
-    * Internal Public Key `P` of the Taproot output used.
-    * Partner node(s) of the `Taproot Script Path Spend` which is either:
-      * The top left branch (in the example `tHABC`) if the `tapret` commitment is on the right side of the tree.
-      * The left and right nodes of the upper right branch (in the example `tHAB` and `tHC`) if the `tapret` commitment is on the left side of the tree.
-    * The `nonce`, if used, to optimize the Partner node part of the proof.
+## TxId
+
+`Txid` is the 32-byte Bitcoin Transaction Id which contains the data-related `opret` `tapret` commitment. Note that `TxId` could theoretically be reconstructed from the off-chain data of state transitions pointing to each on-chain closing transaction, however for simplicity they are included in the anchor.
+
+## MPC Proof
+
+The `MPC Proof` of the contract `c_i` consists of `pos_i` `cofactor` `Merkle Proof` which were described previously.
+
+## Extra Transaction Proof - ETP
+
+If an [Opret](deterministic-bitcoin-commitments-dbc/opret.md) commitment is used, no additional proof is provided in this field, since, as described above, the verifier inspects the first `OP_RETURN` output finding the correct `mpc::Commitement`.
+
+If a [Tapret](deterministic-bitcoin-commitments-dbc/tapret.md) commitment is used, a so called **Extra Transaction Proof - ETP** must be provided, which consists of:
+
+* Internal Public Key `P` of the Taproot output used.
+* Partner node(s) of the `Taproot Script Path Spend` which is either:
+  * The top left branch (in the [example](deterministic-bitcoin-commitments-dbc/tapret.md#tapret-incorporation-in-pre-existing-script-path-spend) `tHABC`) if the `tapret` commitment is on the right side of the tree.
+  * The left and right nodes of the upper right branch (in the example `tHAB` and `tHC`) if the `tapret` commitment is on the left side of the tree.
+* The [nonce](deterministic-bitcoin-commitments-dbc/tapret.md#nonce-optimization), if used, to optimize the Partner node part of the proof.
 
 #### Library for Client-side Validation and Deterministic Bitcoin Commitments
 

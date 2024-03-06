@@ -2,65 +2,72 @@
 
 ## Strict Type System
 
-As described in previous sections, The state represent a set of condition which undergo validation both against contract business logic and both with regards to commitment ordered history.
+As described in the previous sections, the [state](../annexes/glossary.md#contract-state) represents a set of conditions that are subjected to validation against both the [business logic](../annexes/glossary.md#business-logic) and ordered history of commitments.
 
-In RGB, this set of data is actually a **set of arbitrary rich data** which:
+In RGB, this data set is actually an **arbitrary rich data set** that:
 
-* are **strongly typed**, which means that **each variable possesses a clear type definition (e.g. u8) and both lower and upped bounds**.
-* can be **nested**, meaning that a type can be constructed from other types.
-* can be organized in `lists` `sets` or `maps`
+* are **strongly typed**, meaning that **each variable has a clear type definition (e.g. u8) and lower and upper bounds**;
+* can be **nested**, meaning that a type can be constructed from other types;
+* can be organized in `lists`, `sets` or `maps`.
 
-In order to properly encode data into the state in a reproducible way a [Strict Type System](https://www.strict-types.org/) together with [Strict Encoding](https://github.com/rust-amplify/rust-amplify) has been adopted in RGB. This means that:
+To properly encode data in the state in a reproducible way, a [Strict Type System](https://www.strict-types.org/) has been adopted in RGB along with [Strict Encoding](https://github.com/rust-amplify/rust-amplify). This means that:
 
-* The encoding of the data is done according to a precise [schema](features-of-rgb-state.md#terminilogy/glossary.md#schema) which, unlike JSON or YAML, define a precise structure and layout of the data thus allowing also for deterministic ordering of each data element herein.
-* The ordering of the elements inside every collection (i.e. in lists, sets or maps) is deterministic as well.
-* Boundaries (lower and higher) are defined for every variable and for the number of element in a collection (the so called **Confinement**).
-* All data field are byte-aligned.
-* The serialization and hashing of the data is performed in a deterministic way (Strict Encoding) allowing for creating **reproducible commitments** of the data irrespective of the system on which such operation is performed.
-* The creation of the data according to the schema is **performed through a simple description language which compile in Binary form** from Rust Language. In the future extension to other languages will be supported.
-* Additionally, the compiling according to the Strict Type System produces 2 types of outputs:
-  * A **Memory Layout at compile time**
-  * **Associated Semantic identifiers** to the memory layout (i.e. commitment to each field's name of the data)\
-    For instance, this kind of construction is able to make detectable the change of a single variable name, which **doesn't change the memory layout** but which **do change the semantics**.
-* Finally, Strict Type System allows for **versioning** of the compilation schema, thus enabling the tracking of consensus changes in contracts and in the compilation engine.
+* Encoding of the data is done according to a precise [schema](features-of-rgb-state.md#terminilogy/glossary.md#schema) which, unlike JSON or YAML, defines a precise structure and layout of the data, thus also allowing deterministic ordering of each data element.
+* The ordering of elements within each collection (i.e., in lists, sets or maps) is also deterministic.
+* Bounds (lower and upper) are defined for each variable and for the number of elements in a collection (the so called **Confinement**).
+* All data fields are byte-aligned.
+* Data serialization and hashing are performed deterministically (Strict Encoding) allowing **reproducible commitments** of the data to be created regardless of the system on which that operation is performed.
+* Data creation according to the schema is **performed through a simple description language which compiles to binary form** from the Rust Language. Extension to other languages will be supported in the future.
+* In addition, compilation according to the Strict Type System produces two types of output:
+  * A **compile-time Memory Layout**.
+  * **Semantic identifiers** associated with memory layout (i.e., the commitment to the name of each data field).
+    For instance, this type of construction is able to make detectable the change of a single variable name, which **doesn't change the memory layout** but **changes the semantics**.
+* Finally, Strict Type System allows for **versioning** of the compilation schema, thus enabling the tracking of consensus changes in contracts and the compilation engine.
 
-As a matter of fact Strict Encoding is defined in both an extremely pure functional level (thus very far away from Oriented Object Programming (OOP) philosophy) and at a very low level (nearly hardware definition, so far away from more abstract structures and languages).
+As a matter of fact, Strict Encoding is defined both at an extremely pure functional level (thus far away from object-oriented programming (OOP) philosophy) and at a very low level (almost a hardware definition, thus far removed from more abstract structures and languages).
 
 ### Size limitation
 
-Regarding the **data concurring to state validation**, the RGB protocol consensus rule apply a **maximum size limit** of 2^16 bytes (64kiB):
+Regarding **data participating in state validation**, the RGB protocol consensus rule applies a **maximum size limit** of 2^16 bytes (64 KiB):
 
-* To the size of **any data type** participating in state validation (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
-* To the **number of elements of each collection** employed in state validation. This has been designed in order to:
-* Avoid unlimited growth of the client side-validate data per each state transition.
-* Ensures that this size fits the size of the register of a particular virtual machine [AluVM](state-transitions.md) which is capable of complex validation purposes working alongside RGB.
+* To the size of **any type of data** participating in state validation (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
+* To the **number of elements of each collection** employed in state validation. This is designed to:
+  * Avoid unlimited growth of client side-validate data per each state transition.
+  * Ensure that this size fits the register size of a particular virtual machine [AluVM](state-transitions.md) that is capable of performing complex validations along with RGB.
 
 ## The Validation != Ownership Paradigm in RGB
 
-One of the most important features of RGB in respect to the majority of blockchain-based smart contract systems rests on the **clear separation between the validation task and ownership property** which are defined by the protocol at the most fundamental level.
+One of the most important features of RGB compared to most blockchain-based smart contract systems is based on the **clear separation between the validation task and ownership** that are defined by the protocol at the most fundamental level.
 
 ![](../.gitbook/assets/validation-ownership-1.png)
 
 In practice:
 
-* The **Validation** task, performed by users and observers of the protocol, guarantees **in which way(s) the properties of a smart contract may change** and thus the internal consistency and adherence of state transitions to the smart contract rule. This process belong entirely accomplished by RGB-specific libraries.
-* The **Ownership** property, which, through the seal definition pointing to a Bitcoin UTXO, **defines who can change the state**. The security level of this property, depends entirely upon the security model of Bitcoin itself.
+* The **Validation** task, performed by users and observers of the protocol, ensures **how the properties of a smart contract can change** and thus the internal consistency and adherence of state transitions to the smart contract rule. This process is fully realized by the [RGB-specific](../annexes/rgb-library-map.md) libraries.
+* The **Ownership** property, which, through the definition of the seal pointing to a Bitcoin UTXO, **defines who can change the state**. The security level of this property depends entirely on the security model of Bitcoin itself.
 
-This kind of separation prevents the possibility of mix the non-Turing complete capabilities of smart contract with the public access of contract states which is embedded in nearly all blockchains with advanced programming capabilities. On the opposite, **the usage of these common "mixed" architectures, have led to frequent and notable episodes of hacks** where yet unknown vulnerabilities of smart contracts have been exploited by publicly accessing the contract state encoded in the blockchain.
+This type of separation **prevents the possibility of mixing the non-Turing complete capabilities of smart contracts with the public access to contract states** that is embedded in almost all blockchains with advanced programming capabilities. In contrast, **the use of these common "mixed" architectures has led to frequent and notable hacks** in which yet unknown vulnerabilities of smart contracts have been exploited by publicly accessing the contract state encoded in the blockchain.
 
-Additionally, by relying on Bitcoin transaction structure, RGB can exploit the **features of the Lightning Network** in a straightforward way.
+Moreover, based on Bitcoin's transaction structure, RGB can exploit the **features of the Lightning Network** directly.
 
 ## RGB Consensus Changes
 
-As an another important characteristics, RGB possesses, in addition to Semantic Versioning of data, a Consensus Update System, that keep track of consensus changes in Contracts and Contracts Operations. Basically there are two basic way to update consensus rule embedded in the protocol:
+As another important feature, RGB has, in addition to Semantic Versioning of data, a **Consensus Update System**, which tracks changes in consent in contracts and contractual transactions. There are basically two ways to update the consent rule embedded in the protocol:
 
-* A **fast-forward** update where _some previously invalid rule becomes valid_. Despite the similarities, this kind of update is **not comparable to a **~~**blockchain hardfork**~~. The chronological history of this kind of changes it's mapped in contract through the [Ffv field](features-of-rgb-state.md#components-of-a-contract-operation) of Contract Operation. In particular it is characterized by the following properties:
-  * Existing owners are not affected.
-  * New beneficiaries must upgrade their wallets.
-* A **pushback** update where _some previously valid state becomes invalid_ .Despite the similarities, this kind of update is **not comparable to a **~~**blockchain softfork**~~, and in addition:
-  * Existing owners may loose assets if they update the wallet.
-  * In fact a new protocol, not the same version of RGB anymore.
-  * Can happen only through issuers re-issing assets on a new protocol - and users using two wallets (for both the old and the new protocol).
+### **Fast-forward**&#x20;
+
+A **fast-forward** update occurs when _some previously invalid rule becomes valid_. Despite the similarities, this kind of update is **NOT comparable to a blockchain hardfork**. The chronological history of this kind of changes is mapped into the contract through the [Ffv field](features-of-rgb-state.md#components-of-a-contract-operation) of Contract Operation. Specifically, it is characterized by the following properties:
+
+* Existing owners are not affected.
+* New beneficiaries must upgrade their wallets.
+
+### Push-back
+
+A **push-back** update occurs when _some previously valid state becomes invalid_. Despite the similarities, this kind of update is **NOT comparable to a blockchain softfork**, and furthermore:
+
+* Existing owners can lose assets if they update the wallet.
+* It's actually a new protocol, no longer the same version of RGB.
+* Can only occur through issuers reissuing assets on a new protocol and users using two wallets (for both the old and new protocols).
 
 ## RGB Contract Operation Libraries
 

@@ -1,13 +1,20 @@
 # testpage1
 
-Before Text ...
-
-<figure><img src=".gitbook/assets/csv-shard-1.png" alt=""><figcaption><p>RGB contract shard</p></figcaption></figure>
-
-After text
-
-{% code fullWidth="true" %}
+%%{init: {'theme':'forest'}}%%
 ```mermaid
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'darkMode': 'false', 
+      'primaryColor': '#000000',
+      'primaryTextColor': '#c4ffff',
+      'primaryBorderColor': '#ffffff',
+      'mainBkg': '#000000',
+      'lineColor': '#ffffff'
+    }
+  }
+}%%
 flowchart BT
     subgraph Merklization
         direction LR
@@ -24,7 +31,9 @@ flowchart BT
     MerkleHash === Root
     Leaf -- commit_id ----> MerkleHash
 ```
-{% endcode %}
 
 
 
+Before Text ...
+
+<figure><img src=".gitbook/assets/csv-shard-1.png" alt=""><figcaption><p>RGB contract shard</p></figcaption></figure>

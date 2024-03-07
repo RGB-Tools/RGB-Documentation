@@ -21,13 +21,9 @@ From a contract functional point of view, the **Schema construct addresses the f
 
 <figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption><p><strong>Elements of Contained in an RGB Schema</strong></p></figcaption></figure>
 
-## Schema Structure
-
 **From a technical point of view an RGB Schema is a functional declarative document which need to be compiled for effective usage inside RGB applications and wallets.**
 
-<figure><img src="../../.gitbook/assets/compiled_schema_structure.png" alt="Compiled Schema Structure"><figcaption><p><strong>General Layout of a Schema. Global States and Assignments of Owned States are declared each one preceded by its own Type which make able their referencing in Contract Operations which are declared just after them.  Finally the Validation Scripts and the strict type system used inside the schema in declared.</strong>  </p></figcaption></figure>
-
-Following the picture above, the Schema:
+Among the most important properties: Schema:
 
 * References an optional Root `SchemaId` from which a basic and customizable structure layout is derived. &#x20;
 * Defines all the variable used in contract state and transition using a specific [strict type system](https://www.strict-types.org/) encoding.  Of particular importance inside the Schema are specified the `Types` related to:

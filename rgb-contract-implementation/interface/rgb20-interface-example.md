@@ -1,11 +1,10 @@
-# RG20 Interface example
+# RGB20 Interface example
 
-## Example code of an RGB20 interface with related implementation
-
-Let's take a closer look at what the Rust code of an interface looks like by taking the example of [standard RGB20](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
+In the following code block we report a portion of  rust code taken from the interface [standard RGB20](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
 
 {% code fullWidth="true" %}
 ```rust
+// ...
 fn rgb20() -> Iface {
     let types = StandardTypes::with(rgb20_stl());
 
@@ -171,4 +170,28 @@ fn rgb20() -> Iface {
 ```
 {% endcode %}
 
-From Rust code an interface looks very similar to a Schema, but the key difference is that the types are defined in terms of strings, rather than Rust's primitive data types, which are connected directly to the strict data types, see `RGBContract`, that define the semantics for the API. See for example the various transition functions that have meaningful names such as `Transfer`, `Issue` etc... with their equally easily interpretable input arguments such as `input`, `used` etc... which have a data structure of type `assetOwner` defined in the interface itself in a declarative manner. The interface also declares its own error type, `error_type`, and default operation, `default_operation`, which in this case is `Transfer`. Note that, unlike a Schema, in an interface we do not have any AluVM code, since the purpose of the interface does not consist of the business logic of the contract, as mentioned earlier.
+From the code above, we can observe that the interface has rather similar structure to that of [Schema](../schema/non-inflatable-fungible-asset-schema.md). However, **the key difference lies in the different type definition,** which in interface's code is expressed  in terms of strings through `fname!()` or `tn!()` macros, while in Schema are defined through primitive strict data types.&#x20;
+
+Moreover, we can observe that in addition to the related endpoint encoded in the [NIA Schema](../schema/non-inflatable-fungible-asset-schema.md),  we find several additional state data such as:
+
+* `burnEpoch`
+* `issuedSupply`
+* `burnedSupply`
+* `replacedSupply`
+* `...`
+
+Additional endpoints for Contract Operations Transition:
+
+* `Issue`
+* `Burn`
+* `Replace`
+* `Rename`
+
+Declaration for Errors in the Contract State or Transitions such as:
+
+* `SUPPLY_MISMATCH`
+* &#x20;`INVALID_PROOF`
+* `ISSUE_EXCEEDS_ALLOWANCE`
+* &#x20;`INSUFFICIENT_RESERVES`
+
+The Interface Implementation which will be described in the next section is responsible for the selection and mapping of the suitable endpoints declared in the interface with the the data structure and operation present in the schema.

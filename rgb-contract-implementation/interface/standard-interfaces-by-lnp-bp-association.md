@@ -13,7 +13,7 @@ The following Interfaces are fully compatible and tested to work with RGB consen
   * **Stock split**, similar to those of the stock markets, or the possibility to **change the precision** of the token.
   * S**econdary issuance**, which can be unlimited, limited to specific values or unique.&#x20;
   * **Asset burning or replace** by the issuer.  The interface is designed to allow for specific parties to accomplish those task even associated to the issuance of a new contract contemporary to burning actions which make possible the reduction of the size of the contract [stash](../../annexes/glossary.md#stash).
-* **RGB21** is the interface which is design to address **NFT contracts, or better even better, digital production contract** such as digital media, books, movie, or music etc. It can be connected to the [Unique Digital Asset (UDA)](https://github.com/RGB-WG/rgb-schemata/blob/master/src/uda.rs) contract schema. As interesting additional features it provides:
+* **RGB21** is the interface which is design to address **NFT contracts, or in general any digital production contract** such as digital media, books, movie, or music etc. It can be connected to the [Unique Digital Asset (UDA)](https://github.com/RGB-WG/rgb-schemata/blob/master/src/uda.rs) contract schema. As interesting additional features it provides:
   * The built-in support for direct fetch of the media file from the contract if its size is below 16MB.
   * The possibility, for the Owner, to register [engraving](../../annexes/glossary.md#engraving) to mark the possession of the asset which remain in the asset's history after it has been sold. This feature is provided in order leverage in direct and in trustless way some notable user's possession in the NFT exchange history.
 * **RGB25** represents **an hybrid of RGB20 and RGB21** thus addressing the need to interface **partially fungible asset** contracts.  For instance it is made for assets which need to be fractionated but which need to maintain a relations with the single asset issued in the first place. A typical example would be the use of such interface for real estate tokenized assets. It can be connected to  [Collectible Fungible Asset (CFA)](https://github.com/RGB-WG/rgb-schemata/blob/master/src/cfa.rs) schema.
@@ -29,3 +29,6 @@ These interfaces haven't been implemented yet.
 * **RGB30** interface concept is very similar to an RGB20 interface, however it is able to connect to contracts which embeds **decentralized issuance**. RGB30 is the only standard that foresee to use [state extensions](../../annexes/glossary.md#state-extension).
 
 In the following section we will report the code of RGB20 interface.
+
+***
+

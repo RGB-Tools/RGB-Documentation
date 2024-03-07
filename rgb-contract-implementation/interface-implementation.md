@@ -6,7 +6,7 @@ From the previous sections, it has been illustrated that every encoded piece of 
 
 As a distinctive characteristic the Interface Implementation can explicitly **map only a subset of the data structure or state operation both from the Schema side and from the Interface side.** This way the interface implementation can restrict implicitly the functionality of some Schema from being accessed as well as restricting the use of some endpoints provided in the interface.
 
-In the following code section we report the default Interface Implementation which associates [Non Inflatable Asset Schema](schema/non-inflatable-asset-schema-code-example.md) to [RGB20 Interface](interface-and-interface-implementations/rgb20-interface-example.md). &#x20;
+In the following code section we report the default Interface Implementation which associates [Non Inflatable Asset Schema](schema/non-inflatable-fungible-asset-schema.md) to [RGB20 Interface](interface/rgb20-interface-example.md). &#x20;
 
 ```rust
 fn nia_rgb20() -> IfaceImpl {

@@ -144,7 +144,7 @@ Every Component of a Global State is composed by a 2-field structure which inclu
 * A `GlobalType` which embeds a deterministic reference to the global propriety expressed in the [Schema](../rgb-contract-implementation/schema/).
 * The actual Data expressing the property.
 
-For example, a Global State of newly issued token written in Genesis, dependent on the [Non inflatable Asset Schema](../rgb-contract-implementation/schema/non-inflatable-asset-schema-code-example.md) and [Contract Interface](../rgb-contract-implementation/interface-and-interface-implementations/) `RGB 20`, [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `GlobalTypes`:
+For example, a Global State of newly issued token written in Genesis, dependent on the [Non inflatable Asset Schema](../rgb-contract-implementation/schema/non-inflatable-fungible-asset-schema.md) and [Contract Interface](../rgb-contract-implementation/interface/) `RGB 20`, [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `GlobalTypes`:
 
 * the `ticker`.
 * the Full name of the token: `name`.

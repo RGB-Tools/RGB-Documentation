@@ -1,4 +1,4 @@
-# Interface and Interface Implementations
+# Interface
 
 An **Interface represents a standardized way to translate all the information pertaining to a compiled contract, as well as its states and operation, in a human-readable and wallet-readable format.**
 
@@ -18,10 +18,10 @@ In general we can state that **contracts which have different purposes possess d
 
 * **Standardization of contract interface**, fostering code re-usability for common wallet tasks. In particular this is the purpose of the Interfaces provided by the LNP/BP association described in the next section.&#x20;
 * A clear **separation between the development of schema and the development of interfaces** which can happen in different development streams. For instance the Schema developers can focus on the contract features paying attention only to the connections of those features an already coded interface (task which is accomplished by [interface implementation](./#interface-implementation) we will be discussing just after).
-* A **contract may even implement more than one interface** in order to provide separated functionality for different class of wallet and users. For example the features of an issuer would be more advanced to those of a normal user, which can lack all the complex part related to the contract issuance.
+* A **contract may even be parsable by more than one interface** in order to provide separated functionality for different class of wallet and users. For example the features of an issuer would be more advanced to those of a normal user, which can lack all the complex part related to the contract issuance.
 
 <figure><img src="../../.gitbook/assets/interfaces.png" alt="Interfaces"><figcaption><p>W<strong>allet that interacts with multiple contracts through various interfaces</strong></p></figcaption></figure>
 
 From this important points, it's helpful to stress, once more, the major **difference of RGB in respect to Ethereum smart contract system.** In the case of Ethereum, as well as other blockchain-based smart contract systems, all the interface related part is encoded directly inside the contract and committed into the blockchain at issuance time. This approach leads, inevitably, to an high degree of rigidity in the possible evolution of the contract, since it results hard to make modification to some specific part of the interface without modify the contract altogether. With RGB the clear separation of contract Schema and Interface allows to **easily modify the interface (and also the Interface Implementation)  even after assets issuance.**  This way the contract can contain some advance functionality whose Interface code with the wallet can be written later and independently from the development of the contract.
 
-In the next section we will be going through a description of some Interface which are shipped by default with [RGB Standard Library](https://github.com/RGB-WG/rgb-std)  and which were provided by LNP/BP association.
+In the next section we will be going through a description of some Interface which are shipped by default with [RGB Standard Library](https://github.com/RGB-WG/rgb-std)  and which were provided by LNP/BP association. As a final remark it is important to point out that **any person can write his own custom interface**.

@@ -99,7 +99,7 @@ The set of rules which allows for the registration of a provably single [commitm
 
 A directed graph which do not contains any directed cycle thus allowing topological ordering. A Blockchain or an RGB Contract [Shard](glossary.md#shard) are examples of DAG.&#x20;
 
-&#x20;[Wiki link](https://en.wikipedia.org/wiki/Directed\_acyclic\_graph)
+&#x20;[Wikipedia link](https://en.wikipedia.org/wiki/Directed\_acyclic\_graph)
 
 ### Engraving
 
@@ -119,7 +119,7 @@ The set of data, regulated by a contract [schema](glossary.md#schema), which rep
 
 The set of code instructions that allows to transform the compiled binary data of contracts [Schema](glossary.md#schema) and [Contract Operation](glossary.md#contract-operation) on [States](glossary.md#contract-state) in user and wallet-readable information.
 
-[Link](../rgb-contract-implementation/interface-and-interface-implementations/)
+[Link](../rgb-contract-implementation/interface/)
 
 ### Interface Implementation
 
@@ -127,7 +127,7 @@ The set of code declarations which bind an [Interface](glossary.md#interface) to
 
 ### Invoice
 
-A [Base85](https://en.wikipedia.org/wiki/Ascii85) encoded string, which support URL scheme capabilities, embedding the necessary data in order to allow a payer counterpart to construct a [State Transition](glossary.md#state-transition).
+A [base58](https://en.wikipedia.org/wiki/Binary-to-text\_encoding#Base58) encoded string, which support URL scheme capabilities, embedding the necessary data in order to allow a payer counterpart to construct a [State Transition](glossary.md#state-transition).
 
 ### Multi Protocol Commitment - MPC
 
@@ -207,6 +207,6 @@ A public rights having no state but which can be referenced and redeemed through
 
 ### Witness Transaction
 
-The transaction which provide the [Seal](glossary.md#single-use-seal) closing operation around a message which contain RGB commitment to a [State Transition](glossary.md#state-transition).
+The transaction which provide the [Seal](glossary.md#single-use-seal) closing operation around a message which contains the RGB commitment to a [State Transition](glossary.md#state-transition).
 
 ***

@@ -6,7 +6,7 @@ A RGB Interface can be compared to the very same word of various Object Oriented
 
 Their use in RGB is made necessary by the design choice of the contract construction. Indeed, as  described in the previous chapters,  [Schema](../schema/) is expressed a purely declarative form which is then eventually compiled in a `.rgb` binary file or in a `.rgba` armored binary file. Through Schema the definition of the [states](../../annexes/glossary.md#contract-state), the related variable and [contract operation](../../annexes/glossary.md#contract-operation) is basically **not accessible without additional pieces of code which actually are able to parse these information once those are compiled.** &#x20;
 
-<figure><img src="../../.gitbook/assets/interface_anatomy.png" alt="Interface anatomy"><figcaption><p><strong>Definition and purposes of an RGB Interface.</strong></p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/interface-anatomy.png" alt="Interface anatomy"><figcaption><p><strong>Definition and purposes of an RGB Interface.</strong></p></figcaption></figure>
 
 With Interface we can have a **semantic connection** which can connect to suitable predefined names all the relevant types encoded in the strict type system, in particular:
 

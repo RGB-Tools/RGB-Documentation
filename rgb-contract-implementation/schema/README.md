@@ -19,7 +19,7 @@ From a contract functional point of view, the **Schema construct addresses the f
 * How state data are allowed to change with state transitions?
 * What sequences of transitions are allowed?
 
-<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption><p><strong>Elements of Contained in an RGB Schema</strong></p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/schema-components.png" alt=""><figcaption><p><strong>Elements of Contained in an RGB Schema</strong></p></figcaption></figure>
 
 **From a technical point of view an RGB Schema is a functional declarative document which need to be compiled for effective usage inside RGB applications and wallets.**
 

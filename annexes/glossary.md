@@ -42,10 +42,10 @@ Formal timestamped fingerprint expressed as the registration of an hash referrin
 
 ### Consignment
 
-The data transferred between parties that are subject to [client-side validation](glossary.md#client-side-validation). There are 2 main types of consignment:
+The data transferred between parties that are subject to [client-side validation](glossary.md#client-side-validation).  In RGB there are 2 types of consignment:
 
-* Contract Consignment: provided by the contract issuer including the main information about the contract
-* Transfer Consignment: provided by the payer user party and containing all the state transition history up to the [terminal consignment](glossary.md#terminal-consignment---consignment-endpoint).
+* Contract Consignment: provided by the contract issuer including the information about the contract setup, such as the [Schema](glossary.md#schema), the [Genesis](glossary.md#genesis), the [Interface](glossary.md#interface) and the [Interface Implementation](glossary.md#interface-implementation).
+* Transfer Consignment: provided by the payer user party and containing all the state transition history up to the [terminal consignment](glossary.md#terminal-consignment-consignment-endpoint).
 
 ### Container
 
@@ -117,7 +117,7 @@ The set of data, regulated by a contract [schema](glossary.md#schema), which rep
 
 ### Interface
 
-The set of code instructions that allows to transform the compiled binary data of contracts [Schema](glossary.md#schema) and [Contract Operation](glossary.md#contract-operation) on [States](glossary.md#contract-state) in user and wallet-readable information.
+The set of code instructions that allows to transform the compiled binary data of contracts [Schema](glossary.md#schema), [Contract Operation](glossary.md#contract-operation) and [States](glossary.md#contract-state) in user and wallet-readable information.
 
 [Link](../rgb-contract-implementation/interface/)
 
@@ -129,15 +129,33 @@ The set of code declarations which bind an [Interface](glossary.md#interface) to
 
 A [base58](https://en.wikipedia.org/wiki/Binary-to-text\_encoding#Base58) encoded string, which support URL scheme capabilities, embedding the necessary data in order to allow a payer counterpart to construct a [State Transition](glossary.md#state-transition).
 
+### Global State
+
+The set of public properties included in the [state](glossary.md#contract-state) of a [contract](glossary.md#contract), defined in [Genesis](glossary.md#genesis) and optionally updatable according to the rule defined therein, which are not [owned](glossary.md#ownership) by any party.&#x20;
+
+[Link](../rgb-state-and-operations/components-of-a-contract-operation.md#global-state)
+
 ### Multi Protocol Commitment - MPC
 
 The Merkle Tree structure used in RGB to include in a single commitment into the Bitcoin Blockchain multiple [Transition Bundles](glossary.md#transition-bundle) of different contracts.
 
 [Link](commitment-layer/multi-protocol-commitments-mpc.md)
 
+### Owned State
+
+Part of the [state](glossary.md#contract-state) of a [contract](glossary.md#contract) enclosed into an [Assignment](glossary.md#assignment) which contains definition and type of the property of a contract subjected to someone's [ownership](glossary.md#ownership).
+
+[Link](../rgb-state-and-operations/components-of-a-contract-operation.md#owned-states) &#x20;
+
 ### Ownership
 
 The control and thus the possibility to spend an [UTXO](glossary.md#utxo) to which some client-side property are [assigned](glossary.md#assignment).
+
+### Partially Signed Bitcoin Transaction - PSBT
+
+A transaction which lacks some element of its signature and which can be completed / finalized with some additional elements later in time.
+
+[Link](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki)
 
 ### Redeem
 
@@ -187,7 +205,7 @@ The Bitcoin's Segwit v1 transaction format detailed in [BIP341](https://github.c
 
 ### Terminal Consignment - Consignment Endpoint
 
-The last state of a contract which include the last [State Transition](glossary.md#state-transition) constructed from a payee counterpart invoice.
+The last state of a contract which include the last [State Transition](glossary.md#state-transition) constructed from a payee counterpart [invoice](glossary.md#invoice).
 
 ### Transition Bundle
 

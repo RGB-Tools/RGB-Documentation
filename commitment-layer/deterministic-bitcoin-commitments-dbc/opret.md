@@ -10,3 +10,5 @@ This is the simplest and most straightforward scheme. The commitment is inserted
 ```
 
 `mpc::Commitment` is the 32-byte Tagged hash resulting from the [MPC tree](../multi-protocol-commitments-mpc.md#mpc-tagged-hash) which is meant to organize RGB client-side data of different contract in one commitment. Hence the size of the total commitment size in the _ScriptPubKey_ is 34 bytes.
+
+***

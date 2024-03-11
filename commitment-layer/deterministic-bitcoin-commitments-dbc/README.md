@@ -12,3 +12,5 @@ With this requirement, it is not possible to construct an "alternative history" 
 > 2. The first taproot output (if present) for the `Tapret` commitment scheme.
 
 It is worth observing that a transaction **can contain both a single** `Opret` **and a single** `Tapret` commitment in two separate outputs. Of course, these commitments will commit to different client-side validated data which, as we shall see later, explicitly indicate the commitment method used to refer to themselves.
+
+***

@@ -141,3 +141,5 @@ From a verifier's perspective, in order to prove the presence of client-side val
 {% endcode %}
 
 So the Merkle Proof provided to verify the existence and uniqueness of contract commitment in the tree is: `0x11 | entropy || 3` `tH_MPC_BRANCH(tHA || tHB)` `tH_MPC_BRANCH(tHEF || tHGH`.
+
+***

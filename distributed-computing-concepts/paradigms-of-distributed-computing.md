@@ -67,3 +67,5 @@ Naturally, if the client-side validated data are embedded in the state channels,
 In addition to the three layers just described, a fourth layer of Bitcoin Finance (#BiFi) which leverages both state channels and blockchain can complete the whole ecosystem. The general picture and the deep interconnections of all the layers, with the blockchain layer at the base, allows to achieve all the properties of the CAP theorem in a composite way.
 
 In the next section we will delve into Client-side Validation and its features.
+
+***

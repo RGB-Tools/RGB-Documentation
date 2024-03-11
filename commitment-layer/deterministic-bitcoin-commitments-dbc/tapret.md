@@ -213,3 +213,5 @@ The new Taproot Output Key `Q` including the tapret commitment is built as follo
 ## **Nonce optimization**
 
 As an additional optimization method, the `<Nonce>` representing the last byte of the `64_byte_Tapret_Commitment` allows the user constructing the proof to attempt at "mining" a `tHT` such that `tHABC < tHT`, thus placing it in the right-hand side of the tree and definitely avoiding revealing the constituents of the script branch (in this example `tHAB` and `tHC`).
+
+***

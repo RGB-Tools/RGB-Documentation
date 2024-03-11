@@ -56,30 +56,32 @@ Let's now deep-dive into all the components of a contract operation, which are c
 ```
 {% endcode %}
 
-With the help of the comprehensive diagram above, it's important to point out that any contract operation is composed of some components related to the **New State** and some components related to the **Old State** being updated. The components of the **New state** are:
+With the help of the comprehensive diagram above, it's important to point out that any contract operation is composed of some components related to the **New State** and some components which reference the **Old State** being updated. The components of the **New state** are:
 
-* **Assignments** in which are defined:
+* The **Assignments** in which are defined:
   * [Seal Definition](components-of-a-contract-operation.md#seal-definition).
   * [Owned State](components-of-a-contract-operation.md#owned-states).
-* [Global State](components-of-a-contract-operation.md#global-state) which can be either mutated or added.
-* [Valencies](components-of-a-contract-operation.md#valencies) which are present only in State Extensions.
+* The [Global State](components-of-a-contract-operation.md#global-state) which can be either [mutated or added](components-of-a-contract-operation.md#state-update-methods-and-rules).
+* The [Valencies](components-of-a-contract-operation.md#valencies) which can be defined in State Transition and Genesis.
 
 The **Old State** is referenced through:
 
-* [Inputs](components-of-a-contract-operation.md#inputs) connected to previous assignments of related old states. Not found in Genesis.
+* [Inputs](components-of-a-contract-operation.md#inputs) connected to previous assignments of related State Transitions. Not found in Genesis.
 * [Redeems](components-of-a-contract-operation.md#redeems) which are a reference to previously defined [Valencies](state-transitions.md). They are present only in State Extensions.
 
 In addition, we also have a number of operation-specific fields:
 
 * `Ffv` or `Fast-forward version` a 2-byte integer indicating the version of the contract, following the RGB rules of [fast-forward versioning](features-of-rgb-state.md#rgb-consensus-changes). The version of the contract can be updated according to the issuer's choices and needs at certain points in the contract's history, such as with respect to _re-issuances._
-* `TransitionType` **or** `ExtensionType` a 16-bit integer indicating the type of Transition/Extension expressed by the operation encoded in the Contract [Schema](../annexes/glossary.md#schema) and representing the manifestation of the [Business Logic](../annexes/glossary.md#business-logic) of the contract. It's not present in [Genesis](../annexes/glossary.md#genesis).
+* `TransitionType` or `ExtensionType` a 16-bit integer indicating the type of Transition/Extension expressed by the operation encoded in the Contract [Schema](../annexes/glossary.md#schema) and representing the manifestation of the [Business Logic](../annexes/glossary.md#business-logic) of the contract. It's not present in [Genesis](../annexes/glossary.md#genesis).
 * `ContractId` the 32-byte number that references the processed `OpId` of the Genesis of the contract. Naturally, it's present in State Transitions and Extensions, but not in Genesis.
 * `SchemaId` is a field found only in Genesis, instead of the `ContractId` and `SchemaId`. It's a 32-byte hash of the contract [Schema](state-transitions.md) that is used in the contract.
 * `Testnet` is a boolean variable indicating the use of Bitcoin Testnet or Mainnet. It is only present in Genesis.
 * `Altlayers1` is a variable that indicates which layer of the Blockchain is used as the Commitment medium for the client-side validated data as an alternative to Bitcoin (e.g. [Liquid Sidechain](https://blockstream.com/liquid/)). It is only present in Genesis.
-* `Metadata` that allows you to declare temporary variables that are useful for validating complex contracts, but do not have to be recorded as [state](../annexes/glossary.md#contract-state) properties.
+* `Metadata` that allows you to declare temporary variables that are useful for validating complex contracts, but that do not have to be recorded as [state](../annexes/glossary.md#contract-state) properties.
 
-Finally, through a custom hashing methodology, all of the fields in the Contract Operation are summarized into an `OpId` commitment that is placed in the [Transition Bundle](state-transitions.md#transition-bundle). We will cover each of these constructs in a separate subsection. The complete memory layout of each component of a contract operation is given [here](https://github.com/RGB-WG/rgb-core/blob/vesper/stl/Transition.vesper).
+Finally, through a custom hashing methodology, all of the fields in the Contract Operation are summarized into an `OpId` commitment that is placed in the [Transition Bundle](state-transitions.md#transition-bundle).&#x20;
+
+We will cover each contract component in a dedicated subsection. The complete memory layout of each component of a contract operation is given [here](https://github.com/RGB-WG/rgb-core/blob/vesper/stl/Transition.vesper).
 
 ## OpId
 
@@ -87,7 +89,7 @@ Each Contract Operation is identified by a 32-byte hash called `OpId`, which is,
 
 ## ContractId
 
-As an important additional feature, the `ContractId` of a smart contract is calculated by using the `OpId` of its [Genesis](../annexes/glossary.md#genesis) and applying to it a `Reverse byte order operation` plus a `Base58` encoding.
+As an important additional feature, the `ContractId` of a smart contract is calculated by using the `OpId` of its [Genesis](../annexes/glossary.md#genesis) and applying to it a _Reverse byte order operation_ plus a [Base58](https://en.wikipedia.org/wiki/Binary-to-text\_encoding#Base58) encoding.
 
 ## Contract State
 
@@ -98,22 +100,22 @@ Before addressing each state component, it's essential to clarify through which 
   * Private States
   * Public States
 
-![](../.gitbook/assets/state-global-owned-1.png)
+![Element composing RGB state representation of contracts.](../.gitbook/assets/state-global-owned-1.png)
 
-Global State are embedded into state transitions as a single component block, while [Owned States](components-of-a-contract-operation.md#owned-states) are defined within [Assignment](state-transitions.md) components along with a [Seal Definition](components-of-a-contract-operation.md#seal-definition).
+Global State are embedded into Contract Operation as a single component block, while [Owned States](../annexes/glossary.md#owned-state) are defined inside [Assignment](../annexes/glossary.md#assignment) construct where they are stored alongside the pertaining [Seal Definition](../annexes/glossary.md#seal-definition).
 
 ### State update methods and rules
 
 An important feature of RGB, which **affects both Global and Owned States, is the way State is modified**. Basically, State exhibit two different behaviors:
 
-* **Mutable** behavior, in which **each state transition discards previous state** and assigns a new one;
-* **Accumulative** behavior, in which each state transition adds a new state to the previous state.
+* A **Mutable** behavior, in which **each state transition discards previous state** and assigns a new one.
+* An **Accumulating** behavior, in which each state transition adds a new state to the previous state.
 
-In all cases where the **Contract State is neither Mutated nor Accumulated, the respective components are left empty**, meaning that no repetition of data takes place in such a Contract Operation.
+In all cases where the **Contract State is neither Mutated nor Accumulated, the respective components are left empty**, meaning that no repetition of data takes place a Contract Operation.&#x20;
 
-The choice of the [Business Logic](../annexes/glossary.md#business-logic) is encoded in the [Schema](../annexes/glossary.md#schema) of the contract and cannot be changed after the Genesis, except by some [extensions](../annexes/glossary.md#state-extension) specifically encoded herein.
+The choice between mutable or accumulated state is set inside the [Business Logic](../annexes/glossary.md#business-logic) encoded in the [Schema](../annexes/glossary.md#schema) of the contract and cannot be changed after the Genesis, except by some [extensions](../annexes/glossary.md#state-extension) specifically encoded herein.
 
-&#x20;The table below provides a summary of the rules regarding the permitted modification of Global/Owned States by each Contract Operation:
+The table below provides a summary of the rules regarding the permitted modification of Global/Owned States by each Contract Operation:
 
 |                          | **Genesis** | **State Extension** | **State Transition** |
 | ------------------------ | :---------: | :-----------------: | :------------------: |
@@ -123,9 +125,9 @@ The choice of the [Business Logic](../annexes/glossary.md#business-logic) is enc
 | **Mutates Owned State**  |     n/a     |          No         |           +          |
 | **Adds Valencies**       |      +      |          +          |           +          |
 
-_+ = if allowed by Contract Schema      \* = if Confirmed by a State Transition_
+_+ = if allowed by Contract Schema \* = if Confirmed by a State Transition_
 
-As a final consideration of this section, in the following table we provide a summary of the main scope-related properties that the various types of state elements exhibit in the RGB protocol.
+As a final consideration of this section, in the following table we provide a summary of the main scope-related properties that the various kind of state elements exhibit in the RGB protocol.
 
 |                    |             **Metadata**            |                   **Global state**                  |                                             **Owned state**                                            |
 | ------------------ | :---------------------------------: | :-------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
@@ -137,23 +139,21 @@ As a final consideration of this section, in the following table we provide a su
 
 The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** in that it defines certain general features of the contract that must be publicly visible. A **Global State is always a public state**, and can be written in Genesis by the contract issuer and later modified in state transition or state extensions by a legitimate party defined in the contract schema.
 
-As an important feature, the Global State is usually made available by contract issuers or contract participants and distributed through both centralized and decentralized public networks (e.g. websites, IPFS, Nostr, Torrent, etc.). It's important to note that the **availability** of the Global State is incentivized only by economic means of using and disseminating of the contract: the parties involved are interested in and bears the cost of the storage solution that enables the accessibility of this type of data.
+As an important feature, the Global State is usually made available by contract issuers or contract participants and distributed through both centralized and decentralized public networks (e.g. websites, IPFS, Nostr, Torrent, etc.) in form of a [contract consignment](../annexes/glossary.md#consignment). It's important to note that the **availability** of the Global State is incentivized only by economic means of using and disseminating of the contract: the parties involved are committed at bears the cost of the storage solution that enables the accessibility of this kind of  contract data.
 
 Each component of a Global State consists of a 2-field structure that includes:
-
 
 * A `GlobalType` which embeds a deterministic reference to the global propriety expressed in the [Schema](../rgb-contract-implementation/schema/).
 * The actual Data expressing the property.
 
-For example, a Global State of newly issued token written in Genesis, dependent on the [Non inflatable Asset Schema](../rgb-contract-implementation/schema/non-inflatable-fungible-asset-schema.md) and [Contract Interface](../rgb-contract-implementation/interface/) `RGB 20`, [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `GlobalTypes`:
+For example, a Global State of newly issued token written in Genesis, dependent on the [Non inflatable Asset Schema](../rgb-contract-implementation/schema/non-inflatable-fungible-asset-schema.md) and Contract [Interface](../annexes/glossary.md#interface) [RGB 20](../rgb-contract-implementation/interface/rgb20-interface-example.md), [contains](https://github.com/RGB-WG/rgb/blob/master/examples/rgb20-demo.yaml) generally, as common `GlobalTypes`:
 
-* the `ticker`.
-* the full name of the token: `name`.
-* the precision of decimal digits: `precision`.
-* the maximum supply of the token: `issuedSupply`.
-* the date of issuance: `created`.
-* a text with some Legal disclaimer: `data`.
-
+* The `ticker`.
+* The full name of the token: `name`.
+* The precision of decimal digits: `precision`.
+* The maximum supply of the token: `issuedSupply`.
+* The date of issuance: `created`.
+* A text with some Legal disclaimer: `data`.
 
 ### Assignments
 
@@ -178,7 +178,7 @@ Since the concealment methodology of each construct may vary, we will discuss th
 The first main component of the Assignment construct is the [Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) which, in its `revealed` form, is itself a structure consisting of four fields: `txptr` `vout` `blinding` `method`.
 
 * `txptr` is a more complex object than a simple hash of a Bitcoin Transaction. In particular, it can have two forms:
-  * `Graph seal` which is the simplest case where an existing UTXO (having a specific `txid`) is used as the seal definition. Specifically, the seal&#x20;
+  * `Graph seal` which is the simplest case where an existing UTXO (having a specific `txid`) is used as the seal definition. Specifically, the seal
   * `Genesis seal` which is a "self-referenced" definition, meaning that the **transaction used as the seal definition coincides with the witness transaction that includes the present Assignment**. Since the final `txid` of the transaction depends on all the state transition data, including `txptr` it would be impossible to compute it because of the implied circular reference. In practice the `Genesis Seal` is a null field that has become necessary to handle several situations where no external UTXO is available: a notable example is the generation and update of Lightning Network's commitment transactions.
 * `vout` is the transaction output of the transaction id entered in `txptr` (if it's `Graph seal`). `txptr` together with `vout` form the standard _outpoint_ representation of Bitcoin transactions.
 * `blinding` is a random number of 8 bytes, which allows the seal data to be effectively hidden once it has been hashed, improving resistance to brute-force attacks.
@@ -251,7 +251,7 @@ In addition, a summary of the characteristics of each **StateType** is provided 
 
 ## Inputs
 
-Similar to Bitcoin Transactions, **Inputs represent the "other half" of the Assignment construct**. They have the basic role of referencing Assignments from a previous State Transition or Genesis. Inputs are not present in Genesis and State Extension Operation and  consist of the following fields:
+Similar to Bitcoin Transactions, **Inputs represent the "other half" of the Assignment construct**. They have the basic role of referencing Assignments from a previous State Transition or Genesis. Inputs are not present in Genesis and State Extension Operation and consist of the following fields:
 
 * `PrevOpId` containing the identifier of the previous Assignment operation being referenced.
 * `AssignmentType` containing the identifier of the contract property being modified by the referenced Assignment.

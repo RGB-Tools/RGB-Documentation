@@ -29,3 +29,5 @@ If a [Tapret](deterministic-bitcoin-commitments-dbc/tapret.md) commitment is use
 * The [nonce](deterministic-bitcoin-commitments-dbc/tapret.md#nonce-optimization), if used, to optimize the Partner node part of the proof.
 
 In the next section we will introduce concepts purely concerning the off-chain part of RGB, i.e., contracts, giving an abstract view of the partially replicated finite state machine that gives RGB a much greater expressiveness than can be achieved through Bitcoin Script without sacrificing confidentiality
+
+***

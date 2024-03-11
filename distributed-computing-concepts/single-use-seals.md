@@ -70,3 +70,5 @@ We therefore need a **“chain” of Single-Use-Seals**, where **the closure of 
 * The chain of connected transaction spends represent the Proof-of-Publication.
 
 In the next chapters we will explore in detail how RGB implements the concept of Single-Use-Seal by storing the commitments of its operation in the Bitcoin blockchain.
+
+***

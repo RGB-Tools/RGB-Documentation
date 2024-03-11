@@ -61,3 +61,5 @@ The key point of using the single-use seal in combination with client-side valid
 <figure><img src="../.gitbook/assets/txo2-5.png" alt=""><figcaption><p><strong>The UTXO being spent contains the seal definition. A precise kind of transaction output contains the message.</strong></p></figcaption></figure>
 
 The next important step is to illustrate precisely how the two commitment schemes adopted in RGB protocol, **opret** and **tapret**, work and which are the features they must meet, particularly with regard to commitment determinism.
+
+***

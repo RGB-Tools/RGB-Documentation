@@ -46,3 +46,5 @@ The commitment structure used in Client-Side Validation (as in the RGB protocol,
 [Anchor](../commitment-layer/anchors.md) structures provide the deterministic link between the [single-use seal](single-use-seals.md) and the client-side data that represent the message to which the [single-use seal is closed around](single-use-seals.md#seal-closing). &#x20;
 
 In order to guarantee the efficacy of the commitment scheme and precise chronological ordering derived from the 1st layer, the use of a new cryptographic primitive needs to be introduced: the **Single-use Seal**.
+
+***

@@ -59,3 +59,9 @@ The approach adopted by RGB in transferring consignments between parties, as ill
         </p>
     </figcaption>
 </figure>
+
+The RGB system offers a significant advantage over other digital exchange methods, especially when it comes to complex operations such as atomic swaps. Atomic swaps, commonly used in various cryptocurrency networks, such as the Lightning network, can present complications. Typically, they require two separate transactions and the use of a hash code to ensure that both parties complete the swap simultaneously, known as the ***reverse American call option problem***. This process can create a situation where one party has the power to influence the timing of the exchange by revealing or withholding the hash code.
+
+RGB simplifies this process considerably. Instead of requiring two separate transactions, RGB allows the direct exchange of one asset against another (e.g., Bitcoin against an RGB asset or an RGB asset against another RGB asset) within a single transaction. This eliminates the need for a hash code, as both assets can be exchanged directly. If an exchange involves Bitcoin and RGB assets, both can be included in the same transaction output, making the process more direct and secure.
+
+In addition, RGB introduces a mechanism that allows both parties to have complete control over the execution of the transaction. If the transaction is not published, both parties have the option to do so, ensuring that neither can take advantage at the expense of the other. If both parties fail to publish, the original inputs can be spent again, rendering the transaction invalid. This approach offers a higher level of security and flexibility than traditional methods, while simplifying the exchange process.

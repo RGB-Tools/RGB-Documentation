@@ -11,11 +11,7 @@ Each element within the system, be it a contract, schema, interface, interface o
 The concept of chunking is introduced as a means to enhance the readability and verifiability of these identifiers. This technique, commonly used in phone and credit card numbers, breaks down long strings into smaller, more manageable segments. This not only aids in human parsing but also in verification processes, where checking the integrity of an identifier involves examining specific segments, such as the checksum at the end. Chunking thereby offers a balance between security and usability, with each chunk providing a certain level of security assurance. For example, having 256-bit strings divided into six blocks means that each chunk adds about 256/6 (~42) bits of security.
 
 An identifier for an RGB contract could be, for example, the following string:
-<p style="text-align: center;">
-    <mark style="color: yellow;">
-        2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </mark>
-</p>
+$${\text{\color{orange}2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX}}$$
 which, as we said, is a string in Base 58 divided into the various chunks to make it easier to read.
 
 Initially, bech 32 coding was considered for use in the system. Despite the potential for shorter QR codes and error correction capabilities, bech 32 proved to be more time-consuming and less practical than Base 58, especially in terms of readability and QR code size: it is not recommended for use for strings longer than 90 characters. Similar discourse for bech32m. The decision to return to Base 58, the format originally used by Bitcoin, was dictated by these results and the realization that error correction was not as crucial as previously thought, given the system's verification mechanisms.
@@ -23,35 +19,7 @@ Initially, bech 32 coding was considered for use in the system. Despite the pote
 ## Utilizing URLs for Enhanced Interaction
 
 A significant advantage of the chosen identifier system is its compatibility with URLs, allowing for direct interaction with wallets through simple clicks. This contrasts sharply with the cumbersome process required by other systems, where multiple steps are needed to copy and paste identifiers into wallets. An example of a URL for fungible tokens might be:
-<p style="text-align: center;">
-    <mark style="color: red;">
-        rgb
-    </mark>
-    <mark style="color: white;">
-        :
-    </mark>
-    <mark style="color: yellow;">
-        2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: blue;">
-        RGB20
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: magenta;">
-        100
-    </mark>
-    <mark style="color: white;">
-        +utxob:
-    </mark>
-    <mark style="color: green;">
-        egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </mark>
-</p>
+$${\text{\color{red}rgb\color{black}:\color{orange}2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX\color{black}/\color{blue}RGB20\color{black}/\color{magenta}100\color{black}+utxob:\color{green}egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb}}$$
 
 where `rgb:` defines the URL pattern, the contract ID is the same as in the previous example, `RGB20` defines the interface used, i.e., the default methods available to interact with the contract, the number `100` is part of the assignment and represents the amount of tokens associated with the blinded UTXO introduced by the string `utxob`. The blinded UTXO is itself in the Base 58 format divided into chunks, but it is neither a Bitcoin address nor a transaction ID, but is the hash of: transaction ID, output number, blinding factor, and commitment method. This prevents Alice from knowing the UTXO actually held by Bob, so it falls into the type of state associated with a secret seal that we introduced in the chapter (put reference).
 
@@ -59,107 +27,14 @@ The URL format's simplicity and efficiency in opening wallets and facilitating t
 Alternatives to the direct use of contract IDs, such as using asset tickers or mnemonic checksums, were considered but ultimately rejected due to security concerns and the potential for confusion. The chosen format prioritizes clarity and security, ensuring that users can easily understand and verify the details of their transactions.
 
 The power of URLs is also expressed in the ease with which parameters such as an invoice signature can be introduced:
-<p style="text-align: center;">
-    <mark style="color: red;">
-        rgb
-    </mark>
-    <mark style="color: white;">
-        :
-    </mark>
-    <mark style="color: yellow;">
-        2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: blue;">
-        RGB20
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: magenta;">
-        100
-    </mark>
-    <mark style="color: white;">
-        +utxob:
-    </mark>
-    <mark style="color: green;">
-        egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </mark>
-    <mark style="color: cyan;">
-        ?sig=6kzbKKffP6xftkxn9UP8gWqiC41W16wYKE5CYaVhmEve
-    </mark>
-</p>
+$${\text{\color{red}rgb\color{black}:\color{orange}2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX\color{black}/\color{blue}RGB20\color{black}/\color{magenta}100\color{black}+utxob:\color{green}egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb\color{cyan}?sig=6kzbKKffP6xftkxn9UP8gWqiC41W16wYKE5CYaVhmEve}}$$
 
 in which additional parameters beyond `sig` can be added if there is a need and it is not necessary for all software to be able to support them since it is inherent in the operation of URLs that the path of the request that is not understood can be ignored.
 
 We can see how easily an NFT can be defined, for example:
-<p style="text-align: center;">
-    <mark style="color: red;">
-        rgb
-    </mark>
-    <mark style="color: white;">
-        :
-    </mark>
-    <mark style="color: yellow;">
-        2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: blue;">
-        RGB21
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: magenta;">
-        DbwzvSu-4BZU81jEp-E9FVZ3xj-cyuTKWWy-2gmdnaxt-ACrS
-    </mark>
-    <mark style="color: white;">
-        +utxob:
-    </mark>
-    <mark style="color: green;">
-        egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </mark>
-</p>
+$${\text{\color{red}rgb\color{black}:\color{orange}2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX\color{black}/\color{blue}RGB21\color{black}/\color{magenta}DbwzvSu-4BZU81jEp-E9FVZ3xj-cyuTKWWy-2gmdnaxt-ACrS\color{black}+utxob:\color{green}egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb}}$$
 Or the issuance of new RGB20 tokens:
-<p style="text-align: center;">
-    <mark style="color: red;">
-        rgb
-    </mark>
-    <mark style="color: white;">
-        :
-    </mark>
-    <mark style="color: yellow;">
-        2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: blue;">
-        RGB20
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: cyan;">
-        issue
-    </mark>
-    <mark style="color: white;">
-        /
-    </mark>
-    <mark style="color: magenta;">
-        100000
-    </mark>
-    <mark style="color: white;">
-        +utxob:
-    </mark>
-    <mark style="color: green;">
-        egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </mark>
-</p>
+$${\text{\color{red}rgb\color{black}:\color{orange}2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX\color{black}/\color{blue}RGB20\color{black}/\color{cyan}issue\color{black}/\color{magenta}100000\color{black}+utxob:\color{green}egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb}}$$
 this URL can be sent to whoever is authorized to issue the token, which could be, for example, a company that controls the UTXO with a multisig.
 
 ## The Command Line Interface and Workflow
@@ -167,31 +42,31 @@ this URL can be sent to whoever is authorized to issue the token, which could be
 RGB includes an all-in-one tool that allows you to work with these URLs through the command-line interface, for example, to verify and process invoices. Including invoice generation, transaction construction and verification, and seamless integration of RGB assets into the transaction process. The workflow demonstrates the efficiency and security of the system, highlighting its potential to simplify and secure transactions in a variety of contexts.
 
 So, for example, Alice could use the command line to create an invoice by specifying the interface, `RGB20`, quantity and ticker of the token, which will be automatically resolved in the contract/genesis ID, and information regarding where she will receive payment, i.e., an outpoint that is prefixed with a specific code (in this case `tapret1st`):
-```bash
+```shell
 alice$ rgb invoice RGB20 100 USDT tapret1st:456e3..dfe1:0
 ```
 She will receive as output an URL of the type
-```bash
+```shell
 rgb:2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
 /RGB20/100+utxob:egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
 ```
 in which the blinding factor generated to hide Alice's UTXO is saved in Alice's stash for future use.
 
 The invoice is then sent by Alice to Bob. Now Bob can in turn use Bitcoin wallet commands from the shell to construct the transaction in PSBT format (this feature will be integrated inside RGB itself starting with version 0.11) and later use the newly constructed PSBT to expend one of the outputs that you want to use for RGB assets:
-```bash
+```shell
 bob$ wallet construct tx.psbt
 bob$ rgb transfer tx.psbt <invoice> consignment.rgb
 ```
 therefore RGB constructs the state transition based on the information just provided by Bob respecting the requirements of the invoice generated by Alice. To do this it takes the whole story from Bob's stash, places the state transition on top, and generates as output the consignment file in binary form that can be sent to Alice to be accepted to produce the signature to be sent to Bob:
-```bash
+```shell
 alice$ rgb accept consignment.rgb
 ```
-```bash
+```shell
 sig:DbwzvSu4BZU81jEpE9FVZ3xjcyuTKWWy2gmdnaxtACrS # <— signature
 ```
 
 Lastly Bob checks the signature and in turn signs the PSBT transaction which already contains the information about RGB since in the command used by alice not only the consignment is produced, but also the contents of the PSBT file are changed:
-```bash
+```shell
 bob$ rgb check <sig>
 bob$ wallet sign —publish tx.psbt
 ```

@@ -169,7 +169,7 @@ Each Assignment consists of the following components:
 
 As a unique feature of RGB, both the Seal Definition and the Owned State can be expressed in `Revealed` or `Concealed` form. This is particularly useful for maintaining - selectively - high privacy and scalability both in the construction of state transitions and in subsequent validation by the various parties that may be involved in the contract. In fact, the constructs in `Revealed` form can be used to validate the same data entered in the previous [State Transitions](../annexes/glossary.md#state-transition) with their hash digest representing the `concealed` form of the construct. In the diagram below, all four Reveal/Conceal form combinations are shown:
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption><p><strong>All combination of Revealed/Concealed form applied to Seal Definition and Owned State.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/concealed-revealed.png" alt=""><figcaption><p><strong>All combination of Revealed/Concealed form applied to Seal Definition and Owned State.</strong></p></figcaption></figure>
 
 Since the concealment methodology of each construct may vary, we will discuss the respective forms for each construct when necessary. As a final remark in this paragraph, according to the RGB consensus rules **the `OpId` of the state transition is always** [**calculated**](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#commitencode-trait) **from the concealed data.**
 
@@ -188,7 +188,7 @@ The `concealed` form of the Seal Definition is simply the SHA-256 [tagged hash](
 
 `SHA-256(SHA-256(urn:lnp-bp:seals:secret#2024-02-03) || SHA-256(urn:lnp-bp:seals:secret#2024-02-03) || txptr || vout || blinding || method)`
 
-<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption><p><strong>Components of the Seal Definition.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/components-seal-definition.png" alt=""><figcaption><p><strong>Components of the Seal Definition.</strong></p></figcaption></figure>
 
 #### Owned States
 

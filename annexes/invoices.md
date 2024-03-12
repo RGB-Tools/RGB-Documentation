@@ -12,9 +12,9 @@ The concept of chunking is introduced as a means to enhance the readability and 
 
 An identifier for an RGB contract could be, for example, the following string:
 <p style="text-align: center;">
-    <span style="color: yellow;">
+    <mark style="color: yellow;">
         2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </span>
+    </mark>
 </p>
 which, as we said, is a string in Base 58 divided into the various chunks to make it easier to read.
 
@@ -24,33 +24,33 @@ Initially, bech 32 coding was considered for use in the system. Despite the pote
 
 A significant advantage of the chosen identifier system is its compatibility with URLs, allowing for direct interaction with wallets through simple clicks. This contrasts sharply with the cumbersome process required by other systems, where multiple steps are needed to copy and paste identifiers into wallets. An example of a URL for fungible tokens might be:
 <p style="text-align: center;">
-    <span style="color: red;">
+    <mark style="color: red;">
         rgb
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         :
-    </span>
-    <span style="color: yellow;">
+    </mark>
+    <mark style="color: yellow;">
         2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: blue;">
+    </mark>
+    <mark style="color: blue;">
         RGB20
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: magenta;">
+    </mark>
+    <mark style="color: magenta;">
         100
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         +utxob:
-    </span>
-    <span style="color: green;">
+    </mark>
+    <mark style="color: green;">
         egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </span>
+    </mark>
 </p>
 
 where `rgb:` defines the URL pattern, the contract ID is the same as in the previous example, `RGB20` defines the interface used, i.e., the default methods available to interact with the contract, the number `100` is part of the assignment and represents the amount of tokens associated with the blinded UTXO introduced by the string `utxob`. The blinded UTXO is itself in the Base 58 format divided into chunks, but it is neither a Bitcoin address nor a transaction ID, but is the hash of: transaction ID, output number, blinding factor, and commitment method. This prevents Alice from knowing the UTXO actually held by Bob, so it falls into the type of state associated with a secret seal that we introduced in the chapter (put reference).
@@ -60,105 +60,105 @@ Alternatives to the direct use of contract IDs, such as using asset tickers or m
 
 The power of URLs is also expressed in the ease with which parameters such as an invoice signature can be introduced:
 <p style="text-align: center;">
-    <span style="color: red;">
+    <mark style="color: red;">
         rgb
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         :
-    </span>
-    <span style="color: yellow;">
+    </mark>
+    <mark style="color: yellow;">
         2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: blue;">
+    </mark>
+    <mark style="color: blue;">
         RGB20
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: magenta;">
+    </mark>
+    <mark style="color: magenta;">
         100
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         +utxob:
-    </span>
-    <span style="color: green;">
+    </mark>
+    <mark style="color: green;">
         egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </span>
-    <span style="color: cyan;">
+    </mark>
+    <mark style="color: cyan;">
         ?sig=6kzbKKffP6xftkxn9UP8gWqiC41W16wYKE5CYaVhmEve
-    </span>
+    </mark>
 </p>
 
 in which additional parameters beyond `sig` can be added if there is a need and it is not necessary for all software to be able to support them since it is inherent in the operation of URLs that the path of the request that is not understood can be ignored.
 
 We can see how easily an NFT can be defined, for example:
 <p style="text-align: center;">
-    <span style="color: red;">
+    <mark style="color: red;">
         rgb
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         :
-    </span>
-    <span style="color: yellow;">
+    </mark>
+    <mark style="color: yellow;">
         2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: blue;">
+    </mark>
+    <mark style="color: blue;">
         RGB21
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: magenta;">
+    </mark>
+    <mark style="color: magenta;">
         DbwzvSu-4BZU81jEp-E9FVZ3xj-cyuTKWWy-2gmdnaxt-ACrS
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         +utxob:
-    </span>
-    <span style="color: green;">
+    </mark>
+    <mark style="color: green;">
         egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </span>
+    </mark>
 </p>
 Or the issuance of new RGB20 tokens:
 <p style="text-align: center;">
-    <span style="color: red;">
+    <mark style="color: red;">
         rgb
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         :
-    </span>
-    <span style="color: yellow;">
+    </mark>
+    <mark style="color: yellow;">
         2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: blue;">
+    </mark>
+    <mark style="color: blue;">
         RGB20
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: cyan;">
+    </mark>
+    <mark style="color: cyan;">
         issue
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         /
-    </span>
-    <span style="color: magenta;">
+    </mark>
+    <mark style="color: magenta;">
         100000
-    </span>
-    <span style="color: white;">
+    </mark>
+    <mark style="color: white;">
         +utxob:
-    </span>
-    <span style="color: green;">
+    </mark>
+    <mark style="color: green;">
         egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb
-    </span>
+    </mark>
 </p>
 this URL can be sent to whoever is authorized to issue the token, which could be, for example, a company that controls the UTXO with a multisig.
 

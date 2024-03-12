@@ -25,16 +25,16 @@ Let's now deep-dive into all the components of a contract operation, which are c
                |  |                                               |  |                                                            |  |
                |  | +-------------------------------------------+ |  | +--------------------------------------------------------+ |  |
                |  | | Input #1                                  | |  | | Assignment #1                                          | |  |
-+------+       |  | | +----------+ +----------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +-------------+
-| OpId +--------------> PrevOpId | | AssignmentType | | Index | | |  | | | AssignmentType | | Owned State | | Seal Definition +--------------> Bitcoin TXO |
-+------+       |  | | +----------+ + ---------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +-------------+
++------+       |  | | +----------+ +----------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +--------------+
+| OpId +--------------> PrevOpId | | AssignmentType | | Index | | |  | | | AssignmentType | | Owned State | | Seal Definition +--------------> Bitcoin UTXO |
++------+       |  | | +----------+ + ---------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +--------------+
                |  | +-------------------------------------------+ |  | +--------------------------------------------------------+ |  |         
                |  |                                               |  |                                                            |  |         
                |  | +-------------------------------------------+ |  | +--------------------------------------------------------+ |  |         
                |  | | Input #2                                  | |  | | Assignment #2                                          | |  |         
-+------+       |  | | +----------+ +----------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +-------------+
-| OpId +--------------> PrevOpId | | AssignmentType | | Index | | |  | | | AssignmentType | | Owned State | | Seal Definition +--------------> Bitcoin TXO |
-+------+       |  | | +----------+ +----------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +-------------+
++------+       |  | | +----------+ +----------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +--------------+
+| OpId +--------------> PrevOpId | | AssignmentType | | Index | | |  | | | AssignmentType | | Owned State | | Seal Definition +--------------> Bitcoin UTXO |
++------+       |  | | +----------+ +----------------+ +-------+ | |  | | +----------------+ +-------------+ +-----------------+ | |  |       +--------------+
                |  | +-------------------------------------------+ |  | +--------------------------------------------------------+ |  |
                |  |                                               |  |                                                            |  |
                |  |       ...           ...          ...          |  |     ...          ...             ...                       |  |
@@ -113,7 +113,7 @@ An important feature of RGB, which **affects both Global and Owned States, is th
 
 In all cases where the **Contract State is neither Mutated nor Accumulated, the respective components are left empty**, meaning that no repetition of data takes place a Contract Operation.&#x20;
 
-The choice between mutable or accumulated state is set inside the [Business Logic](../annexes/glossary.md#business-logic) encoded in the [Schema](../annexes/glossary.md#schema) of the contract and cannot be changed after the Genesis, except by some [extensions](../annexes/glossary.md#state-extension) specifically encoded herein.
+The choice between mutable or accumulated state is set inside the [Business Logic](../annexes/glossary.md#business-logic) encoded in the [Schema](../annexes/glossary.md#schema) of the contract and cannot be changed after the Genesis, except by some [State Extension](../annexes/glossary.md#state-extension) specifically encoded herein.
 
 The table below provides a summary of the rules regarding the permitted modification of Global/Owned States by each Contract Operation:
 
@@ -127,7 +127,7 @@ The table below provides a summary of the rules regarding the permitted modifica
 
 _+ = if allowed by Contract Schema \* = if Confirmed by a State Transition_
 
-As a final consideration of this section, in the following table we provide a summary of the main scope-related properties that the various kind of state elements exhibit in the RGB protocol.
+As a final consideration of this section, in the following table we provide a summary of the main scope-related properties that the various kind of state data elements exhibit in the RGB protocol.
 
 |                    |             **Metadata**            |                   **Global state**                  |                                             **Owned state**                                            |
 | ------------------ | :---------------------------------: | :-------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
@@ -137,9 +137,9 @@ As a final consideration of this section, in the following table we provide a su
 
 ### Global State
 
-The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** in that it defines certain general features of the contract that must be publicly visible. A **Global State is always a public state**, and can be written in Genesis by the contract issuer and later modified in state transition or state extensions by a legitimate party defined in the contract schema.
+The purpose of Global State can be summarized by the following sentence:**"nobody owns, everyone knows"** in that it defines certain general features of the contract that must be publicly visible. A **Global State is always a public state**, and can be written in Genesis by the [contract issuer](../annexes/glossary.md#contract-participant) and later modified in state transition or state extensions by a legitimate party defined in the contract schema.
 
-As an important feature, the Global State is usually made available by contract issuers or contract participants and distributed through both centralized and decentralized public networks (e.g. websites, IPFS, Nostr, Torrent, etc.) in form of a [contract consignment](../annexes/glossary.md#consignment). It's important to note that the **availability** of the Global State is incentivized only by economic means of using and disseminating of the contract: the parties involved are committed at bears the cost of the storage solution that enables the accessibility of this kind of  contract data.
+As an important feature, the Global State is usually made available by contract issuers or contract participants and distributed through both centralized and decentralized public networks (e.g. websites, IPFS, Nostr, Torrent, etc.) in form of a [contract consignment](../annexes/glossary.md#consignment). It's important to note that the **availability** of the Global State is incentivized only by economic means of using and sharing the contract to the wider public: the parties involved are committed to bear the cost of the necessary storage solution that enables the accessibility of this kind of contract data.
 
 Each component of a Global State consists of a 2-field structure that includes:
 
@@ -157,7 +157,7 @@ For example, a Global State of newly issued token written in Genesis, dependent 
 
 ### Assignments
 
-Assignments are the core constructs responsible for the **Seal Definition** operation and related **Owned State** to which that Seal Definition is bound. They are the central part that enables the **rightful transfer of a digital property** described in the Owned State, to a New Owner identified by the possession of a specific Bitcoin [UTXO](../annexes/glossary.md#utxo). The Assignment can be compared to Bitcoin Transaction Outputs, but possibly embeds more expressiveness and potential.
+Assignments are the core constructs responsible for the [Seal Definition](../annexes/glossary.md#seal-definition) operation and related [Owned State](../annexes/glossary.md#owned-state) to which that Seal Definition is bound. They are the central part that enables the **rightful transfer of a digital property**, described in the Owned State, to a New Owner identified by the possession of a specific Bitcoin [UTXO](../annexes/glossary.md#utxo). An Assignment can be compared to a Bitcoin Transaction Output, but possibly embedding more expressiveness and potential.
 
 Each Assignment consists of the following components:
 
@@ -167,26 +167,30 @@ Each Assignment consists of the following components:
 
 #### Revealed / Concealed form
 
-As a unique feature of RGB, both the Seal Definition and the Owned State can be expressed in `Revealed` or `Concealed` form. This is particularly useful for maintaining - selectively - high privacy and scalability both in the construction of state transitions and in subsequent validation by the various parties that may be involved in the contract. In fact, the constructs in `Revealed` form can be used to validate the same data entered in the previous [State Transitions](../annexes/glossary.md#state-transition) with their hash digest representing the `concealed` form of the construct. In the diagram below, all four Reveal/Conceal form combinations are shown:
+As a unique feature of RGB, both the Seal Definition and the Owned State can be expressed in `Revealed` or `Concealed` form. This is particularly useful for maintaining - selectively - high privacy and scalability both in the construction of state transitions and in subsequent validation by the various parties that may be involved in the contract. In fact, the constructs in `Revealed` form can be used to validate the same data entered in the previous [State Transitions](../annexes/glossary.md#state-transition) with their hash digest representing the C`oncealed` form of the construct. In the diagram below, all four Reveal/Conceal form combinations are shown:
 
 <figure><img src="../.gitbook/assets/concealed-revealed.png" alt=""><figcaption><p><strong>All combination of Revealed/Concealed form applied to Seal Definition and Owned State.</strong></p></figcaption></figure>
 
-Since the concealment methodology of each construct may vary, we will discuss the respective forms for each construct when necessary. As a final remark in this paragraph, according to the RGB consensus rules **the `OpId` of the state transition is always** [**calculated**](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#commitencode-trait) **from the concealed data.**
+Since the concealment methodology of each construct may vary, we will discuss the respective forms for each construct when necessary. As a final remark in this paragraph, according to the RGB consensus rules **the** `OpId` **of the state transition is always** [calculated](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#commitencode-trait) **from the concealed data.**
 
 #### Seal Definition
 
-The first main component of the Assignment construct is the [Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) which, in its `revealed` form, is itself a structure consisting of four fields: `txptr` `vout` `blinding` `method`.
+The first main component of the Assignment construct is the [Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) which, in its `Revealed` form, is itself a structure consisting of four fields: `txptr` `vout` `blinding` `method`.
 
 * `txptr` is a more complex object than a simple hash of a Bitcoin Transaction. In particular, it can have two forms:
-  * `Graph seal` which is the simplest case where an existing UTXO (having a specific `txid`) is used as the seal definition. Specifically, the seal
-  * `Genesis seal` which is a "self-referenced" definition, meaning that the **transaction used as the seal definition coincides with the witness transaction that includes the present Assignment**. Since the final `txid` of the transaction depends on all the state transition data, including `txptr` it would be impossible to compute it because of the implied circular reference. In practice the `Genesis Seal` is a null field that has become necessary to handle several situations where no external UTXO is available: a notable example is the generation and update of Lightning Network's commitment transactions.
-* `vout` is the transaction output of the transaction id entered in `txptr` (if it's `Graph seal`). `txptr` together with `vout` form the standard _outpoint_ representation of Bitcoin transactions.
-* `blinding` is a random number of 8 bytes, which allows the seal data to be effectively hidden once it has been hashed, improving resistance to brute-force attacks.
+  * `Graph seal` which is the simplest case where an existing [UTXO](../annexes/glossary.md#utxo)  is used as the seal definition. Specifically, the seal is referenced through the `txid` pointing at the UTXO chosen as seal.
+  * `Genesis seal` which should be interpreted as a "self-referenced" definition. The use of this construct means that the **transaction used as the seal definition coincides with the witness transaction that includes the present Assignment**. Since the final `txid` of the transaction depends on all the state transition data, including `txptr`, it would be impossible to compute it because of the implied circular reference. In practice the `Genesis Seal` is a null field that has become necessary to handle several situations where no external UTXO is available: a notable example is the generation and update of Lightning Network's commitment transactions.
+* `vout` is the transaction output number of the transaction id entered in `txptr` (if it's `Graph seal`). `txptr` together with `vout` form the standard _outpoint_ representation of Bitcoin transactions.
+* `blinding` is a random number of 8 bytes, which allows the seal data to be effectively hidden once they have been hashed, improving resistance to brute-force attacks.
 * `method` is a 1-byte field indicating the seal closing method, which will be used in the related [witness transaction](../annexes/glossary.md#witness-transaction). It's either [tapret](../commitment-layer/commitment-schemes.md#tapret) or [opret](../commitment-layer/commitment-schemes.md#tapret).
 
-The `concealed` form of the Seal Definition is simply the SHA-256 [tagged hash](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#specific-rgb-consensus-commitments) of concatenation of the the four fields:
+The `concealed` form of the Seal Definition is simply the SHA-256 [tagged hash](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#specific-rgb-consensus-commitments) of the concatenation of the four fields:
 
-`SHA-256(SHA-256(urn:lnp-bp:seals:secret#2024-02-03) || SHA-256(urn:lnp-bp:seals:secret#2024-02-03) || txptr || vout || blinding || method)`
+`SHA-256(SHA-256(seal_tag) || SHA-256(seal_tag) || txptr || vout || blinding || method)`
+
+Where&#x20;
+
+* `seal_tag = urn:lnp-bp:seals:secret#2024-02-03`
 
 <figure><img src="../.gitbook/assets/components-seal-definition.png" alt=""><figcaption><p><strong>Components of the Seal Definition.</strong></p></figcaption></figure>
 
@@ -199,10 +203,10 @@ This second Assignment component is responsible for defining and storing the dat
 
 In RGB, an Owned State can only be defined with one of the four **StateTypes**: `Declarative`, `Fungible`, `Structured`, `Attachments`, each of which has its concealed and Revealed form:
 
-* `Declarative` is a StateType with **no data**, representing some form of governance [rights](../annexes/glossary.md#contract-rights) that can be performed by a contract party. For example, it can be used for _voting rights_. Concealed and Revealed form of it coincides.
-* `Fungible` is the StateType that allows for the transfer of **fungible units** such as those in a token contract. In the Revealed form it consists of two fields: an `amount` and a `blinding` factor, while in concealed form it is transformed into a 1-field structure containing a [`Pedersen commitment`](https://link.springer.com/chapter/10.1007/3-540-46766-1\_9) which commits to the `amount` and the `blinding` factor of the revealed form. In a future update, it would be possible to implement ZK cryptographic proofs such as [`Bulletproof`](https://crypto.stanford.edu/bulletproofs/) that will be able to prove that within the same State Transition the sum of `Inputs` that refer to a fungible state equals the sum of fungible `Owned States` without revealing the actual amounts.
-* `Structured` is a state that can accommodate ordered and limited data collections of arbitrary content, which can be used for complex contract validation schemes. It's maximum storage size is limited to a maximum of 64 KiB. The Revealed form is simply the _blob_ of data serialized into bytes, the concealed form is the SHA-256 tagged hash of that data blob: `SHA-256(SHA-256(urn:lnp-bp:rgb:state-data#2024-02-12) || SHA-256(urn:lnp-bp:rgb:state-data#2024-02-12) || blob)`
-* `Attachments` is used to attach an arbitrary file with a defined purpose, such as a media file, audio file, text, binary, etc. The actual file is kept separated by the Owned State construct itself, as, in revealed form the Attachment structure contains three fields: the SHA-256 `file_hash`, the MIME `media type` and a `salt` factor that provides additional privacy. In concealed form, this StateType is the SHA-256 tagged hash of the three fields just described: `SHA-256(SHA-256(urn:lnp-bp:rgb:state-attach#2024-02-12) || SHA-256(urn:rgb:state-attach#2024-02-12) || file_hash || media_type || salt)`
+* `Declarative` is a StateType with **no data**, representing some form of governance [rights](../annexes/glossary.md#contract-rights) that can be performed by a contract party. For example, it can be used for _voting rights_. Concealed and Revealed forms of it coincide.
+* `Fungible` is the StateType that allows for the transfer of **fungible units** such as those in a token contract. In the Revealed form it consists of two fields: an `amount` and a `blinding` factor, while in concealed form it is transformed into a 1-field structure containing a [`Pedersen commitment`](https://link.springer.com/chapter/10.1007/3-540-46766-1\_9) which commits to the `amount` and to the `blinding` factor of the revealed form. In a future update, it would be possible to implement _Zero Knowledge_ cryptographic proofs such as [`Bulletproof`](https://crypto.stanford.edu/bulletproofs/) that will be able to prove that within the same State Transition the sum of `Inputs` that refer to a fungible state equals the sum of fungible `Owned States` without revealing the actual amounts.
+* `Structured` is a State Type that can accommodate ordered and limited data collections of arbitrary content, which can be used as input for complex contract validation schemes. It's maximum storage size is limited to a maximum of 64 KiB. The Revealed form is simply the _blob_ of data serialized into bytes, while the concealed form is the SHA-256 tagged hash of that data blob: `SHA-256(SHA-256(tag_data) || SHA-256(tag_data) || blob)`, where `tag_data = urn:lnp-bp:rgb:state-data#2024-02-12`.
+* `Attachments` type is used to attach an arbitrary file with a defined purpose, such as media file, audio file, text, binary, etc. The actual file is kept separated by the Owned State construct itself, as, in revealed form the Attachment structure contains three fields: the SHA-256 `file_hash`, the MIME `media type` and a `salt` factor that provides additional privacy. In concealed form, this StateType is the SHA-256 tagged hash of the three fields just described: `SHA-256(SHA-256(tag_attachment) || SHA-256(tag_attachment) || file_hash || media_type || salt)` , where `tag_attachment = urn:rgb:state-attach#2024-02-12`.
 
 The diagram below shows a summary of the four state types and their Concealed and Revealed forms:
 
@@ -221,9 +225,9 @@ The diagram below shows a summary of the four state types and their Concealed an
 +---------------------------------------------------------------------------------------------------------
 
                      +--------------------------+             +---------------------------------------+
-                     | +----------------------+ |             |         +--------+ +---------+        |
-  Fungible           | | Pedersen Commitement | | <========== |         | Amount | | Blinding|        |
-                     | +----------------------+ |             |         +--------+ +---------+        |
+                     | +----------------------+ |             |         +--------+ +----------+       |
+  Fungible           | | Pedersen Commitement | | <========== |         | Amount | | Blinding |       |
+                     | +----------------------+ |             |         +--------+ +----------+       |
                      +--------------------------+             +---------------------------------------+
 
 +---------------------------------------------------------------------------------------------------------
@@ -245,7 +249,7 @@ The diagram below shows a summary of the four state types and their Concealed an
 ```
 {% endcode %}
 
-In addition, a summary of the characteristics of each **StateType** is provided in the next table:
+In addition, a summary of the technical characteristics of each **StateType** is provided in the table below:
 
 <table><thead><tr><th width="164">Item</th><th width="136">Declarative</th><th width="132">Fungible</th><th>Structured</th><th>Attachments</th></tr></thead><tbody><tr><td><strong>Data</strong></td><td>None</td><td>64-bit signed/unsigned integer</td><td>Any strict data type</td><td>Any file</td></tr><tr><td><strong>Type info</strong></td><td>None</td><td>Signed/unsigned</td><td>Strict Types</td><td>MIME type</td></tr><tr><td><strong>Confidentiality</strong></td><td>Not Required</td><td>Pedersen commitment</td><td>Hashing with blinding</td><td>Hashed file id</td></tr><tr><td><strong>Size limits</strong></td><td>N/A</td><td>256 Byte</td><td>Up to 64 kByte</td><td>Up to ~500 GByte</td></tr></tbody></table>
 
@@ -255,25 +259,25 @@ Similar to Bitcoin Transactions, **Inputs represent the "other half" of the Assi
 
 * `PrevOpId` containing the identifier of the previous Assignment operation being referenced.
 * `AssignmentType` containing the identifier of the contract property being modified by the referenced Assignment.
-* `Index` is the index number of the Assignment being referenced within the Assignment list of the `PrevOpId`. The `Index`is calculated implicitly from the lexicographic sorting of the hashes of the **Concealed Seal** of the referenced Assignments.
+* `Index` is the index number of the Assignment being referenced within the Assignment list of the `PrevOpId`. The `Index` is calculated implicitly from the lexicographic sorting of the hashes of the **Concealed Seal** of the referenced Assignments.
 
-The validation procedure of RGB, in addition to checking the correct closure of the Seal, is also responsible for checking the consistency between the inputs and outputs, particularly for the `Fungible` StateType. In this case, the validation procedure checks that the amount of tokens of each Input of a specific `AssignmentType` matches the number of tokens of the the Assignments with the same `AssignmentType`.
+The validation procedure of RGB, in addition to checking the correct closure of the Seal, is also responsible for checking the consistency between the inputs and outputs, particularly for the `Fungible` StateType. In this case, the validation procedure, embedded in the  [AluVM](../annexes/glossary.md#aluvm) script part of the [Schema](../annexes/glossary.md#schema), checks that the amount of tokens of each Input of a specific `AssignmentType` matches the number of tokens of the the Assignments with the same `AssignmentType`.
 
-As a natural property, Genesis has no Inputs as well as all State Transitions taht don't change some Owned States of any kind. For example, a State Transition that changes only the Global State has no Inputs.
+As a natural property, Genesis has no Inputs as well as all State Transitions that don't change some Owned States of any kind. For example, a State Transition that changes only the Global State has no Inputs.
 
 ## Metadata
 
-The metadata construct is a particular field that contains all the information that is not useful to be store as part of the contract state history. It has a maximum size of 64 KiB and can be used, for example, to host temporary data from a complex contract validation procedure by the [AluVm](state-transitions.md) engine.
+The metadata construct is a particular field that contains all the information that is not useful to be store as part of the contract state history. It has a maximum size of 64 KiB and can be used, for example, to host temporary data from a complex contract validation procedure by the AluVm engine.
 
 ## Valencies
 
-Valencies are a unique-in-its-kind construct that can be present in all three forms of Contract Operation. In essence, they are a set of digital rights that can be invoked and "put into effect" by a subsequent State Transition. In RGB, Valencies are encoded simply by enumerating each `ValencyType`, which is a list of 16-bit fields that define the particular right encoded by the Valency. As `GlobalType` and `AssignmentType`, the appropriate meaning and semantics are encoded and defined in the Contract [Schema](state-transitions.md) and decoded into human form by a related [Interface](state-transitions.md).
+Valencies are a unique-in-its-kind construct that can be present in all three forms of Contract Operation. In essence, they are a set of digital rights that can be [redeemed](../annexes/glossary.md#redeem) in State Extensions and "put into effect" by a subsequent State Transition. In RGB, Valencies are encoded simply by enumerating each `ValencyType`, which is a list of 16-bit fields that define the particular right encoded by the Valency. As `GlobalType` and `AssignmentType`, the appropriate meaning and semantics are encoded and defined in the Contract Schema and decoded into human form by a related [Interface](../annexes/glossary.md#interface).
 
 ## Redeems
 
-Redeems are similar to State Transition's Inputs for Valencies. They are included only in State Extensions that are responsible for "activating" the digital right embedded in the Valency itself. An example of Redeem might be the execution of a _coinswap_ or a _distributed issuance_. Redemptions consist of two fields:
+Redeems are similar to State Transition's Inputs for Valencies. They are included only in State Extensions and are responsible for "activating" the digital right embedded in the Valency itself. An example of Redeem might be the execution of a _coinswap_ or a _distributed issuance_. Redeems consist of two fields:
 
-* the 32-byte `PrevOpId` field that refers to the hash of the Operation in which the Valency to be redeemed is included.
-* the 16-bit `ValencyType` field that is retrieved from the previous operation in which the Valency is defined. Each ValencyType can be redeemed only once within the same State Extension.
+* The 32-byte `PrevOpId` field that refers to the hash of the Operation in which the Valency to be redeemed is defined.
+* The 16-bit `ValencyType` field that is retrieved from the previous operation in which the Valency is defined. Each ValencyType can be redeemed only once within the same State Extension.
 
 ***

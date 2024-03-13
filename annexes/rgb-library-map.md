@@ -1,6 +1,6 @@
 # RGB Library Map
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption><p><strong>The different code parts making up RGB Protocol and dependent libraries.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption><p><strong>The different code parts making up RGB Protocol and dependent libraries.</strong></p></figcaption></figure>
 
 ## Client-side Validation
 

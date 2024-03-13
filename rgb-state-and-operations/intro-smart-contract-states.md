@@ -47,7 +47,7 @@ Without going into the specific details of RGB implementation, which will be cov
 
 Therefore, a [Contract Operation](../annexes/glossary.md#contract-operation), in general terms, represents any **first creation / update of data** from an **old state** to a **new state** following the **rules inscribed into the contract** constituting its **Business Logic**.
 
-<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption><p><strong>State Transitions (among Contract Operations) apply business logic to an Old state to derive a New state.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1).png" alt=""><figcaption><p><strong>State Transitions (among Contract Operations) apply business logic to an Old state to derive a New state.</strong></p></figcaption></figure>
 
 The chain of Contract Operations in RGB is the ordered path that evolves the contract data from the **first contract definition**, called [Genesis](../annexes/glossary.md#genesis) to the [Terminal State](../annexes/glossary.md#terminal-consignment-consignment-endpoint) that represent the most up-to-date state at the end of the [DAG](../annexes/glossary.md#directed-acyclic-graph---dag) of Contract Operations.
 

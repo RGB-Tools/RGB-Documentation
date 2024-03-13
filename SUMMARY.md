@@ -33,12 +33,12 @@
   * [Standard Interfaces by LNP/BP Association](rgb-contract-implementation/interface/standard-interfaces-by-lnp-bp-association.md)
   * [RGB20 Interface example](rgb-contract-implementation/interface/rgb20-interface-example.md)
 * [Interface Implementation](rgb-contract-implementation/interface-implementation.md)
-* [Contract Issuance Workflow](rgb-contract-implementation/contract-issuance-workflow.md)
 
 ## Annexes
 
 * [Glossary](annexes/glossary.md)
 * [Contract Transfers](annexes/contract-transfers.md)
+* [Invoices](annexes/invoices.md)
 * [RGB Library Map](annexes/rgb-library-map.md)
 
 ***

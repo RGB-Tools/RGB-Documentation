@@ -17,7 +17,7 @@ Set of client-side data that proof the inclusion of a unique commitment inside a
 
 Acronym of Algoritmic logic unit Virtual machine is register-based virtual machine for smart contract validation and distributed computing, used but not limited to RGB contract validation.
 
-&#x20;[Link](https://www.aluvm.org/)
+[Link](https://www.aluvm.org/)
 
 ### Assignment
 
@@ -42,7 +42,7 @@ Formal timestamped fingerprint expressed as the registration of an hash referrin
 
 ### Consignment
 
-The data transferred between parties that are subject to [client-side validation](glossary.md#client-side-validation).  In RGB there are 2 types of consignment:
+The data transferred between parties that are subject to [client-side validation](glossary.md#client-side-validation). In RGB there are 2 types of consignment:
 
 * Contract Consignment: provided by the contract issuer including the information about the contract setup, such as the [Schema](glossary.md#schema), the [Genesis](glossary.md#genesis), the [Interface](glossary.md#interface) and the [Interface Implementation](glossary.md#interface-implementation).
 * Transfer Consignment: provided by the payer user party and containing all the state transition history up to the [terminal consignment](glossary.md#terminal-consignment-consignment-endpoint).
@@ -71,7 +71,7 @@ An actor which participate in contract operations. Contract parties are classifi
 
 * **Contract issuer**: an actor creating contract [Genesis](glossary.md#genesis).
 * **Contract party**: all actors which have some [ownership](glossary.md#ownership) rights over RGB [contract state](glossary.md#contract-state) which have been provided trough an [Assignment](glossary.md#assignment).
-* **Public party**: an actor which is able to construct [State Extensions](glossary.md#state-extension). Can exist only in contracts providing [Valencies](glossary.md#valency) to be redeemed by State Extension.&#x20;
+* **Public party**: an actor which is able to construct [State Extensions](glossary.md#state-extension). Can exist only in contracts providing [Valencies](glossary.md#valency) to be redeemed by State Extension.
 
 ### Contract Rights
 
@@ -97,9 +97,9 @@ The set of rules which allows for the registration of a provably single [commitm
 
 ### Directed Acyclic Graph - DAG
 
-A directed graph which do not contains any directed cycle thus allowing topological ordering. A Blockchain or an RGB Contract [Shard](glossary.md#shard) are examples of DAG.&#x20;
+A directed graph which do not contains any directed cycle thus allowing topological ordering. A Blockchain or an RGB Contract [Shard](glossary.md#shard) are examples of DAG.
 
-&#x20;[Wikipedia link](https://en.wikipedia.org/wiki/Directed\_acyclic\_graph)
+[Wikipedia link](https://en.wikipedia.org/wiki/Directed\_acyclic\_graph)
 
 ### Engraving
 
@@ -131,7 +131,7 @@ A [base58](https://en.wikipedia.org/wiki/Binary-to-text\_encoding#Base58) encode
 
 ### Global State
 
-The set of public properties included in the [state](glossary.md#contract-state) of a [contract](glossary.md#contract), defined in [Genesis](glossary.md#genesis) and optionally updatable according to the rule defined therein, which are not [owned](glossary.md#ownership) by any party.&#x20;
+The set of public properties included in the [state](glossary.md#contract-state) of a [contract](glossary.md#contract), defined in [Genesis](glossary.md#genesis) and optionally updatable according to the rule defined therein, which are not [owned](glossary.md#ownership) by any party.
 
 [Link](../rgb-state-and-operations/components-of-a-contract-operation.md#global-state)
 
@@ -145,7 +145,7 @@ The Merkle Tree structure used in RGB to include in a single commitment into the
 
 Part of the [state](glossary.md#contract-state) of a [contract](glossary.md#contract) enclosed into an [Assignment](glossary.md#assignment) which contains definition and type of the property of a contract subjected to someone's [ownership](glossary.md#ownership).
 
-[Link](../rgb-state-and-operations/components-of-a-contract-operation.md#owned-states) &#x20;
+[Link](../rgb-state-and-operations/components-of-a-contract-operation.md#owned-states)
 
 ### Ownership
 
@@ -169,7 +169,7 @@ A declarative piece of code which contains the set of variables, rules and [busi
 
 ### Seal Definition
 
-The reference part of an [Assignment](glossary.md#assignment) which bind the commitment to an UTXO belonging to the new [owner](glossary.md#ownership).&#x20;
+The reference part of an [Assignment](glossary.md#assignment) which bind the commitment to an UTXO belonging to the new [owner](glossary.md#ownership).
 
 [Link](../rgb-state-and-operations/components-of-a-contract-operation.md#seal-definition)
 
@@ -181,17 +181,17 @@ A branch of the [DAG](glossary.md#directed-acyclic-graph---dag) chain of the RGB
 
 A promise to [commit](glossary.md#commitment) to a yet unknown message in the future, once and only once, such that commitment fact will be provably known to all members of a certain audience.
 
-&#x20;[Link](../distributed-computing-concepts/single-use-seals.md)
+[Link](../distributed-computing-concepts/single-use-seals.md)
 
 ### Stash
 
-The set of client-side data related to [contract](glossary.md#contract)  which have undergone [validation](glossary.md#client-side-validation) and are stored by the users.
+The set of client-side data related to [contract](glossary.md#contract) which have undergone [validation](glossary.md#client-side-validation) and are stored by the users.
 
 ### State Extension
 
 A contract operation which allows for the redeeming of some [Valencies](glossary.md#valency). It needs to be closed by a [State Transition](glossary.md#state-transition) in order to put in effect the changes to the contract expressed by the Valencies.
 
-&#x20;[Link](../rgb-state-and-operations/state-transitions.md#state-extensions)
+[Link](../rgb-state-and-operations/state-transitions.md#state-extensions)
 
 ### State Transition
 
@@ -205,13 +205,13 @@ The Bitcoin's Segwit v1 transaction format detailed in [BIP341](https://github.c
 
 ### Terminal Consignment - Consignment Endpoint
 
-The last state of a contract which include the last [State Transition](glossary.md#state-transition) constructed from a payee counterpart [invoice](glossary.md#invoice).
+A [transfer consignment](glossary.md#consignment) which include the last state of a contract embedding the [State Transition](glossary.md#state-transition) constructed from a payee counterparty [invoice](glossary.md#invoice).
 
 ### Transition Bundle
 
 A set of RGB [State Transition](glossary.md#state-transition), belonging to the same contract, which are constructed by different parties closing their seal in a single operations.
 
-&#x20;[Link](../rgb-state-and-operations/state-transitions.md#transition-bundle)
+[Link](../rgb-state-and-operations/state-transitions.md#transition-bundle)
 
 ### UTXO
 

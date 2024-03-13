@@ -49,7 +49,7 @@
 * [https://crates.io/crates/strict\_types](https://crates.io/crates/strict\_types)
 * [https://crates.io/crates/strict\_encoding](https://crates.io/crates/strict\_encoding)
 
-## RGB Core&#x20;
+## RGB Core
 
 **Repository:**
 
@@ -58,3 +58,16 @@
 **Rust Crates:**
 
 * [https://crates.io/crates/rgb-core](https://crates.io/crates/rgb-core)
+
+## RGB Standard Library & Wallet
+
+**Repository:**
+
+* [https://github.com/RGB-WG/rgb-std](https://github.com/RGB-WG/rgb-std)
+
+**Rust Crates:**
+
+* [https://crates.io/crates/rgb-std](https://crates.io/crates/rgb-std)
+
+
+

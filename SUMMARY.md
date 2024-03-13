@@ -40,7 +40,3 @@
 * [Contract Transfers](annexes/contract-transfers.md)
 * [Invoices](annexes/invoices.md)
 * [RGB Library Map](annexes/rgb-library-map.md)
-
-***
-
-* [testpage1](testpage1.md)

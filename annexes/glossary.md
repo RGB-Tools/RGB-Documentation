@@ -15,7 +15,7 @@ Set of client-side data that proof the inclusion of a unique commitment inside a
 
 ### AluVM
 
-Acronym of Algoritmic logic unit Virtual machine is register-based virtual machine for smart contract validation and distributed computing, used but not limited to RGB contract validation.
+Acronym of Algoritmic logic unit Virtual Machine is register-based virtual machine for smart contract validation and distributed computing, used but not limited to RGB contract validation.
 
 [Link](https://www.aluvm.org/)
 
@@ -38,7 +38,15 @@ The operation which allows the verification of some data exchanged between parti
 
 ### Commitment
 
-Formal timestamped fingerprint expressed as the registration of an hash referring to some structured data over some defined medium expressing time indication and chronological ordering (e.g. the blockchain).
+It can be seen as the digital equivalent of an envelope containing some text/data whose contents you do not want to reveal right away. It consists of two algorithms: 
+- ***commit***: takes a public message, called $msg$, and a random value, called $r$, that will be kept secret until a certain event occurs and returns a value, this value being $com = commit(msg, r)$;
+- ***verify***: takes the value returned by the commit algorithm, the public message and the (previously) secret value and returns True/False, $verify(msg, com, r) \rightarrow \text{accept or reject}$.
+
+The commitment algorithm is required to have two security properties: 
+- ***binding***: requires that there cannot be two valid "openings" of the same commitment. That is, no adversary can produce $msg'$ and $r'$ such that, given $com$, then $verify(msg,r)=verify(msg',r') \rightarrow True$ and $msg \neq msg'$; 
+- ***hiding***: requires that $com$ not let the committed data leak out, i.e., that $r$ be uniformly sampled in a set $R$ such that it is statistically independent of $msg$ (also taken from the set $R$).
+
+In RGB, the so-called [Pedersen commitment](glossary.md#pedersen-commitment) is used for several operations related to [anchors](../commitment-layer/anchors.md).
 
 ### Consignment
 
@@ -151,11 +159,22 @@ Part of the [state](glossary.md#contract-state) of a [contract](glossary.md#cont
 
 The control and thus the possibility to spend an [UTXO](glossary.md#utxo) to which some client-side property are [assigned](glossary.md#assignment).
 
+
 ### Partially Signed Bitcoin Transaction - PSBT
 
 A transaction which lacks some element of its signature and which can be completed / finalized with some additional elements later in time.
 
 [Link](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki)
+
+
+### Pedersen commitment
+
+This is a particular type of cryptographic commitment that has the property of being partially homomorphic. This means that given a certain $commit$ function, it is possible to verify the commitment given by the sum of two data without revealing the data itself. That is, given $msg_1$, $msg_2$, $r_1$ and $r_2$, we can verify:
+
+$$com_1 \cdot com_2 = commit(msg_1+msg_2,r_1 + r_2)$$
+
+without revealing the individual summed/multiplied values. This is extremely useful if we want to conceal the amounts of tokens transacted without sacrificing cryptographic security.
+
 
 ### Redeem
 

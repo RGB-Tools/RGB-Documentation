@@ -1,6 +1,6 @@
 # Introduction to Smart Contracts and their States
 
-Before addressing the technical implementation of  **RGB states** and the related data structure, it is important to remember that the **ordered sequence of seal definition and subsequent seal closure** is intended to provide the ability to properly implement the various **Contract Operations** in the client-side validated domain.
+Before addressing the technical implementation of **RGB states** and the related data structure, it is important to remember that the **ordered sequence of seal definition and subsequent seal closure** is intended to provide the ability to properly implement the various **Contract Operations** in the client-side validated domain.
 
 \
 After a brief introduction to **smart contracts** and **state concepts**, we will devote our attention to the mechanism behind **Contract Operations** from the the Client-side perspective and the related bridging _points which_ tether these operations to the Bitcoin Blockchain commitments discussed in the [commitment layer section](../commitment-layer/commitment-schemes.md).
@@ -23,7 +23,7 @@ Not long times ago, contracts, such as securities, were **bearer instruments**. 
 
 A wider range of smart contract programmability issues were considered in the design of RGB, in particular:
 
-1. **A contract can be associated with a digital asset or a **_**token**_**, but it's not limited to it**. A broader range of applications and extensions of the _smart contract_ concept can be implemented in RGB.
+1. **A contract can be associated with a digital asset or a \_token**\_**, but it's not limited to it**. A broader range of applications and extensions of the _smart contract_ concept can be implemented in RGB.
 2. Unlike the approach of other public blockchains to smart contracts, in **RGB there is a clear separation between the different** [parties](../annexes/glossary.md#contract-participant) **related to a contract and the their rights**: e.g. the creator/issuer of the contract and the different kind of users interacting in some ways with the contract. This includes in particular the differentiation between:
    * the ability to _observe_ certain properties or operations performed by other parties on the contract;
    * the ability to _execute a set of operations_ permitted by the contract.
@@ -47,7 +47,7 @@ Without going into the specific details of RGB implementation, which will be cov
 
 Therefore, a [Contract Operation](../annexes/glossary.md#contract-operation), in general terms, represents any **first creation / update of data** from an **old state** to a **new state** following the **rules inscribed into the contract** constituting its **Business Logic**.
 
-<figure><img src="../.gitbook/assets/image (4) (1).png" alt=""><figcaption><p><strong>State Transitions (among Contract Operations) apply business logic to an Old state to derive a New state.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1).png" alt=""><figcaption><p><strong>State Transitions (among Contract Operations) apply business logic to an Old state to derive a New state.</strong></p></figcaption></figure>
 
 The chain of Contract Operations in RGB is the ordered path that evolves the contract data from the **first contract definition**, called [Genesis](../annexes/glossary.md#genesis) to the [Terminal State](../annexes/glossary.md#terminal-consignment-consignment-endpoint) that represent the most up-to-date state at the end of the [DAG](../annexes/glossary.md#directed-acyclic-graph---dag) of Contract Operations.
 

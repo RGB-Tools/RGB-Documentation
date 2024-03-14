@@ -1,6 +1,6 @@
 # RGB20 Interface example
 
-In the following code block we report a portion of  rust code taken from the interface [standard RGB20](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
+In the following code block we report a portion of rust code taken from the interface [standard RGB20](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
 
 {% code fullWidth="true" %}
 ```rust
@@ -170,9 +170,9 @@ fn rgb20() -> Iface {
 ```
 {% endcode %}
 
-From the code above, we can observe that the interface has rather similar structure to that of [Schema](../schema/non-inflatable-fungible-asset-schema.md). However, **the key difference lies in the different type definition,** which in interface's code is expressed  in terms of strings through `fname!()` or `tn!()` macros, while in Schema are defined through primitive strict data types.&#x20;
+From the code above, we can observe that the interface has rather similar structure to that of [Schema](../schema/non-inflatable-fungible-asset-schema.md). However, **the key difference lies in the different type definition,** which in interface's code is expressed in terms of strings through `fname!()` or `tn!()` macros, while in Schema are defined through primitive strict data types.
 
-Moreover, we can observe that in addition to the related endpoint encoded in the [NIA Schema](../schema/non-inflatable-fungible-asset-schema.md),  we find several additional state data such as:
+Moreover, we can observe that in addition to the related endpoint encoded in the [NIA Schema](../schema/non-inflatable-fungible-asset-schema.md), we find several additional state data such as:
 
 * `burnEpoch`
 * `issuedSupply`
@@ -190,8 +190,8 @@ Additional endpoints for Contract Operations Transition:
 Declaration for Errors in the Contract State or Transitions such as:
 
 * `SUPPLY_MISMATCH`
-* &#x20;`INVALID_PROOF`
+* `INVALID_PROOF`
 * `ISSUE_EXCEEDS_ALLOWANCE`
-* &#x20;`INSUFFICIENT_RESERVES`
+* `INSUFFICIENT_RESERVES`
 
-The Interface Implementation which will be described in the next section is responsible for the selection and mapping of the suitable endpoints declared in the interface with the the data structure and operation present in the schema.
+The Interface Implementation which will be described in the next section is responsible for the selection and mapping of the suitable endpoints declared in the Interface with the the data structure and operation present in the Schema.

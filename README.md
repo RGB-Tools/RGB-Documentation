@@ -45,7 +45,7 @@ This guide targets the broader technical audience willing to understand in depth
 
 ## Credits
 
-The material provided by this guide is based on a 3-days full-immersion seminar on RGB protocol held by Maxim Orlovsky in Viareggio.&#x20;
+The material provided by this guide is based on a 3-days full-immersion seminar on RGB protocol held by [Maxim Orlovsky](https://twitter.com/dr_orlovsky) in Viareggio during the 2nd week of October 2023.&#x20;
 
 Videos:
 

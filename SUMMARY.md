@@ -6,7 +6,7 @@
 
 * [Paradigms of Distributed Computing](distributed-computing-concepts/paradigms-of-distributed-computing.md)
 * [Client-side Validation](distributed-computing-concepts/client-side-validation.md)
-* [Single-use Seals and Proof of Pubblication](distributed-computing-concepts/single-use-seals.md)
+* [Single-use Seals and Proof of Publication](distributed-computing-concepts/single-use-seals.md)
 
 ## Commitment layer
 

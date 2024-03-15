@@ -6,7 +6,7 @@ description: Terminology used in RGB sorted in alphabetical order
 
 ### Anchor
 
-Set of client-side data that proof the inclusion of a unique commitment inside a transaction. In RGB protocol it is constituted by:
+Set of client-side data that proof the inclusion of a unique [commitment](glossary.md#commitment) inside a transaction. In RGB protocol it is constituted by:
 
 * The Bitcoin transaction ID of the [witness transaction](glossary.md).
 * The [MPC](glossary.md#multi-protocol-commitment---mpc)
@@ -38,17 +38,15 @@ The operation which allows the verification of some data exchanged between parti
 
 ### Commitment
 
-It can be seen as the digital equivalent of an envelope containing some text/data whose contents you do not want to reveal right away. It consists of two algorithms:
+Cryptographic process which consist in the creation of fingerprint ($$com$$) derived from some structured data ($$msg$$). The commitment can registered in some defined publication medium (e.g. the blockchain) and consists of two operations:
 
-* _**commit**_: takes a public message, called $msg$, and a random value, called $r$, that will be kept secret until a certain event occurs and returns a value, this value being $com = commit(msg, r)$;
-* _**verify**_: takes the value returned by the commit algorithm, the public message and the (previously) secret value and returns True/False, $verify(msg, com, r) \rightarrow \text{accept or reject}$.
+* _**Commit**_: takes a public message, called $$msg$$, and a random value, called $$r$$ and usually, through a cryptographic hash operation it returns a value $$com = \text{commit}(msg, r)$$.
+* _**Verify**_: takes the value returned by the commit algorithm, the public message $$msg$$ and the secret value $$r$$ and returns True/False.  $$\text{verify}(msg, r, com) \rightarrow (\text{True} /  \text{False})$$.
 
 The commitment algorithm is required to have two security properties:
 
-* _**binding**_: requires that there cannot be two valid "openings" of the same commitment. That is, no adversary can produce $$$msg' and r' such that, \\ given com$, then $$verify(msg,r)=verify(msg',r') \rightarrow True$ and $msg \neq msg'$$$;
-* _**hiding**_: requires that $com$ not let the committed data leak out, i.e., that $r$ be uniformly sampled in a set $R$ such that it is statistically independent of $msg$ (also taken from the set $R$).
-
-In RGB, the so-called [Pedersen commitment](glossary.md#pedersen-commitment) is used for several operations related to [anchors](../commitment-layer/anchors.md).
+* _**Binding**_: requires that there cannot be two valid messages of the same commitment $$com$$. That is, it is computationally unfeasible to produce different $$msg' \:  |    \: msg' \neq msg$$ and $$r' \: | \: r' \neq r$$ such that:     $$\text{verify}(msg,r,com)=\text{verify}(msg',r',com) \rightarrow \text{True}$$&#x20;
+* _**Hiding**_: requires that $$msg$$ cannot be easily discovered by commitment attempts, i.e., that $$r$$ be uniformly sampled in a set $$R$$ such that it is statistically independent of $$msg$$.
 
 ### Consignment
 
@@ -169,11 +167,13 @@ A transaction which lacks some element of its signature and which can be complet
 
 ### Pedersen commitment
 
-This is a particular type of cryptographic commitment that has the property of being partially homomorphic. This means that given a certain $commit$ function, it is possible to verify the commitment given by the sum of two data without revealing the data itself. That is, given $msg\_1$, $msg\_2$, $r\_1$ and $r\_2$, we can verify:
+Particular type of cryptographic [commitment](glossary.md#commitment) that has the property of being [homomorphic](https://en.wikipedia.org/wiki/Homomorphism) in respect to addition operation. This means that given a certain $$\text{commit}$$ function, it is possible to verify the commitment given by the sum of two data without revealing the data itself. That is, given $$msg_1$$, $$msg_2$$,  $$r_1$$ and $$r_2$$, if $$com_1 = \text{commit}(msg_1,r_1)$$ and $$com_2 = \text{commit}(msg_2,r_2)$$:
 
-$$com_1 \cdot com_2 = commit(msg_1+msg_2,r_1 + r_2)$$
+$$com_3 = com_1 +  com_2 = \text{commit}(msg_1+msg_2,r_1 + r_2)$$
 
-without revealing the individual summed/multiplied values. This is extremely useful if we want to conceal the amounts of tokens transacted without sacrificing cryptographic security.
+So it is possible to verify the without revealing the individual summed values. This operation turns useful in order to conceal the amounts of tokens transacted.
+
+[Article Link](https://link.springer.com/chapter/10.1007/3-540-46766-1\_9)
 
 ### Redeem
 

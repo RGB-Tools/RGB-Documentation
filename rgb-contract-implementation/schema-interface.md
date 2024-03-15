@@ -8,7 +8,7 @@ We have finally arrived at **describing how an RGB contract is actually defined 
 
 At this regard, it is important to point out that **each one of this component can be freely** **and independently developed by different persons**, provided that they respect the RGB consensus regarding the validation of client-side data and strict types formats. This represent a notable feature of RGB ecosystem which allows an even higher degree of competition among different components of the contract itself.
 
-In the image below a general scheme of all the components together with a summary explanation is reported. In addition to this, the creation of a compiled Genesis with suitable procedures derived from the 3 components just described complete the issuance phase of a contract, which become then fully operational to users.
+In the picture below a general scheme of all the components together with a summary explanation is reported. In addition to this, the creation of a compiled Genesis with suitable procedures derived from the 3 components just described complete the issuance phase of a contract, which become then fully operational to users.
 
 <figure><img src="../.gitbook/assets/contract_anatomy.png" alt="RGB contract anatomy"><figcaption><p><strong>The list of components which defines a contract in RGB and their analogies with construct of OOP programming languages.</strong></p></figcaption></figure>
 

@@ -15,7 +15,7 @@ Set of client-side data that proof the inclusion of a unique [commitment](glossa
 
 ### AluVM
 
-Acronym of Algoritmic logic unit Virtual Machine is register-based virtual machine for smart contract validation and distributed computing, used but not limited to RGB contract validation.
+Acronym of Algorithmic logic unit Virtual Machine, it is a register-based virtual machine for smart contract validation and distributed computing, used but not limited to RGB contract validation.
 
 [Link](https://www.aluvm.org/)
 

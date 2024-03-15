@@ -51,7 +51,7 @@ This guide targets the broader technical audience willing to understand in depth
 
 ## Credits
 
-The production of this documentation has been sponsored by [Bitfinex](https://www.bitfinex.com/) and the material provided is mostly based on a 3-days full-immersion seminar on RGB protocol held by [Maxim Orlovsky](https://twitter.com/dr\_orlovsky) at the Tuscany Lightning Bootcamp in October 2023.
+The production of this documentation has been sponsored by [Bitfinex](https://www.bitfinex.com/) and the material provided is mostly based on a 3-days full-immersion seminar on RGB Protocol held by [Maxim Orlovsky](https://twitter.com/dr\_orlovsky) at the Tuscany Lightning Bootcamp in October 2023.
 
 Videos: [https://planb.network/en/courses/rgb/1/1](https://planb.network/en/courses/rgb/1/1)
 

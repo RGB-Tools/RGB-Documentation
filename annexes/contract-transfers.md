@@ -13,29 +13,29 @@ Let consider the case of Bob, who owns a Bitcoin wallet but has not yet started 
 
 <figure><img src="../.gitbook/assets/transfers_0.png" alt="Several channels to acquire an RGB contract in the wallet."><figcaption><p><strong>All the various possible channels for acquiring an RGB contract in the form of consignment in a wallet.</strong></p></figcaption></figure>
 
-3. Once a contract is obtained in consignment format, Bob is able to import it in his RGB wallet and validate the data contained herein.  The next thing he can do, is to find someone possessing the contract / asset he is interested to receive in his wallet. In our example, Alice possesses the asset in hes wallet. So, similarly to Bitcoin Transaction **they can setup an RGB Transfer.** The mechanism for discovering stakeholders who have owned state in the contract, such as Alice, remains up to the receiving party, just as the process for discovering who can pay in Bitcoin.
-4. I**n order to initiate a transition**, Bob must act first. It does so by **issuing an** [invoice](glossary.md#invoice) which call the specific **transfer method** encoded in the [Schema](glossary.md#schema) of the contract and which he will hand over to Alice. **This invoice generation**, which precede the effective asset transfer, guarantee that the invoice contains **all the relevant instruction needed by Alice to make the transfer**, containing in particular Bob's UTXO derived from his Bitcoin wallet encoded in [blinded form](../rgb-state-and-operations/components-of-a-contract-operation.md#revealed-concealed-form). To generate the Invoice to be handled to Alice, he can use the `rgb` command line tool issuing requesting e.g. over interface `RGB20` 100 USDT, which will be [assigned](glossary.md#assignment) to one of his [UTXO](glossary.md#utxo) identified by `Txid` and `:vout`  using [Tapret](glossary.md#deterministic-bitcoin-commitment-dbc) form, by typing the following code:
+3. Once a contract is obtained in consignment format, Bob is able to import it in his RGB wallet and validate the data contained herein. The next thing he can do, is to find someone possessing the contract / asset he is interested to receive in his wallet. In our example, Alice possesses the asset in hes wallet. So, similarly to Bitcoin Transaction **they can setup an RGB Transfer.** The mechanism for discovering stakeholders who have owned state in the contract, such as Alice, remains up to the receiving party, just as the process for discovering who can pay in Bitcoin.
+4. I**n order to initiate a transition**, Bob must act first. It does so by **issuing an** [invoice](glossary.md#invoice) which call the specific **transfer method** encoded in the [Schema](glossary.md#schema) of the contract and which he will hand over to Alice. **This invoice generation**, which precede the effective asset transfer, guarantee that the invoice contains **all the relevant instruction needed by Alice to make the transfer**, containing in particular Bob's UTXO derived from his Bitcoin wallet encoded in [blinded form](../rgb-state-and-operations/components-of-a-contract-operation.md#revealed-concealed-form). To generate the Invoice to be handled to Alice, he can use the `rgb` command line tool issuing requesting e.g. over interface `RGB20` 100 USDT, which will be [assigned](glossary.md#assignment) to one of his [UTXO](glossary.md#utxo) identified by `Txid` and `:vout` using [Tapret](glossary.md#deterministic-bitcoin-commitment-dbc) form, by typing the following code:
 
 ```sh
 bob$ rgb invoice RGB20 100 USDT tapret1st:456e3..dfe1:0
 ```
 
-5. [Invoices](glossary.md#invoice), which are described in more detail in this [chapter](invoices.md#use-of-urls-for-invoices), are generated as simple URL strings and can be transmitted by any means in a manner similar to what we said for consignment.&#x20;
+5. [Invoices](glossary.md#invoice), which are described in more detail in this [chapter](invoices.md#use-of-urls-for-invoices), are generated as simple URL strings and can be transmitted by any means in a manner similar to what we said for consignment.
 
 <figure><img src="../.gitbook/assets/txf1.png" alt=""><figcaption><p><strong>The transfer process begins with an invoice prepared by Bob which contains all the information that Alice need to transfer the asset, in particular the Bob's seal definition, encoded as a Blinded UTXO.</strong></p></figcaption></figure>
 
-6. Alice, who has both a Bitcoin wallet and an RGB wallet with a [stash](glossary.md#stash) of client-side validated data, receive the Invoice from Bob, which appears to be a string like this:  &#x20;
+6. Alice, who has both a Bitcoin wallet and an RGB wallet with a [stash](glossary.md#stash) of client-side validated data, receive the Invoice from Bob, which appears to be a string like this:
 
-* `rgb:2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX/RGB20/100 +utxob:egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb` , where Bob's  UTXO has been blinded automatically in the generation process. &#x20;
+* `rgb:2WBcas9-yjzEvGufY-9GEgnyMj7-beMNMWA8r-sPHtV1nPU-TMsGMQX/RGB20/100 +utxob:egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb` , where Bob's UTXO has been blinded automatically in the generation process.
 
-7. First, Alice prepares a [PSBT](glossary.md#partially-signed-bitcoin-transaction-psbt) transaction which spends the UTXO containing the [seal definition](glossary.md#seal-definition)  which assign the [ownership](glossary.md#ownership) of the RGB asset to her. The following represent the generic shell command of a wallet utility in order to construct the transaction which will be modified later:&#x20;
+7. First, Alice prepares a [PSBT](glossary.md#partially-signed-bitcoin-transaction-psbt) transaction which spends the UTXO containing the [seal definition](glossary.md#seal-definition) which assign the [ownership](glossary.md#ownership) of the RGB asset to her. The following represent the generic shell command of a wallet utility in order to construct the transaction which will be modified later:
 
 ```
 alice$ wallet construct tx.psbt
 ```
 
-8. Alice, through shell command, is now able to generate [terminal consignment](glossary.md#terminal-consignment-consignment-endpoint)  `consignment.rgb` that contains, according to the instruction of Bob's `<invoice>` :&#x20;
-   * The final RGB [state transition](glossary.md#state-transition) client-side data.&#x20;
+8. Alice, through shell command, is now able to generate [terminal consignment](glossary.md#terminal-consignment-consignment-endpoint) `consignment.rgb` that contains, according to the instruction of Bob's `<invoice>` :
+   * The final RGB [state transition](glossary.md#state-transition) client-side data.
    * The history of state transitions since contract [genesis](glossary.md#genesis) and contained in validated form in Alice's stash.
    * The unsigned version of the [witness transaction](glossary.md#witness-transaction), elaborated from the `tx.psbt` file, which:
      * Spend Alice's single-use seal related to the asset being transferred.
@@ -47,7 +47,7 @@ alice$ rgb transfer tx.psbt <invoice> consignment.rgb
 
 5. This **terminal transfer consignment**, obviously larger than a contract consignment because of the inclusion of the entire history of the asset, **is then forwarded to Bob**, even though the related witness transition has not yet been broadcasted into the Bitcoin P2P Network.
 
-<figure><img src="../.gitbook/assets/txf2.png" alt=""><figcaption><p><strong>Alice prepares a witness transaction including the information provided both by Bob's invoice and those coming from her RGB and Bitcoin wallet. In addition, through a transfer consignment allows Bob to verify all the asset history as well as the last state transition addressed to him.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf2 (1).png" alt=""><figcaption><p><strong>Alice prepares a witness transaction including the information provided both by Bob's invoice and those coming from her RGB and Bitcoin wallet. In addition, through a transfer consignment allows Bob to verify all the asset history as well as the last state transition addressed to him.</strong></p></figcaption></figure>
 
 7. Bob, at this point, using the `rgb accept` command proceed at validating the transfer consignment. If the validation is successful:
    * Adds all the data to his stash.
@@ -82,11 +82,11 @@ The following diagram represent a summary of all the operation just described:
 
 Finally, the following diagram show an example of transfer interaction between the various element of RGB technology stack composed of RGB wallets, RGB nodes and Electrum Server.
 
-<figure><img src="../.gitbook/assets/txf_flow.png" alt=""><figcaption><p><strong>The transfer process behind the scenes. It requires several round of interaction between the various components of the RGB stack.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf_flow (1).png" alt=""><figcaption><p><strong>The transfer process behind the scenes. It requires several round of interaction between the various components of the RGB stack.</strong></p></figcaption></figure>
 
 ## Features of RGB Transfers
 
-**The approach adopted by RGB** in transferring consignments between parties, as illustrated in the Alice and Bob example, **underscores the significance of privacy and security**.&#x20;
+**The approach adopted by RGB** in transferring consignments between parties, as illustrated in the Alice and Bob example, **underscores the significance of privacy and security**.
 
 In the ideal case no one other than Bob and Alice is in possession of the consignment and witness transaction. Nonetheless, Bob has all the elements to verify the validity of the consignment by comparing it with the various anchors on the Bitcoin Blockchain. Bob's stash status is consequently updated through this consignment decomposition and validation procedure. In practical transfer cases, **Alice may publish the witness transaction** to be included in the blockchain **only when some events have occurred**, such as, for example, the transfer of some object from Bob.
 

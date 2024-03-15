@@ -1,6 +1,6 @@
 # Schema
 
-An RGB Schema defines, through coding, the necessary template for Genesis and embeds all the rules of available [contract operation](../../annexes/glossary.md#contract-operation) representing its [business logic](../../annexes/glossary.md#business-logic)  allowing for the related [state](../../annexes/glossary.md#contract-state) to be updated.
+An RGB Schema defines, through coding, the necessary template for Genesis and embeds all the rules of available [contract operation](../../annexes/glossary.md#contract-operation) representing its [business logic](../../annexes/glossary.md#business-logic) allowing for the related [state](../../annexes/glossary.md#contract-state) to be updated.
 
 As [mentioned earlier](../schema-interface.md), an RGB Schema is the analogue of a class for an OOP language. Hence such a construction is used to define the various standards for RGB contract and assets, for example: fungible assets, collectibles, digital identities, etc.
 
@@ -19,7 +19,7 @@ From a functional point of view, the **Schema construct addresses the following 
 * How state data are allowed to change within state transitions?
 * What sequences of transitions are allowed?
 
-<figure><img src="../../.gitbook/assets/schema-components.png" alt=""><figcaption><p><strong>Elements of Contained in an RGB Schema</strong></p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/schema-components (2).png" alt=""><figcaption><p><strong>Elements of Contained in an RGB Schema</strong></p></figcaption></figure>
 
 **From a technical point of view an RGB Schema is a functional declarative document which need to be compiled for effective usage inside RGB applications and wallets.**
 

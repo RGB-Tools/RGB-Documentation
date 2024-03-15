@@ -34,6 +34,10 @@
   * [RGB20 Interface example](rgb-contract-implementation/interface/rgb20-interface-example.md)
 * [Interface Implementation](rgb-contract-implementation/interface-implementation.md)
 
+## RGB over Lightning Network&#x20;
+
+* [Lightning Network compatibility](rgb-over-lightning-network/schema-interface.md)
+
 ## Annexes
 
 * [Glossary](annexes/glossary.md)

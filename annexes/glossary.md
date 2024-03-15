@@ -9,8 +9,8 @@ description: Terminology used in RGB sorted in alphabetical order
 Set of client-side data that proof the inclusion of a unique [commitment](glossary.md#commitment) inside a transaction. In RGB protocol it is constituted by:
 
 * The Bitcoin transaction ID of the [witness transaction](glossary.md).
-* The [MPC](glossary.md#multi-protocol-commitment---mpc)
-* The [DBC](glossary.md#deterministic-bitcoin-commitment---dbc)
+* The Multi Protocol Commitment - [MPC](glossary.md#multi-protocol-commitment---mpc)
+* The Deterministic Bitcoin Commitment - [DBC](glossary.md#deterministic-bitcoin-commitment---dbc)
 * The [ETP](glossary.md#extra-transaction-proof---etp) in case of [Tapret](../commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md) commitment scheme.
 
 ### AluVM
@@ -38,14 +38,14 @@ The operation which allows the verification of some data exchanged between parti
 
 ### Commitment
 
-Cryptographic process which consist in the creation of fingerprint ($$com$$) derived from some structured data ($$msg$$). The commitment can registered in some defined publication medium (e.g. the blockchain) and consists of two operations:
+Cryptographic process which consist in the creation of a fixed size fingerprint ($$com$$) derived from some structured data ($$msg$$). The commitment can be registered in a defined publication medium (e.g. the blockchain) and consists of two operations:
 
-* _**Commit**_: takes a public message, called $$msg$$, and a random value, called $$r$$ and usually, through a cryptographic hash operation it returns a value $$com = \text{commit}(msg, r)$$.
-* _**Verify**_: takes the value returned by the commit algorithm, the public message $$msg$$ and the secret value $$r$$ and returns True/False.  $$\text{verify}(msg, r, com) \rightarrow (\text{True} /  \text{False})$$.
+* _**Commit** operation, which_ takes as inputs a public message $$msg$$ and a random value $$r$$, and by applying to them the chosen cryptographic algorithm returns a value $$com = \text{commit}(msg, r)$$.
+* _**Verify** operation, which_ takes the value returned by the commit algorithm $$com$$, the public message $$msg$$ and the secret value $$r$$ and returns True/False. $$\text{verify}(msg, r, com) \rightarrow (\text{True} / \text{False})$$.
 
-The commitment algorithm is required to have two security properties:
+The commitment algorithm is required to possess two fundamental security properties:
 
-* _**Binding**_: requires that there cannot be two valid messages of the same commitment $$com$$. That is, it is computationally unfeasible to produce different $$msg' \:  |    \: msg' \neq msg$$ and $$r' \: | \: r' \neq r$$ such that:     $$\text{verify}(msg,r,com)=\text{verify}(msg',r',com) \rightarrow \text{True}$$&#x20;
+* _**Binding**_: requires that there cannot be two valid messages of the same commitment $$com$$. That is, it is computationally unfeasible to produce different $$msg' \: | \: msg' \neq msg$$ and $$r' \: | \: r' \neq r$$ such that: $$\text{verify}(msg,r,com)=\text{verify}(msg',r',com) \rightarrow \text{True}$$
 * _**Hiding**_: requires that $$msg$$ cannot be easily discovered by commitment attempts, i.e., that $$r$$ be uniformly sampled in a set $$R$$ such that it is statistically independent of $$msg$$.
 
 ### Consignment
@@ -143,6 +143,12 @@ The set of public properties included in the [state](glossary.md#contract-state)
 
 [Link](../rgb-state-and-operations/components-of-a-contract-operation.md#global-state)
 
+### Lightning Network
+
+A decentralized network of bidirectional payment (state) channels constituted by 2-of-2 mutisig wallet constructing and updating off-chain transactions. It represents a popular Bitcoin Layer 2 scaling solution.
+
+[Link](https://lightning.network/)
+
 ### Multi Protocol Commitment - MPC
 
 The Merkle Tree structure used in RGB to include in a single commitment into the Bitcoin Blockchain multiple [Transition Bundles](glossary.md#transition-bundle) of different contracts.
@@ -167,9 +173,9 @@ A transaction which lacks some element of its signature and which can be complet
 
 ### Pedersen commitment
 
-Particular type of cryptographic [commitment](glossary.md#commitment) that has the property of being [homomorphic](https://en.wikipedia.org/wiki/Homomorphism) in respect to addition operation. This means that given a certain $$\text{commit}$$ function, it is possible to verify the commitment given by the sum of two data without revealing the data itself. That is, given $$msg_1$$, $$msg_2$$,  $$r_1$$ and $$r_2$$, if $$com_1 = \text{commit}(msg_1,r_1)$$ and $$com_2 = \text{commit}(msg_2,r_2)$$:
+Particular type of cryptographic [commitment](glossary.md#commitment) that has the property of being [homomorphic](https://en.wikipedia.org/wiki/Homomorphism) in respect to addition operation. This means that given a certain $$\text{commit}$$ function, it is possible to verify the commitment given by the sum of two data without revealing the data itself. That is, given $$msg_1$$, $$msg_2$$, $$r_1$$ and $$r_2$$, if $$com_1 = \text{commit}(msg_1,r_1)$$ and $$com_2 = \text{commit}(msg_2,r_2)$$:
 
-$$com_3 = com_1 +  com_2 = \text{commit}(msg_1+msg_2,r_1 + r_2)$$
+$$com_3 = com_1 + com_2 = \text{commit}(msg_1+msg_2,r_1 + r_2)$$
 
 So it is possible to verify the without revealing the individual summed values. This operation turns useful in order to conceal the amounts of tokens transacted.
 

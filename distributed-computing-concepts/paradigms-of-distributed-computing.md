@@ -4,11 +4,11 @@ Before divining into the technical details of the RGB, the introduction to the f
 
 Indeed RGB it's a combination of several pieces of the Distributed Computing Domain, in particular:
 
-* Commitment scheme with cryptographic hash functions.
-* Client-side Validation.
-* Single-use Seals.
+* [Commitment](../annexes/glossary.md#commitment) scheme with cryptographic hash functions.
+* [Client-side Validation](../annexes/glossary.md#client-side-validation).
+* [Single-use Seals](../annexes/glossary.md#single-use-seal).
 
-The combination of these topics is the underlying substrate that makes RGB  operational.
+The combination of these topics is the underlying substrate that makes RGB operational.
 
 RGB locate itself as a new additional piece of the vast word of _Distributed Computing_.
 
@@ -26,8 +26,8 @@ The achievement of a _resilient and reliable_ chronological ordering for distrib
 We will discuss various kind of **Distributed Consensus Systems** which have some degree of hierarchy and interrelated properties between them. They are differentiated on **how they determine and enforce the most updated state of the system**:
 
 * **Blockchain + PoW Mechanism**. The sequence of **state transitions** is public and auditable and is organized in **transactions** included in ordered blocks which are added one upon the other. The security of the system lies on the amount of work required to produce an alternative chain which revert the actual greater-work chain which is considered as the valid chain. For instance **Bitcoin** is based on this technological stack.
-* **State Channels**. Is a system constructed between 2 (or more) parties and which **depend hierarchically** on the blockchain layer. **The final state is represented by the last transaction out of sequence of ordered invalidating transactions, signed and agreed by the parties **_**off-chain**_. The final state can be enforced by each parties by publishing that last valid transaction on the layer 1. The most known application of payment channels, a simplified form of state channels, is the **Lightning Network**.
-* **Client Side Validated Data - Stash**. Is a system that c**an be implemented both on top of blockchain and state channels** and it is based on a certain amount of data whose validity, computation tasks and update is entrusted to a limited number nodes. Unlike layer 1, the data to be validated by each client node represent a **defined subset of the entirety of all state transitions of the client-side protocol, and not every transition happened within it**. This validated subset of data in possession of a client node is what is called **Stash**. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last transition and which relate to some digital properties exchanged among the counterparties involved. Seen as a whole, the validation mechanism of the shard which produce the stash is called **Client-side Validation** and is at the base of all **RGB** operations.&#x20;
+* **State Channels**. Is a system constructed between 2 (or more) parties and which **depend hierarchically** on the blockchain layer. **The final state is represented by the last transaction out of sequence of ordered invalidating transactions, signed and agreed by the parties \_off-chain**\_. The final state can be enforced by each parties by publishing that last valid transaction on the layer 1. The most known application of payment channels, a simplified form of state channels, is the [Lightning Network](../annexes/glossary.md#lightning-network).
+* **Client Side Validated Data - Stash**. Is a system that c**an be implemented both on top of blockchain and state channels** and it is based on a certain amount of data whose validity, computation tasks and update is entrusted to a limited number nodes. Unlike layer 1, the data to be validated by each client node represent a **defined subset of the entirety of all state transitions of the client-side protocol, and not every transition happened within it**. This validated subset of data in possession of a client node is what is called **Stash**. Basically, the client needs to validate the whole history of the state transitions occurred from the start to the last transition and which relate to some digital properties exchanged among the counterparties involved. Seen as a whole, the validation mechanism of the shard which produce the stash is called **Client-side Validation** and is at the base of all **RGB** operations.
 
 <figure><img src="../.gitbook/assets/distributed-data-inc.png" alt=""><figcaption><p><strong>The 3 set of Distributed System - Blockchain (Layer 1) is self-sustaining while the other 2 rely on Layer 1 for operating. In turn, Stashes can operate on top of both Blockchain and State Channels.</strong></p></figcaption></figure>
 
@@ -35,7 +35,7 @@ In order to precisely frame the applications of each Distributed Consensus Syste
 
 > Any distributed system can provide simultaneously only two of the following three guarantees:
 >
-> * Consistency - Every node in the system agree on the current global state.&#x20;
+> * Consistency - Every node in the system agree on the current global state.
 > * Availability - Every request to the system receives a response.
 > * Partition Tolerance - The system continues to operate correctly despite a network partition, e.g. failures or delays between nodes.
 

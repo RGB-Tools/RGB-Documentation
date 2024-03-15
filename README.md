@@ -38,6 +38,10 @@ This guide targets the broader technical audience willing to understand in depth
   * [RGB20 Interface example](rgb-contract-implementation/interface/rgb20-interface-example.md)
 * [Interface Implementation](rgb-contract-implementation/interface-implementation.md)
 
+### RGB over Lightning Network
+
+* [Lightning Network compatibility](rgb-over-lightning-network/lightning-network-compatibility.md)
+
 ### Annexes
 
 * [Glossary](annexes/glossary.md)
@@ -47,8 +51,8 @@ This guide targets the broader technical audience willing to understand in depth
 
 ## Credits
 
-The material provided by this guide is based on a 3-days full-immersion seminar on RGB protocol held by [Maxim Orlovsky](https://twitter.com/dr\_orlovsky) in Viareggio during the 2nd week of October 2023.
+The material provided by this guide is based on a 3-days full-immersion seminar on RGB protocol held by [Maxim Orlovsky](https://twitter.com/dr\_orlovsky) at Viareggio Lightning Boot Camp during the 2nd week of October 2023.&#x20;
 
-Videos:
+Videos: [https://planb.network/en/courses/rgb/1/1](https://planb.network/en/courses/rgb/1/1)
 
-* [https://planb.network/en/courses/rgb/1/1](https://planb.network/en/courses/rgb/1/1)
+***

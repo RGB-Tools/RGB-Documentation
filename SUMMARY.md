@@ -36,7 +36,7 @@
 
 ## RGB over Lightning Network&#x20;
 
-* [Lightning Network compatibility](rgb-over-lightning-network/schema-interface.md)
+* [Lightning Network compatibility](rgb-over-lightning-network/lightning-network-compatibility.md)
 
 ## Annexes
 

@@ -47,7 +47,7 @@ alice$ rgb transfer tx.psbt <invoice> consignment.rgb
 
 5. This **terminal transfer consignment**, obviously larger than a contract consignment because of the inclusion of the entire history of the asset, **is then forwarded to Bob**, even though the related witness transition has not yet been broadcasted into the Bitcoin P2P Network.
 
-<figure><img src="../.gitbook/assets/txf2 (1).png" alt=""><figcaption><p><strong>Alice prepares a witness transaction including the information provided both by Bob's invoice and those coming from her RGB and Bitcoin wallet. In addition, through a transfer consignment allows Bob to verify all the asset history as well as the last state transition addressed to him.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf2.png" alt=""><figcaption><p><strong>Alice prepares a witness transaction including the information provided both by Bob's invoice and those coming from her RGB and Bitcoin wallet. In addition, through a transfer consignment allows Bob to verify all the asset history as well as the last state transition addressed to him.</strong></p></figcaption></figure>
 
 7. Bob, at this point, using the `rgb accept` command proceed at validating the transfer consignment. If the validation is successful:
    * Adds all the data to his stash.
@@ -82,7 +82,7 @@ The following diagram represent a summary of all the operation just described:
 
 Finally, the following diagram show an example of transfer interaction between the various element of RGB technology stack composed of RGB wallets, RGB nodes and Electrum Server.
 
-<figure><img src="../.gitbook/assets/txf_flow (1).png" alt=""><figcaption><p><strong>The transfer process behind the scenes. It requires several round of interaction between the various components of the RGB stack.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf_flow.png" alt=""><figcaption><p><strong>The transfer process behind the scenes. It requires several round of interaction between the various components of the RGB stack.</strong></p></figcaption></figure>
 
 ## Features of RGB Transfers
 

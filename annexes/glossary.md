@@ -175,7 +175,7 @@ A transaction which lacks some element of its signature and which can be complet
 
 Particular type of cryptographic [commitment](glossary.md#commitment) that has the property of being [homomorphic](https://en.wikipedia.org/wiki/Homomorphism) in respect to addition operation. This means that given a certain $$\text{commit}$$ function, it is possible to verify the commitment given by the sum of two data without revealing the data itself. That is, given $$msg_1$$, $$msg_2$$, $$r_1$$ and $$r_2$$, if $$com_1 = \text{commit}(msg_1,r_1)$$ and $$com_2 = \text{commit}(msg_2,r_2)$$:
 
-$$com_3 = com_1 + com_2 = \text{commit}(msg_1+msg_2,r_1 + r_2)$$
+$$com_3 = com_1 \cdot com_2 = \text{commit}(msg_1+msg_2,r_1 + r_2)$$
 
 So it is possible to verify the without revealing the individual summed values. This operation turns useful in order to conceal the amounts of tokens transacted.
 

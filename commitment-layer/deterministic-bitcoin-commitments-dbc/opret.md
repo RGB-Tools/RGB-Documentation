@@ -1,14 +1,14 @@
 # Opret
 
-This is the simplest and most straightforward scheme. The commitment is inserted into the first output `OP_RETURN` of the [witness transaction](../../annexes/glossary.md#witness-transaction) in the following way:
+This represents the simplest and most straightforward scheme. The commitment is inserted into the first `OP_RETURN` output of the [witness transaction](../../annexes/glossary.md#witness-transaction) in the following way:
 
 ```
 34-byte_Opret_Commitment =
- OP_RETURN   OP_PUSHBYTE_32   mpc::Commitment>
-|_________| |______________| |________________|
+ OP_RETURN   OP_PUSHBYTE_32   <mpc::Commitment>
+|_________| |______________| |_________________|
   1-byte       1-byte         32 bytes                      
 ```
 
-`mpc::Commitment` is the 32-byte Tagged hash resulting from the [MPC tree](../multi-protocol-commitments-mpc.md#mpc-tagged-hash) which is meant to organize RGB client-side data of different contract in one commitment. Hence the size of the total commitment size in the _ScriptPubKey_ is 34 bytes.
+`mpc::Commitment` is the 32-byte Tagged hash resulting from the [MPC tree](../multi-protocol-commitments-mpc.md#mpc-tagged-hash) which is covered in detail [later](../multi-protocol-commitments-mpc.md). Hence an opret commitment will have a total size of 34 bytes.
 
 ***

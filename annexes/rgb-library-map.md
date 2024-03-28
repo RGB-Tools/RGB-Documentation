@@ -73,11 +73,14 @@
 
 **Repository:**
 
-* &#x20;[https://github.com/RGB-WG/rgb](https://github.com/RGB-WG/rgb)
+* [https://github.com/RGB-WG/rgb](https://github.com/RGB-WG/rgb)
 
 **Rust Crate:**
 
 * [https://crates.io/crates/rgb-cli](https://crates.io/crates/rgb-cli)
 
+## RGB Schemata
 
+**Repository:**
 
+* [https://github.com/RGB-WG/rgb-schemata/](https://github.com/RGB-WG/rgb-schemata/)

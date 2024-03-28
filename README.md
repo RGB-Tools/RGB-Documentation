@@ -32,7 +32,7 @@ This guide targets the broader technical audience willing to understand in depth
 
 * [Contract Implementation in RGB](rgb-contract-implementation/schema-interface.md)
 * [Schema](rgb-contract-implementation/schema/)
-  * [Non Inflatable Fungible Asset Schema](rgb-contract-implementation/schema/non-inflatable-fungible-asset-schema.md)
+  * [Schema example: Non-Inflatable Assets](rgb-contract-implementation/schema/non-inflatable-fungible-asset-schema.md)
 * [Interface](rgb-contract-implementation/interface/)
   * [Standard Interfaces by LNP/BP Association](rgb-contract-implementation/interface/standard-interfaces-by-lnp-bp-association.md)
   * [RGB20 Interface example](rgb-contract-implementation/interface/rgb20-interface-example.md)
@@ -51,7 +51,7 @@ This guide targets the broader technical audience willing to understand in depth
 
 ## Credits
 
-The production of this documentation has been sponsored by [Bitfinex](https://www.bitfinex.com/) and the material provided is mostly based on a 3-days full-immersion seminar on RGB Protocol held by [Maxim Orlovsky](https://twitter.com/dr\_orlovsky) at the Tuscany Lightning Bootcamp in October 2023.
+The production of this documentation has been sponsored by [Bitfinex](https://www.bitfinex.com/) and the material provided is mostly based on a 3-day full-immersion seminar on RGB Protocol held by [Maxim Orlovsky](https://twitter.com/dr\_orlovsky) at the Tuscany Lightning Bootcamp in October 2023.
 
 Videos: [https://planb.network/en/courses/rgb/1/1](https://planb.network/en/courses/rgb/1/1)
 

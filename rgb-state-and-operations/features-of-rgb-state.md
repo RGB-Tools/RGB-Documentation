@@ -33,7 +33,7 @@ Regarding **data participating in state validation**, the RGB protocol consensus
 
 * To the size of **any type of data** participating in state validation (e.g. a maximum of 65536 x `u8`, 32768 x `u16`, etc...)
 * To the **number of elements of each collection** employed in state validation. This is designed to:
-  * Avoid unlimited growth of client side-validate data per each state transition.
+  * Avoid unlimited growth of client-side validated data per each state transition.
   * Ensure that this size fits the register size of a particular virtual machine [AluVM](state-transitions.md) that is capable of performing complex validations along with RGB.
 
 ## The Validation != Ownership Paradigm in RGB
@@ -55,7 +55,7 @@ Moreover, based on Bitcoin's transaction structure, RGB can exploit the **featur
 
 As another important feature, RGB has, in addition to Semantic Versioning of data, a **Consensus Update System**, which tracks changes in consent in [contracts](../annexes/glossary.md#contract) and [contract operations](../annexes/glossary.md#contract-operation).
 
-&#x20;There are basically two ways to update the consent rule embedded in the protocol.
+There are basically two ways to update the consent rule embedded in the protocol.
 
 ### **Fast-forward**
 
@@ -68,6 +68,6 @@ A **fast-forward** update occurs when _some previously invalid rule becomes vali
 
 A **push-back** update occurs when _some previously valid state becomes invalid_. Despite the similarities, this kind of update is **NOT comparable to a blockchain softfork**, and furthermore:
 
-* Existing owners can lose assets if they update the wallet.
+* Existing owners can lose assets if they update their wallets.
 * It's actually a new protocol, no longer the same version of RGB.
 * Can only occur through issuers reissuing assets on a new protocol and users using two wallets (for both the old and new protocols).

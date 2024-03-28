@@ -1,6 +1,6 @@
-# RGB20 Interface example
+# Interface example: RGB20
 
-In the following code block we report a portion of rust code taken from the interface [standard RGB20](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
+In the following code block, we report a portion of Rust code taken from the [RGB20 Interface](https://github.com/RGB-WG/rgb-std/blob/master/src/interface/rgb20.rs).
 
 {% code fullWidth="true" %}
 ```rust
@@ -170,7 +170,7 @@ fn rgb20() -> Iface {
 ```
 {% endcode %}
 
-From the code above, we can observe that the interface has rather similar structure to that of [Schema](../schema/non-inflatable-fungible-asset-schema.md). However, **the key difference lies in the different type definition,** which in interface's code is expressed in terms of strings through `fname!()` or `tn!()` macros, while in Schema are defined through primitive strict data types.
+From the code above, we can observe that the interface has a rather similar structure to that of [Schema](../schema/non-inflatable-fungible-asset-schema.md). However, **the key difference lies in the different type definitions,** which in the interface's code are expressed in terms of strings through `fname!()` or `tn!()` macros, while in Schema are defined through primitive strict data types.
 
 Moreover, we can observe that in addition to the related endpoint encoded in the [NIA Schema](../schema/non-inflatable-fungible-asset-schema.md), we find several additional state data such as:
 
@@ -178,7 +178,6 @@ Moreover, we can observe that in addition to the related endpoint encoded in the
 * `issuedSupply`
 * `burnedSupply`
 * `replacedSupply`
-* `...`
 
 Additional endpoints for Contract Operations Transition:
 
@@ -187,7 +186,7 @@ Additional endpoints for Contract Operations Transition:
 * `Replace`
 * `Rename`
 
-Declaration for Errors in the Contract State or Transitions such as:
+Declaration for Errors in the Contract State or Transitions:
 
 * `SUPPLY_MISMATCH`
 * `INVALID_PROOF`

@@ -38,15 +38,15 @@ The operation which allows the verification of some data exchanged between parti
 
 ### Commitment
 
-A cryptographic process that consists of the creation of a defined mathematical object $$C$$deterministically derived from some structured input data $$m$$, called the message. The commitment can be registered in a defined publication medium (e.g. the blockchain) and embeds two operations:
+A defined mathematical object $$C$$,  deterministically derived from applying a cryptographic operation to some structured input data $$m$$, called the message. The commitment can be registered in a defined publication medium (e.g. the blockchain) and embeds two operations:
 
 * _**Commit** operation, which_ takes as inputs a public message $$m$$ and a random value $$r$$, and by applying to them the chosen cryptographic algorithm returns a value $$C = \text{commit}(m, r)$$.
 * _**Verify** operation, which_ takes the value returned by the commit algorithm $$C$$, the public message $$m$$ and the secret value $$r$$ and returns True/False. $$\text{verify}(m, r, com) \rightarrow (\text{True} / \text{False})$$.
 
-The commitment algorithm is required to possess two fundamental security properties:
+The commitment is required to possess two fundamental security properties:
 
 * _**Binding**_: requires that there cannot be two valid messages of the same commitment $$C$$. That is, it is computationally unfeasible to produce different $$m' \: | \: m' \neq m$$ and $$r' \: | \: r' \neq r$$ such that: $$\text{verify}(m,r,C)=\text{verify}(m',r',C) \rightarrow \text{True}$$
-* _**Hiding**_: requires that $$msg$$ cannot be easily discovered by commitment attempts, i.e., that $$r$$ be uniformly sampled in a set $$R$$ such that it is statistically independent of $$m$$.
+* _**Hiding**_: requires that the message $$m$$ cannot be easily discovered by commitment attempts, i.e., that $$r$$ be uniformly sampled in a set $$R$$ such that it is statistically independent of $$m$$.
 
 ### Consignment
 

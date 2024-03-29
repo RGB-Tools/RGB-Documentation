@@ -27,7 +27,7 @@
 
 **Repository:**
 
-* [https://github.com/LNP-BP/client\_side\_validation/tree/master/commit\_verify](https://github.com/LNP-BP/client\_side\_validation/tree/master/commit\_verify)
+* [https://github.com/LNP-BP/client\_side\_validation](https://github.com/LNP-BP/client\_side\_validation)
 
 **Rust Crate:**
 
@@ -39,7 +39,7 @@
 
 * [https://www.strict-types.org/](https://www.strict-types.org/)
 
-**Repository:**
+**Repositories:**
 
 * [https://github.com/strict-types/strict-types](https://github.com/strict-types/strict-types)
 * [https://github.com/strict-types/strict-encoding](https://github.com/strict-types/strict-encoding)
@@ -75,12 +75,47 @@
 
 * [https://github.com/RGB-WG/rgb](https://github.com/RGB-WG/rgb)
 
-**Rust Crate:**
+**Rust Crates:**
 
 * [https://crates.io/crates/rgb-cli](https://crates.io/crates/rgb-cli)
+* [https://crates.io/crates/rgb-wallet](https://crates.io/crates/rgb-wallet)
 
 ## RGB Schemata
 
 **Repository:**
 
 * [https://github.com/RGB-WG/rgb-schemata/](https://github.com/RGB-WG/rgb-schemata/)
+
+## ALuVM
+
+**Info:**
+
+* [https://www.aluvm.org/](https://www.aluvm.org/)
+
+**Repositories:**
+
+* [https://github.com/AluVM/aluvm-spec](https://github.com/AluVM/aluvm-spec)
+* [https://github.com/AluVM/alure](https://github.com/AluVM/alure)
+
+**Rust Crates:**
+
+* [https://crates.io/crates/aluvm](https://crates.io/crates/aluvm)
+* [https://crates.io/crates/aluasm](https://crates.io/crates/aluasm)
+
+## Bitcoin Protocol - BP
+
+**Repositories:**
+
+* [https://github.com/BP-WG](https://github.com/BP-WG)
+  * [https://github.com/BP-WG/bp-core](https://github.com/BP-WG/bp-core)
+  * [https://github.com/BP-WG/bp-std](https://github.com/BP-WG/bp-std)
+  * [https://github.com/BP-WG/bp-wallet](https://github.com/BP-WG/bp-wallet)
+
+## Ubiquitous Deterministic Computing - UBIDECO
+
+**Repository:**
+
+* [https://github.com/UBIDECO](https://github.com/UBIDECO)
+
+
+

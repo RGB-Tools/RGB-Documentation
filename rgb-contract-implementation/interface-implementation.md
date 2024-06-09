@@ -39,6 +39,6 @@ fn nia_rgb20() -> IfaceImpl {
 As we can see from the block code above, the Interface Implementation:
 
 * References the Schema, `nia_schema()`, and Interface, `Rgb20::iface()` and commit to them through `schema.schema_id()` and `iface.iface_id()` statements.
-* Contains a _map_ between the strict type data structure of the contract (e.g. `GS_NOMINAL` ,`GS_DATA,`etc.) to those of the Interface defined via `fname!` statement (e.g. `"spec"` , `"data"`, etc). The same type of mapping is performed for [contract operations](../annexes/glossary.md#contract-operation), in this case `TS_TRASNFER` is mapped to `"Transfer"`.
+* Contains a _map_ between the strict type data structure of the contract (e.g. `GS_NOMINAL` ,`GS_DATA,`etc.) to those of the Interface defined via `fname!` statement (e.g. `"spec"` , `"data"`, etc). The same type of mapping is performed for [contract operations](../annexes/glossary.md#contract-operation), in this case `TS_TRANSFER` is mapped to `"Transfer"`.
 
 The Interface Implementation is compiled separately from Schema and Interface producing a separate `.rgb` or `.rbga` file, which can then be imported in the wallet.

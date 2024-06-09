@@ -1,0 +1,5 @@
+[default]
+extend-ignore-re = [
+    "[0-9A-Za-z]{7}-[0-9A-Za-z]{9}-[0-9A-Za-z]{9}-[0-9A-Za-z]{9}-[0-9A-Za-z]{9}-[0-9A-Za-z]{7}",  #rgb:
+    "[0-9A-Za-z]{7}-[0-9A-Za-z]{9}-[0-9A-Za-z]{9}-[0-9A-Za-z]{9}-[0-9A-Za-z]{9}-[0-9A-Za-z]{6}",  #+utxob:
+]

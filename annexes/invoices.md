@@ -42,7 +42,7 @@ With this invoice URL format each software is to be able to interpret the part o
 
 As for an extra example, in the box below an example of NFT transfer invoice is shown:&#x20;
 
-<mark style="color:red;">`rgb:`</mark><mark style="color:orange;">`7BKsac8-beMNMWA8r--3GEprtFh7-bjzEvGufY-aNLuU4nSN-MRsLOIK`</mark>`/`<mark style="color:blue;">`RGB21`</mark>`/`<mark style="color:purple;">`DbwzvSu-4BZU81jEp-E9FVZ3xj-cyuTKWWy-2gmdnaxt-ACrS`</mark>`+utxob:`<mark style="color:green;">`gXsFnw- 5Eud 7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb`</mark>&#x20;
+<mark style="color:red;">`rgb:`</mark><mark style="color:orange;">`7BKsac8-beMNMWA8r--3GEprtFh7-bjzEvGufY-aNLuU4nSN-MRsLOIK`</mark>`/`<mark style="color:blue;">`RGB21`</mark>`/`<mark style="color:purple;">`DbwzvSu-4BZU81jEp-E9FVZ3xj-cyuTKWWy-2gmdnaxt-ACrS`</mark>`+utxob:`<mark style="color:green;">`egXsFnw-5Eud7WKYn-7DVQvcPbc-rR69YmgmG-veacwmUFo-uMFKFb`</mark>&#x20;
 
 Where, in addition to the already described fields, the <mark style="color:purple;">`DbwzvSu-...`</mark> field refers to the possibility to explicitly refer to the blob of the NFT data by the receiver.
 

@@ -177,9 +177,11 @@ Since the concealment methodology of each construct may vary, we will discuss th
 
 The first main component of the Assignment construct is the [Seal Definition](https://github.com/RGB-WG/rgb-core/blob/master/src/contract/seal.rs) which, in its `Revealed` form, is itself a structure consisting of four fields: `txptr` `vout` `blinding` `method`.
 
-* `txptr` is a more complex object than a simple hash of a Bitcoin Transaction. In particular, it can have two forms:
-  * `Graph seal` which is the simplest case where an existing [UTXO](../annexes/glossary.md#utxo) is used as the seal definition. Specifically, the seal is referenced by the `txid` pointing at the UTXO chosen as a seal.
-  * `Genesis seal` which should be interpreted as a "self-referenced" definition. The use of this construct means that the **transaction used as the seal definition coincides with the witness transaction that includes the present Assignment**. Since the final `txid` of the transaction depends on all the state transition data, including `txptr`, it would be impossible to compute it because of the implied circular reference. In practice the `Genesis Seal` is a null field that has become necessary to handle several situations where no external UTXO is available: a notable example is the generation and update of Lightning Network's commitment transactions or when the recipient doesn't have any available UTXO.
+* `txptr` is a more complex object than a simple hash of a Bitcoin Transaction. In particular, it can have two distinct kinds:
+  * `Genesis seal` which is the seal created for the [Genesis](../annexes/glossary.md#genesis) seal definition. It always contains a `txid` field pointing to an existing [UTXO](../annexes/glossary.md#utxo).&#x20;
+  * `Graph seal` which can have, itself, two separate forms:
+    * A simpler case where, as in in `Genesis seal`, the `txid` points to the UTXO chosen as a seal.
+    * A `WitnessTx` form which should be interpreted as a "self-referenced" definition. The use of this construct means that the **transaction used as the seal definition coincides with the witness transaction that includes the present Assignment**. Since the final `txid` of the transaction depends on all the state transition data, including `txptr`, it would be impossible to compute it because of the implied circular reference. In practice the `WitnessTx` is a null field that has become necessary to handle several situations where no external UTXO is available: a notable example is the generation and update of Lightning Network's commitment transactions or when the recipient doesn't have any available UTXO.
 * `vout` is the transaction output number of the Transaction Id entered in `txptr`, and it is only present if `txptr` is a `Graph seal`. The `txptr`  field together with `vout` field constitute the standard _outpoint_ representation of Bitcoin transactions.
 * `blinding` is a random number of 8 bytes, which allows the seal data to be effectively hidden once they have been hashed, improving resistance to brute-force attacks.
 * `method` is a 1-byte field indicating the seal closing method, which will be used in the related [witness transaction](../annexes/glossary.md#witness-transaction). It's either [Tapret](../commitment-layer/deterministic-bitcoin-commitments-dbc/tapret.md) or [Opret](../commitment-layer/deterministic-bitcoin-commitments-dbc/opret.md).
@@ -192,7 +194,7 @@ Where:
 
 * `seal_tag = urn:lnp-bp:seals:secret#2024-02-03`
 
-<figure><img src="../.gitbook/assets/components-seal-definition.png" alt=""><figcaption><p><strong>Components of the Seal Definition.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p><strong>Components of the Seal Definition.</strong></p></figcaption></figure>
 
 #### Owned States
 

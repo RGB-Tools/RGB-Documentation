@@ -1,0 +1,4 @@
+root: ./
+
+redirects:
+  lightning-network-compatibility: rgb-over-lightning-network/lightning-network-compatibility.md

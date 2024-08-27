@@ -13,12 +13,14 @@ In practice, the preceding points are addressed through an **ordered merkelizati
 
 The commitment of the MPC tree - which goes either into [Opret](deterministic-bitcoin-commitments-dbc/opret.md) or into [Tapret](deterministic-bitcoin-commitments-dbc/tapret.md) commitments - is the `mpc::Commitment` constructed in BIP-341 fashion as follows:
 
-`mpc::Commitment = SHA-256(SHA-256(mpc_tag) || SHA-256(mpc_tag) || mpc::Root )`
+`mpc::Commitment = SHA-256(SHA-256(mpc_tag) || SHA-256(mpc_tag) || depth || cofactor || mpc::Root )`
 
 Where:
 
+* `mpc_tag = urn:ubideco:mpc:commitment#2024-01-31` follows[ RGB tagging conventions](https://github.com/RGB-WG/rgb-core/blob/master/doc/Commitments.md).
+* `depth` is the depth of the tree as a single byte
+* `cofactor` is the value used to obtain distinct positions for the contracts in the tree as a 16-bit Little Endian unsigned integer (see [MPC Tree Construction](#mpc-tree-construction))
 * `mpc::Root` is the root of the MPC tree whose construction is explained in the following paragraphs.
-* `mpc_tag = urn:ubideco:mpc:commitment#2024-01-31`  follows[ RGB tagging conventions](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md).
 
 ## MPC Tree Construction
 
@@ -28,20 +30,28 @@ In order to construct the MPC tree we must **deterministically provide a positio
 
 In essence, the construction of a suitable tree of width `w` that hosts each contract `c_i` in a unique position represents a kind of mining process. The greater the number of contract `C`, the greater should be the number of leaves `w`. Assuming a random distribution of `pos(c_i)`, as per [Birthday Paradox](https://en.wikipedia.org/wiki/Birthday\_problem), we have \~50% probability of a collision occurring in a tree with `w ~ C^2`.
 
-In order to avoid too large MPC trees and knowing that the occurrence of collisions is a random process, an additional optimization has been introduced. The modulus operation was modified according to the following formula: `pos(c_i) = c_i + cofactor mod w` where `cofactor` is a random number of 16 bytes that can be chosen as a "nonce" to obtain distinct values of `pos(c_i)` with `w` fixed. The tree construction process starts from the smallest tree such that `w > C`, then tries a certain number of `cofactor` attempts, if none of them can produce `C` distinct positions, `w` is increased and a new series of `cofactor` trials is attempted.
+In order to avoid too large MPC trees and assuming that the occurrence of collisions is a random process, an additional optimization has been introduced.
+
+The actual formula for determining the **leaf position of the contract** is:
+
+    pos(c_i) = c_i mod (w - cofactor)
+
+Where `cofactor` is a number that allows to increase the chance of deterministically obtaining distinct values of `pos(c_i)` with a given `w`.
+
+The tree construction process starts from the smallest tree such that `w > C`[^min_depth] and performing a certain number of `cofactor` attempts; if none of them can produce `C` distinct positions, `d` is incremented by one and a new series of `cofactor` trials is attempted. In particular, `cofactor` is chosen starting from `0` and trying every number up to `w/2`[^cofactor_attempts]: larger values cannot succeed since otherwise it would have been possible to build a tree of depth `d-1`.
+
+[^min_depth]: Minimum depth is actually set to 3 to avoid leaking the exact number of contracts in the tree.
+[^cofactor_attempts]: `cofactor` is actually capped at 500 for performance reasons since, as it grows, it becomes less and less likely to succeed in producing distinct positions.
 
 ### **Contract Leaves (Inhabited)**
 
 Once `C` distinct positions `pos(c_i)` with `i = 0,...,C-1` are found, the corresponding leaves are populated through a tagged hash constructed in the following way:
 
-`tH_MPC_LEAF(c_i) = SHA-256(SHA-256(merkle_tag) || SHA-256(merkle_tag) || b || d || w || 0x10 || c_i || BundleId(c_i))`
+`tH_MPC_LEAF(c_i) = SHA-256(SHA-256(merkle_tag) || SHA-256(merkle_tag) || 0x10 || c_i || BundleId(c_i))`
 
 Where:
 
-* `merkle_tag = urn:ubideco:merkle:node#2024-01-31` is chosen according to [RGB conventions on Merkle Tree tagging  commitments](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#merklization-procedure). &#x20;
-* `b = 1`  refers to the branching of the leaf which refers to a single leaf node.
-* `d` is the depth of the MPC tree at the base layer.
-* `w`  is the width of the MPC tree.
+* `merkle_tag = urn:ubideco:merkle:node#2024-01-31` is chosen according to [RGB conventions on Merkle Tree tagging commitments](https://github.com/RGB-WG/rgb-core/blob/master/doc/Commitments.md#merklization-procedure).
 * `0x10` is the integer identifier of contract leaves.
 * `c_i` is the 32-byte contract\_id which is derived from the hash of the [Genesis](../rgb-state-and-operations/state-transitions.md#genesis) of the contract itself.
 * `BundleId(c_i)` is the 32-byte hash that is calculated from the data of the  [Transition Bundle](../rgb-state-and-operations/state-transitions.md#transition-bundle) which groups all the [State Transitions](../annexes/glossary.md#state-transition) of the contract `c_i`.
@@ -50,31 +60,37 @@ Where:
 
 For the remaining `w - C` uninhabited leaves, a dummy value must be committed. In order to do that, each leaf in position `j != pos(c_i)` is populated in the following way:
 
-`tH_MPC_LEAF(j) = SHA-256(SHA-256(merkle_tag) || SHA-256(merkle_tag) || b || d || w || 0x11 || entropy || j )`
+`tH_MPC_LEAF(j) = SHA-256(SHA-256(merkle_tag) || SHA-256(merkle_tag) || 0x11 || entropy || j )`
 
 Where:
 
-* `merkle_tag = urn:ubideco:merkle:node#2024-01-31` is chosen according to [RGB conventions on Merkle Tree tagging  commitments](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#merklization-procedure). &#x20;
-* `b = 1`  refers to the branching of the leaf which refers to a single leaf node.
-* `d` is the depth of the MPC tree at the base layer.
-* `w`  is the width of the MPC tree.
+* `merkle_tag = urn:ubideco:merkle:node#2024-01-31` is chosen according to [RGB conventions on Merkle Tree tagging commitments](https://github.com/RGB-WG/rgb-core/blob/master/doc/Commitments.md#merklization-procedure).
 * `0x11` is the integer identifier of entropy leaves.
 * `entropy` is a 64-byte random value chosen by the user constructing the tree.
+* `j` is the position of the current leaf as a 32-bit Little Endian unsigned integer.
 
 ### MPC nodes
 
 After generating the base of the MPC tree having `w` leaves, merkelization is performed following the rule of `commit_verify` crate detailed [here](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#merklization-procedure).
 
-The following diagram shows the construction of an example MPC tree where:
+The hash for non-leaf nodes in the tree is computed as:
+
+`tH_MPC_BRANCH(tH1 || tH2) = SHA-256(SHA-256(merkle_tag) || SHA-256(merkle_tag) || b || d || w || tH1 || tH2)`
+
+Where:
+* `merkle_tag = urn:ubideco:merkle:node#2024-01-31` is chosen according to [RGB conventions on Merkle Tree tagging commitments](https://github.com/RGB-WG/rgb-core/blob/master/doc/Commitments.md#merklization-procedure).
+* `b` is the branching of the tree merkelization scheme, i.e. the number of children the current node has, encoded as a 8-bit unsigned integer. If the tree is complete, this is always `0x02`.
+* `d` is the node depth within the tree (i.e. the length of the path to the root), encoded as an 8-bit unsigned integer.
+* `w` is the tree width, encoded as a 256-bit Little Endian unsigned integer.
+* `tH1` and `tH2` are respectively the hash of the left and the right child, calculated according to the appropriate formula depending on their role in the tree (contract leaf, entropy leaf or merkle node).
+
+The following diagram shows the construction of an example MPC tree, where:
 
 * `C = 3` number of contract to place.
 * As an example: `pos(c_0) = 7, pos(c_1) = 4, pos(c_2) = 2`.
 * `BUNDLE_i = BundleId(c_i)`.
-* `tH_MPC_BRANCH(tH1 || tH2) = SHA-256(SHA-256(merkle_tag) || SHA-256(merkle_tag) || b || d || w || tH1 || tH2)`.
-* `merkle_tag = urn:ubideco:merkle:node#2024-01-31` is chosen according to [RGB conventions on Merkle Tree tagging  commitments](https://github.com/RGB-WG/rgb-core/blob/vesper/doc/Commitments.md#merklization-procedure). &#x20;
-* `b` is the branching of the tree merkelization scheme. For this case it is `b = 2` meaning that the merkelization happens with 2 input nodes: `tH1` and `tH2`, both having 32-byte length .
-* `d` is the tree depth which is updated at each level of the tree encoded a an 8-bit Little Endian unsigned integer. The depth at the base of the MPC tree in the example is `d = 3`
-* `w` is a 256-bit Little Endian unsigned integer representing the width of the tree which remain fixed in each merkelization. In the example we have: `w=8`.
+* `d` depends on the position of the node within the tree; for example, `tH_MPC_BRANCH(tHA || tHB)` has `d=2`.
+* `w=8` for every node in the tree.
 
 {% code fullWidth="true" %}
 ```
@@ -133,13 +149,12 @@ From a verifier's perspective, in order to prove the presence of client-side val
                                               +-------+--------+        +---------+------+
                                               | tH_MPC_LEAF(C) |        | tH_MPC_LEAF(D) |
                                               +-------------^--+        +-------------^--+
-                                                            |                         |
-                                             +-------------------------+  +------+----+---------+                                                                                                           
-                                             | 0x10 || c_3 || BUNDLE_2 |  | 0x11 | entropy || 3 |                                                                                                           
-                                             +-------------------------+  +------+--------------+                                                                                                           
+                                                            |                          
+                                             +-------------------------+                                                                                                                                    
+                                             | 0x10 || c_2 || BUNDLE_2 |                                                                                                                                    
+                                             +-------------------------+                                                                                                                                    
 ```
 {% endcode %}
 
-So the Merkle Proof provided to verify the existence and uniqueness of contract commitment in the tree is: `0x11 | entropy || 3` `tH_MPC_BRANCH(tHA || tHB)` `tH_MPC_BRANCH(tHEF || tHGH`.
-
+So the Merkle Proof provided to verify the existence and uniqueness of contract commitment in the tree is: `tH_MPC_LEAF(D)`, `tH_MPC_BRANCH(tHA || tHB)` and `tH_MPC_BRANCH(tHEF || tHGH)`. These are enough to recompute the tree root and, together with `pos(c_2)` and `cofacor`, reproduce the MPC commitment to be compared with the one included in the anchor.
 ***

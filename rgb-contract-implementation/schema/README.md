@@ -30,7 +30,7 @@ Among the most important properties, a Schema:
   * Metadata.
   * Owned state.
   * Global state.
-  * Valencivariableses.
+  * Valences.
   * Contract Operation.
 * Defines all the data structure required for Genesis operation, which marks the first instantiation of the contract.
 * Allows for **programmed updates to the contract without** having to modify the infrastructure software, so that wallets and explorers can accept modified asset types without making any changes to their respective code.

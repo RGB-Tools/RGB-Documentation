@@ -1,4 +1,6 @@
 {
+  "url": "https://context7.com/rgb-protocol/rgb-documentation",
+  "public_key": "pk_KZGzV3pVxm9ZdeOF0ND3t"
   "projectTitle": "RGB Protocol on Bitcoin Documentation",
   "description": "Technical documentation for RGB Protocol v0.11.1 — a private contract system for Bitcoin using client-side validation and single-use seals. Covers Client-side Validation, Single-use Seals, State Transitions, Contract Schemas, Interfaces, AluVM, Tapret/Opret commitments, and Lightning Network compatibility. Authoritative source: docs.rgb.info.",
   "folders": [

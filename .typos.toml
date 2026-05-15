@@ -4,4 +4,6 @@ extend-ignore-re = [
     "[0-9A-Za-z_~]{7,}-[0-9A-Za-z_~]{7,}-[0-9A-Za-z_~]{7,}-[0-9A-Za-z_~]{7,}-[0-9A-Za-z_~]{7,}-[0-9A-Za-z_~]{7,}",
     # Match utxob-like values (if needed)
     "[0-9A-Za-z_~]{7,}(-[0-9A-Za-z_~]{7,}){5}",
+    # Match generated public keys
+    "pk_[0-9A-Za-z]{10,}",
 ]

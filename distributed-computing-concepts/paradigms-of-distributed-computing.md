@@ -60,7 +60,7 @@ An important feature to take into account is the different ways through which St
 * Channel state must be **synchronous** between the counterparts.
 * Client-side validated state updates can be **asynchronous**.
 
-Naturally, if the client-side validated data are embedded in the state channels, the state update will be ultimately based on an asynchronous process.
+Naturally, if the client-side validated data are embedded in the state channels, the state update will ultimately be a synchronous process (it inherits the channel's synchronous update requirement).
 
 <figure><img src="../.gitbook/assets/triangle-bifi.png" alt=""><figcaption><p><strong>Blockchain is the base layer over which multiple-interacting layers can be constructed</strong></p></figcaption></figure>
 

@@ -120,131 +120,94 @@ State transitions, just covered in the previous sections, allow the transfer of 
 
 The following figure shows the three components of contract operations along with their position in the RGB contract DAG, linked to their respective anchors in the Bitcoin Blockchain. State Transitions are represented by the red blocks.
 ```mermaid
-block-beta
-  columns 7
-  block:group1:3
-    columns 3
-    space t1(["RGB Contract"]) space
-    space G("Genesis") space
-    space space space
-    space C0(" ") C1(" ")
-    space space space
-    space C2(" ") space
-    space space space
-    space C3(" ") space
-    space space space
-    C4(" ") C5(" ") space
-    space space space
-    C6(" ") C7(" ") space
-    space space space
-    space C8(" ") space
-  end
-  space
-  block:group2:1
-    columns 1
-    t2(["Anchors"])
-    space
-    A0(" ")
-    A1(" ")
-    space
-    A2(" ")
-    space
-    A3(" ")
-    space
-    A4(" ")
-    space
-    A5(" ")
-    A6(" ")
-    A7(" ")
-  end
-  space
-  block:group3:1
-    columns 1
-    t3(["Blockchain"])
-    B0(" ")
-    space
-    B1(" ")
-    space
-    B2(" ")
-    space
-    B3(" ")
-    space
-    B4(" ")
-    space
-    B5(" ")
-    space
-    B6(" ")
-  end
+flowchart LR
+    subgraph RGB["RGB Contract"]
+        direction TB
+        G["Genesis"]
 
-  %% contract DAG
-  G --> C0
-  G --> C1
-  C0 --> C2
-  C1 --> C3
-  C2 --> C3
-  C2 --> C4
-  C3 --> C5
-  C4 --> C6
-  C5 --> C7
-  C6 --> C8
-  C7 --> C8
+        G --> C0[" "]
+        G --> C1[" "]
+        C0 --> C2[" "]
+        C1 --> C3[" "]
+        C2 --> C3
+        C2 --> C4[" "]
+        C3 --> C5[" "]
+        C4 --> C6[" "]
+        C5 --> C7[" "]
+        C6 --> C8[" "]
+        C7 --> C8
+    end
 
-  %% blockchain relationships
-  B0 --> B1
-  B1 --> B2
-  B2 --> B3
-  B3 --> B4
-  B4 --> B5
-  B5 --> B6
+    subgraph Anchors["Anchors"]
+        direction TB
+        A0[" "]
+        A1[" "]
+        A2[" "]
+        A3[" "]
+        A4[" "]
+        A5[" "]
+        A6[" "]
+        A7[" "]
+    end
 
-  %% transitions included in anchors
-  C0 --> A1
-  C1 --> A0
-  C2 --> A2
-  C3 --> A3
-  C4 --> A3
-  C5 --> A4
-  C6 --> A6
-  C7 --> A5
-  C8 --> A7
+    subgraph Blockchain["Blockchain"]
+        direction TB
+        B0[" "]
+        B1[" "]
+        B2[" "]
+        B3[" "]
+        B4[" "]
+        B5[" "]
+        B6[" "]
 
-  %% anchors included in blocks
-  A0 --> B0
-  A1 --> B1
-  A2 --> B1
-  A3 --> B2
-  A4 --> B4
-  A5 --> B5
-  A6 --> B5
-  A7 --> B6
+        B0 --> B1 --> B2 --> B3 --> B4 --> B5 --> B6
+    end
 
-  %% style
-  style C0 fill:#ED2939,stroke:#ED2939
-  style C1 fill:#ED2939,stroke:#ED2939
-  style C2 fill:#ED2939,stroke:#ED2939
-  style C3 fill:#ED2939,stroke:#ED2939
-  style C4 fill:#ED2939,stroke:#ED2939
-  style C5 fill:#ED2939,stroke:#ED2939
-  style C6 fill:#ED2939,stroke:#ED2939
-  style C7 fill:#ED2939,stroke:#ED2939
-  style C8 fill:#ED2939,stroke:#ED2939
+    C0 --> A1
+    C1 --> A0
+    C2 --> A2
+    C3 --> A3
+    C4 --> A3
+    C5 --> A4
+    C6 --> A6
+    C7 --> A5
+    C8 --> A7
 
-  style A0 fill:#808080,stroke:#808080
-  style A1 fill:#808080,stroke:#808080
-  style A2 fill:#808080,stroke:#808080
-  style A3 fill:#808080,stroke:#808080
-  style A4 fill:#808080,stroke:#808080
-  style A5 fill:#808080,stroke:#808080
-  style A6 fill:#808080,stroke:#808080
-  style A7 fill:#808080,stroke:#808080
+    A0 --> B0
+    A1 --> B1
+    A2 --> B1
+    A3 --> B2
+    A4 --> B4
+    A5 --> B5
+    A6 --> B5
+    A7 --> B6
 
-  style B0 fill:#F98129,stroke:#F98129
-  style B1 fill:#F98129,stroke:#F98129
-  style B2 fill:#F98129,stroke:#F98129
-  style B3 fill:#F98129,stroke:#F98129
-  style B4 fill:#F98129,stroke:#F98129
-  style B5 fill:#F98129,stroke:#F98129
-  style B6 fill:#F98129,stroke:#F98129
+    style C0 fill:#ED2939,stroke:#ED2939
+    style C1 fill:#ED2939,stroke:#ED2939
+    style C2 fill:#ED2939,stroke:#ED2939
+    style C3 fill:#ED2939,stroke:#ED2939
+    style C4 fill:#ED2939,stroke:#ED2939
+    style C5 fill:#ED2939,stroke:#ED2939
+    style C6 fill:#ED2939,stroke:#ED2939
+    style C7 fill:#ED2939,stroke:#ED2939
+    style C8 fill:#ED2939,stroke:#ED2939
+
+    style A0 fill:#808080,stroke:#808080
+    style A1 fill:#808080,stroke:#808080
+    style A2 fill:#808080,stroke:#808080
+    style A3 fill:#808080,stroke:#808080
+    style A4 fill:#808080,stroke:#808080
+    style A5 fill:#808080,stroke:#808080
+    style A6 fill:#808080,stroke:#808080
+    style A7 fill:#808080,stroke:#808080
+
+    style B0 fill:#F98129,stroke:#F98129
+    style B1 fill:#F98129,stroke:#F98129
+    style B2 fill:#F98129,stroke:#F98129
+    style B3 fill:#F98129,stroke:#F98129
+    style B4 fill:#F98129,stroke:#F98129
+    style B5 fill:#F98129,stroke:#F98129
+    style B6 fill:#F98129,stroke:#F98129
 ```
 
 It is important to note that the main difference between ordinary State Transitions and Genesis lies in the **lack of the closing part of the seal**. Hence **Genesis is only committed into the blockchain history when a State Transition closes one of the seals defined by it**.

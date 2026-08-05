@@ -20,7 +20,7 @@
 ## RGB State and Operations
 
 * [Introduction to Smart Contracts and their States](rgb-state-and-operations/intro-smart-contract-states.md)
-* [Contract Operations](rgb-state-and-operations/state-transitions.md)
+* [State Transitions](rgb-state-and-operations/state-transitions.md)
 * [Components of a Contract Operation](rgb-state-and-operations/components-of-a-contract-operation.md)
 * [Features of RGB State](rgb-state-and-operations/features-of-rgb-state.md)
 

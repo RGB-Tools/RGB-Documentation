@@ -20,7 +20,7 @@ However, from the point of view of the recipient of a transaction, the only aspe
 * The last state transition, that is represented by a transaction addressed to him.
 * The chronological sequence of transactions (and thus state transitions) leading up to the last state transition.
 
-Basically, what is relevant to the recipient is the [Directed Acyclic Graph](../annexes/glossary.md#directed-acyclic-graph-dag) which connects the history of the state transitions from the [Genesis](../annexes/glossary.md#genesis) to the last state addressed to him (a [Shard](../annexes/glossary.md#shard) of the whole data).
+Basically, what is relevant to the recipient is the Directed Acyclic Graph which connects the history from a set of coinbase transactions to the state addressed to him (a subset of the whole data).
 
 <figure><img src="../.gitbook/assets/transaction-graph-1.png" alt=""><figcaption><p><strong>The transaction graph of Public Blockchains cannot be sharded due to internal consistency.</strong></p></figcaption></figure>
 

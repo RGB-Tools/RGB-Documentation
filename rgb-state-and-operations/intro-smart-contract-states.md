@@ -15,7 +15,7 @@ This means that the enforcement of the terms agreed upon between the parties **d
 
 Furthermore, a question arises. To achieve the highest degree of automation, decentralization, and privacy, is it possible to forfeit the use of a centralized registry that stores ownership and contract information? The affirmative answer lies back at the origins.
 
-![RGB enables digital version of bearer instruments.](../.gitbook/assets/orenoque-contract.png)
+![RGB enables digital version of bearer instruments.](../.gitbook/assets/orenoque-contract.webp)
 
 Not long times ago, contracts, such as securities, were **bearer instruments**. Indeed, the widespread use of asset registers that imply a custodial relationship with some institution on behalf of the client is a fairly recent development in economic history. **The bearer nature of contracts is, in fact, a centuries-old tradition.** This type of philosophy is the basis of the RGB architecture, in that **the bearer** rights of each claimant **are contained in the form of data within the contract** and can be modified and applied digitally, following the rules of the contract itself.
 
@@ -39,7 +39,7 @@ In order to achieve these goals, an RGB contract is composed of two main compone
 
 The [Business Logic](../annexes/glossary.md#business-logic) of the contract represents the rules that allow the entitled parties to change the state of the contract. We will find out later that the **Business Logic** is embedded in a particular structure of the contract called the [Schema](../annexes/glossary.md#schema).
 
-![In order to evolve, smart contract states must fallow a business logic.](../.gitbook/assets/state-business-logic.png)
+![In order to evolve, smart contract states must fallow a business logic.](../.gitbook/assets/state-business-logic.webp)
 
 Without going into the specific details of RGB implementation, which will be covered [later](state-transitions.md), an initial and fundamental definition of [State](../annexes/glossary.md#contract-state) is required. Simply put:
 
@@ -47,7 +47,7 @@ Without going into the specific details of RGB implementation, which will be cov
 
 Therefore, a [Contract Operation](../annexes/glossary.md#contract-operation), in general terms, represents any **first creation/update of data** from an **old state** to a **new state** following the **rules inscribed into the contract** constituting its **Business Logic**.
 
-<figure><img src="../.gitbook/assets/old2new_state.png" alt=""><figcaption><p><strong>State Transitions (among Contract Operations) apply business logic to an Old state to derive a New state.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/old2new_state.webp" alt=""><figcaption><p><strong>State Transitions (among Contract Operations) apply business logic to an Old state to derive a New state.</strong></p></figcaption></figure>
 
 The chain of Contract Operations in RGB is the ordered path that evolves the contract data from the **first contract definition**, called [Genesis](../annexes/glossary.md#genesis), to the Terminal State that represents the most up-to-date state at the end of the [DAG](../annexes/glossary.md#directed-acyclic-graph-dag) of Contract Operations.
 

@@ -7,7 +7,7 @@ Multi Protocol Commitments address the following important requirements:
 
 The preceding points are addressed through an **ordered merkelization** of the multiple contracts (actually their [transition bundles](../annexes/glossary.md#transition-bundle) IDs) in an [MPC](../annexes/glossary.md#multi-protocol-commitment-mpc) Tree whose properties will be addressed in depth in this section. Eventually, the root of the tree (`mpc::Root`) is hashed once more to get the `mpc:Commitment` which is finally committed in an output of the [witness transaction](../annexes/glossary.md#witness-transaction) using the appropriate [Deterministic Bitcoin Commitment](../annexes/glossary.md#deterministic-bitcoin-commitment-dbc) construction.
 
-<figure><img src="../.gitbook/assets/immagine (1).png" alt=""><figcaption><p><strong>Each RGB contract has a unique position in the MPC Tree determined by a modular division applied to its ContractId according to the width of the tree. In this example, the MPC tree has a width of 8.</strong> </p></figcaption></figure>
+<figure><img src="../.gitbook/assets/immagine (1).webp" alt=""><figcaption><p><strong>Each RGB contract has a unique position in the MPC Tree determined by a modular division applied to its ContractId according to the width of the tree. In this example, the MPC tree has a width of 8.</strong> </p></figcaption></figure>
 
 ## MPC Root Hash
 
@@ -71,7 +71,7 @@ Where:
 
 ### MPC nodes
 
-After generating the base of the MPC tree having `w` leaves, merkelization is performed following the rule of `commit_verify` crate detailed [here](../annexes/commitments.md#merklization-procedure).
+After generating the base of the MPC tree having `w` leaves, merkelization is performed following the rule of the `commit_verify` module (part of `rgb-consensus`) detailed [here](../annexes/commitments.md#merklization-procedure).
 
 The hash for non-leaf nodes in the tree is computed as:
 

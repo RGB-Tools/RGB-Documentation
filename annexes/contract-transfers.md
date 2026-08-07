@@ -12,7 +12,7 @@ Each of these parts, usually, consists of as little as 200 bytes of data, meanin
 
 In this regards, it's useful to point out that the RGB ecosystem fosters innovation and competition among various wallets by allowing the freedom to propose new methods of contract interaction and transfer. This openness to experimentation and the adoption of new technologies, such as decentralized, censorship-resistant networks, promises to further enrich the capabilities offered by RGB.
 
-<figure><img src="../.gitbook/assets/transfers_0.png" alt="Several channels to acquire an RGB contract in the wallet."><figcaption><p><strong>All the various possible channels for acquiring an RGB contract in the form of consignment in a wallet.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/transfers_0.webp" alt="Several channels to acquire an RGB contract in the wallet."><figcaption><p><strong>All the various possible channels for acquiring an RGB contract in the form of consignment in a wallet.</strong></p></figcaption></figure>
 
 **3)** Once a contract is obtained in consignment format, Bob is able to import it into his RGB wallet and validate the data contained herein. The next thing he can do is to find someone possessing the contract / asset he is interested in receiving in his wallet. In our example, Alice possesses the asset in her wallet. So, similarly to Bitcoin Transaction **they can setup an RGB Transfer.** The mechanism for discovering stakeholders who have owned states in the contract, such as Alice, remains up to the receiving party, just as the process for discovering who can pay in Bitcoin.
 
@@ -24,7 +24,7 @@ bob$ rgb invoice <ContractId> --amount 100
 
 **5)** [Invoices](glossary.md#invoice), which are described in more detail in this [chapter](invoices.md#use-of-urls-for-invoices), are generated as simple URL strings and can be transmitted by any means in a manner similar to what we said for consignment.
 
-<figure><img src="../.gitbook/assets/txf1.png" alt=""><figcaption><p><strong>The transfer process begins with an invoice prepared by Bob which contains all the information that Alice needs to transfer the asset, in particular Bob's seal definition, encoded as a Blinded UTXO or in clear form.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf1.webp" alt=""><figcaption><p><strong>The transfer process begins with an invoice prepared by Bob which contains all the information that Alice needs to transfer the asset, in particular Bob's seal definition, encoded as a Blinded UTXO or in clear form.</strong></p></figcaption></figure>
 
 **6)** Alice, who has both a Bitcoin wallet and an RGB wallet with a [stash](glossary.md#stash) of client-side validated data, receive the invoice from Bob, which appears to be a string like this:
 
@@ -50,7 +50,7 @@ alice$ rgb transfer tx.psbt <invoice> consignment.rgb
 
 **9)** This **terminal consignment**, obviously larger than a contract consignment because of the inclusion of the entire history of the asset, **is then forwarded to Bob**, even though the related witness transition has not yet been broadcasted into the Bitcoin P2P Network.
 
-<figure><img src="../.gitbook/assets/txf2 (1).png" alt=""><figcaption><p><strong>Alice prepares a witness transaction including the information provided both by Bob's invoice and those coming from her RGB and Bitcoin wallet. In addition, through a transfer consignment allows Bob to verify all the asset history as well as the last state transition addressed to him.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf2 (1).webp" alt=""><figcaption><p><strong>Alice prepares a witness transaction including the information provided both by Bob's invoice and those coming from her RGB and Bitcoin wallet. In addition, through a transfer consignment allows Bob to verify all the asset history as well as the last state transition addressed to him.</strong></p></figcaption></figure>
 
 **10)** Bob, at this point, using the `rgb accept` command proceeds at validating the transfer consignment. If the validation is successful:
 
@@ -80,15 +80,19 @@ alice$ wallet sign —publish tx.psbt
 
 Once published, the witness transaction represents the conclusion of the transfer between Alice and Bob.
 
-<figure><img src="../.gitbook/assets/txf3.png" alt=""><figcaption><p><strong>Optionally Bob can sign a payslip which authorizes Alice to broadcast the witness transaction which marks the conclusion of the transfer between Alice and Bob</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf3.webp" alt=""><figcaption><p><strong>Optionally Bob can sign a payslip which authorizes Alice to broadcast the witness transaction which marks the conclusion of the transfer between Alice and Bob</strong></p></figcaption></figure>
 
 The following diagram represents a summary of all the operations just described:
 
-<figure><img src="../.gitbook/assets/txf_diagram.png" alt=""><figcaption><p><strong>Transfer workflow diagram. The signature over consignment id can be optional.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf_diagram.webp" alt=""><figcaption><p><strong>Transfer workflow diagram. The signature over consignment id can be optional.</strong></p></figcaption></figure>
 
-Finally, the following diagram shows an example of transfer interaction between the various elements of the RGB technology stack composed of RGB wallets, RGB nodes, and Electrum Server.
+Finally, the following diagrams show an example of transfer interaction between the various elements of the RGB technology stack composed of RGB wallets, RGB nodes, and Electrum Server, split into the 3 phases of the process.
 
-<figure><img src="../.gitbook/assets/txf_flow (1).png" alt=""><figcaption><p><strong>The transfer process behind the scenes. It requires several round of interaction between the various components of the RGB stack.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txf_flow_1.webp" alt=""><figcaption><p><strong>Phase 1 of 3: Bob creates the invoice and shares it with Alice.</strong></p></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/txf_flow_2.webp" alt=""><figcaption><p><strong>Phase 2 of 3: Alice decodes the invoice, confirms the payment, and prepares the PSBT and the consignment.</strong></p></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/txf_flow_3.webp" alt=""><figcaption><p><strong>Phase 3 of 3: the consignment is sent, validated and acknowledged, the transaction is signed and broadcast, and the payment is confirmed.</strong></p></figcaption></figure>
 
 ## Features of RGB Transfers
 

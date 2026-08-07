@@ -28,6 +28,6 @@ As shown in the table above, several **commitment schemes** can be used for each
   * [Opret](deterministic-bitcoin-commitments-dbc/opret.md) - **used in RGB**, the committed message is placed in an unspendable output after the opcode `OP_RETURN`.
   * [Tapret](deterministic-bitcoin-commitments-dbc/tapret.md) (Taptweak) - This scheme, **used in RGB**, represents a form of tweak in which the commitment is an `OP_RETURN` leaf in the `Script path` of a [taproot output](../annexes/glossary.md#taproot) which then modifies the value of the PubKey.
 
-<figure><img src="../.gitbook/assets/bitcoin-seals.png" alt=""><figcaption><p><strong>The different seal closing methods in Bitcoin transaction.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/bitcoin-seals.webp" alt=""><figcaption><p><strong>The different seal closing methods in Bitcoin transaction.</strong></p></figcaption></figure>
 
 After reading this overview, it should now be easier to dive into details of [RGB Single-use Seals](../commitment-layer/commitment-schemes.md#single-use-seals-in-rgb) construction.

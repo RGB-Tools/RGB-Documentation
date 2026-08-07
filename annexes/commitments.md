@@ -67,7 +67,7 @@ used for automatically generating the documentation on the commitment workflow.
 
 Merklization is the procedure of computing the root of a
 [Merkle Tree](glossary.md#merkle-tree) to be used as a commitment.
-It uses traits and data types from `merkle.rs` module of `commit_verify` crate and it
+It uses traits and data types from `merkle.rs` submodule of the `commit_verify` module (part of `rgb-consensus`) and it
 commits to the tree parameters, such as number of elements, depth of the tree and
 depth of each node.
 

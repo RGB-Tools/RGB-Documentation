@@ -22,23 +22,23 @@ In the next paragraphs, we will focus on client-side validation combined with th
 
 1. First of all, Alice has a [UTXO](../annexes/glossary.md#utxo) **that is linked to some client-side validated data** known only by her.
 
-<figure><img src="../.gitbook/assets/txo2-1.png" alt=""><figcaption><p><strong>A seal definition is applied to a specific Bitcoin UTXO.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-1.webp" alt=""><figcaption><p><strong>A seal definition is applied to a specific Bitcoin UTXO.</strong></p></figcaption></figure>
 
 2. Alice informs Bob that the spending of these UTXO represents a sign that some seal was closed.
 
-<figure><img src="../.gitbook/assets/txo2-2.png" alt=""><figcaption><p><strong>The UTXO is associated to some meaning agreed between Alice and Bob.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-2.webp" alt=""><figcaption><p><strong>The UTXO is associated to some meaning agreed between Alice and Bob.</strong></p></figcaption></figure>
 
 3. Once Alice spends her UTXO, only Bob knows that this event has some additional meaning and consequences, even though everyone (i.e. the Bitcoin Blockchain audience) can see it.
 
-<figure><img src="../.gitbook/assets/txo2-3.png" alt=""><figcaption><p><strong>The spending event of the UTXO triggers some meaningful consequences for the parties involved.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-3.webp" alt=""><figcaption><p><strong>The spending event of the UTXO triggers some meaningful consequences for the parties involved.</strong></p></figcaption></figure>
 
 4. In fact, the UTXO spent by Alice through the [witness transaction](../annexes/glossary.md#witness-transaction) contains a commitment to a change in the client-side validated data. By passing the original data to Bob, she is able to prove him that it is properly referenced by the commitment that Alice included in the witness transaction. Bob can independently verify that the new seal definition is unequivocally bound to the seal closing, so that no other players can be convinced to accept a different one as valid, effectively **preventing double spend**.
 
-<figure><img src="../.gitbook/assets/txo2-4.png" alt=""><figcaption><p><strong>Alice can prove to Bob deterministically the uniqueness of the message committed. In addition the message may contain another seal definition extending the chain of commitments.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-4.webp" alt=""><figcaption><p><strong>Alice can prove to Bob deterministically the uniqueness of the message committed. In addition the message may contain another seal definition extending the chain of commitments.</strong></p></figcaption></figure>
 
 The key point of using the single-use seal in combination with client-side validation is the uniqueness of the spending event and the data committed (i.e., the message) in it, which cannot be changed in the future. The whole operation can be summarized in the following terms.
 
-<figure><img src="../.gitbook/assets/txo2-5.png" alt=""><figcaption><p><strong>The UTXO being spent represents the seal closing. A precise kind of transaction output contains the message, which represents a new seal definition.</strong></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/txo2-5.webp" alt=""><figcaption><p><strong>The UTXO being spent represents the seal closing. A precise kind of transaction output contains the message, which represents a new seal definition.</strong></p></figcaption></figure>
 
 The next important step is to illustrate precisely how the two commitment schemes adopted in RGB protocol, **Opret** and **Tapret**, work and which features they must meet, particularly concerning commitment determinism.
 

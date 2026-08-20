@@ -2,7 +2,7 @@
 
 The `Tapret` scheme is a more complex form of deterministic commitment and represents an improvement in terms of chain footprint and privacy of contract operations. The main idea of this application is to hide the commitment within the `Script Path Spend` of a [taproot transaction](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki).
 
-First, before describing how the commitment is actually embedded in a taproot transaction, we will show the exact **form of the commitment which must match exactly a 64-byte string size** [constructed](https://github.com/BP-WG/bp-core/blob/master/dbc/src/tapret/mod.rs#L179-L196) as follows:
+First, before describing how the commitment is actually embedded in a taproot transaction, we will show the exact **form of the commitment which must match exactly a 64-byte string size** [constructed](https://github.com/rgb-protocol/rgb-consensus/blob/44e79963aa4603270eee9aa112ef07a512345e98/src/dbc/tapret/tapscript.rs#L35C1-L51C2) as follows:
 
 ```
 64-byte_Tapret_Commitment =

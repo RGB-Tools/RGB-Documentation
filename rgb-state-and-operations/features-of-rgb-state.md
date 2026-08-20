@@ -40,7 +40,7 @@ Regarding **data participating in state validation**, the RGB protocol consensus
 
 One of the most important features of RGB compared to most blockchain-based smart contract systems is based on the **clear separation between the validation task and ownership** that are defined by the protocol at the most fundamental level.
 
-![](../.gitbook/assets/validation-ownership-1.png)
+![](../.gitbook/assets/validation-ownership-1.webp)
 
 In practice:
 

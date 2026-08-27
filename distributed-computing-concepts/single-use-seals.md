@@ -70,7 +70,7 @@ We therefore need a **"chain" of single-use seals**, where **the closure of the 
 * Messages represent the commitment to client-side validated data.
 * Seal definitions are bitcoin UTXOs.
 * The commitment is a hash embedded in a Bitcoin transaction.
-* The seal closure can take the form of a UTXO that is spent or an address that receives Bitcoin.
+* The seal closure is the action of spending its UTXO
 * This resulting chain of connected transactions represents the Proof-of-Publication.
 
 In the next chapters, we will explore in detail how RGB Protocol implements the concept of single-use seals by storing the commitments of its operations in the Bitcoin blockchain.

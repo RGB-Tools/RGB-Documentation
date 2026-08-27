@@ -20,7 +20,7 @@ However, from the recipient's perspective, only two aspects matter:
 * The most recent state transition, represented by a transaction addressed to the recipient themselves.
 * The chronological sequence of transactions (and thus state transitions) leading up to the last one.
 
-What is relevant to the recipient is the chain of ownership transfers from the asset's Genesis to the last transaction addressed to them, i.e. their Directed Acyclic Graph, which is only a subset of the complete dataset.
+What is relevant to the recipient is the chain of ownership transfers from a set of coinbase transactions to the last transaction addressed to them, i.e. their Directed Acyclic Graph, which is only a subset of the complete dataset.
 
 <figure><img src="../.gitbook/assets/transaction-graph-1.webp" alt=""><figcaption><p><strong>The transaction graph of public blockchains cannot be sharded: since any transaction may reference an output created anywhere in prior history, all nodes must maintain a consistent view of the entire history, in order to validate new blocks.</strong></p></figcaption></figure>
 
